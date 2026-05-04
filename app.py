@@ -50,7 +50,6 @@ def compute_scale(Ha, Hp, Th, Tt, Lh, Lt, Tsb):
     base_h = max(Th, Tt)
     base_L = Lh + Tsb + Lt
     total_H = base_h + max(Ha, Hp)
-
     sx = (VIEW_W * MARGIN) / base_L
     sy = (VIEW_H * MARGIN) / total_H
     return min(sx, sy)
@@ -58,7 +57,9 @@ def compute_scale(Ha, Hp, Th, Tt, Lh, Lt, Tsb):
 # ==================================================
 # WALL DRAWING (NO CALCULATIONS)
 # ==================================================
-def draw_wall(Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb):
+def draw_wall(Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb,
+              gamma_a, phi_a, c_a,
+              gamma_p, phi_p, c_p):
 
     scale = compute_scale(Ha, Hp, Th, Tt, Lh, Lt, Tsb)
 
@@ -88,11 +89,11 @@ def draw_wall(Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb):
 
     # Active soil
     ax.add_patch(Rectangle((x0, y0 + base_h), Lh, Ha,
-                           fc="#f4a261", alpha=0.8))
+                           fc="#f4a261", alpha=0.85))
 
     # Passive soil
     ax.add_patch(Rectangle((x0 + Lh + Tsb, y0 + base_h), Lt, Hp,
-                           fc="#b7e4c7", alpha=0.8))
+                           fc="#b7e4c7", alpha=0.85))
 
     # Water
     if Hw > 0:
@@ -100,15 +101,28 @@ def draw_wall(Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb):
             (x0, y0 + base_h + Ha - Hw),
             Lh, Hw, fc="#74c0fc", alpha=0.6))
 
+    # Soil labels
+    ax.text(x0 + Lh * 0.5, y0 + base_h + Ha * 0.5,
+        f"Active soil\n"
+        f"γ = {gamma_a:.1f} kN/m³\n"
+        f"φ = {phi_a:.1f}°\n"
+        f"c = {c_a:.1f} kPa",
+        ha="center", va="center", fontsize=9)
+
+    ax.text(x0 + Lh + Tsb + Lt * 0.5, y0 + base_h + Hp * 0.5,
+        f"Passive soil\n"
+        f"γ = {gamma_p:.1f} kN/m³\n"
+        f"φ = {phi_p:.1f}°\n"
+        f"c = {c_p:.1f} kPa",
+        ha="center", va="center", fontsize=9)
+
     # Dimensions
     draw_dimension(ax, (x0, y0 + base_h),
                    (x0, y0 + base_h + Ha),
                    "Ha", offset=-0.6, vertical=True)
-
     draw_dimension(ax, (x0, y0 + base_h + Ha - Hw),
                    (x0, y0 + base_h + Ha),
                    "Hw", offset=-1.0, vertical=True)
-
     draw_dimension(ax, (x0 + base_L, y0 + base_h),
                    (x0 + base_L, y0 + base_h + Hp),
                    "Hp", offset=0.6, vertical=True)
@@ -116,7 +130,6 @@ def draw_wall(Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb):
     draw_dimension(ax, (x0, y0),
                    (x0, y0 + Th),
                    "Th", offset=-0.6, vertical=True)
-
     draw_dimension(ax, (x0 + base_L, y0),
                    (x0 + base_L, y0 + Tt),
                    "Tt", offset=0.6, vertical=True)
@@ -124,11 +137,9 @@ def draw_wall(Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb):
     draw_dimension(ax, (x0, y0),
                    (x0 + Lh, y0),
                    "Lh", offset=-0.6)
-
     draw_dimension(ax, (x0 + Lh, y0),
                    (x0 + Lh + Tsb, y0),
                    "Tsb", offset=-0.6)
-
     draw_dimension(ax, (x0 + Lh + Tsb, y0),
                    (x0 + base_L, y0),
                    "Lt", offset=-0.6)
@@ -137,7 +148,7 @@ def draw_wall(Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb):
     ax.set_ylim(0, VIEW_H)
     ax.set_aspect("equal")
     ax.axis("off")
-    ax.set_title("Retaining Wall Geometry (Fixed Viewport)")
+    ax.set_title("Retaining Wall Geometry with Soil Parameters")
 
     return fig
 
@@ -146,34 +157,28 @@ def draw_wall(Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb):
 # ==================================================
 st.title("🧱 Retaining Wall Geometry Tool")
 
-# ---------------- Geometry ----------------
 st.sidebar.header("Geometry inputs (m)")
-
 Ha = st.sidebar.number_input("Active height Ha", 1.0, 20.0, 6.0)
 Hw = st.sidebar.number_input("Water height Hw", 0.0, Ha, 2.0)
 Hp = st.sidebar.number_input("Passive height Hp", 0.0, 20.0, 3.0)
-
 Th = st.sidebar.number_input("Heel thickness Th", 0.2, 2.0, 0.8)
 Tt = st.sidebar.number_input("Toe thickness Tt", 0.2, 2.0, 0.6)
-
 Lh = st.sidebar.number_input("Heel length Lh", 0.5, 15.0, 3.0)
 Lt = st.sidebar.number_input("Toe length Lt", 0.5, 15.0, 2.0)
 Tsb = st.sidebar.number_input("Stem thickness Tsb", 0.2, 2.0, 0.4)
 
-# ---------------- Active soil ----------------
-st.sidebar.header("Active soil parameters (input only)")
+st.sidebar.header("Active soil (input only)")
+gamma_a = st.sidebar.number_input("γₐ (kN/m³)", 14.0, 25.0, 18.0)
+phi_a   = st.sidebar.number_input("φₐ (°)", 0.0, 45.0, 30.0)
+c_a     = st.sidebar.number_input("cₐ (kPa)", 0.0, 50.0, 0.0)
 
-gamma_a = st.sidebar.number_input("Density γₐ (kN/m³)", 14.0, 25.0, 18.0)
-phi_a   = st.sidebar.number_input("Friction angle φₐ (°)", 0.0, 45.0, 30.0)
-c_a     = st.sidebar.number_input("Cohesion cₐ (kPa)", 0.0, 50.0, 0.0)
+st.sidebar.header("Passive soil (input only)")
+gamma_p = st.sidebar.number_input("γₚ (kN/m³)", 14.0, 25.0, 18.0)
+phi_p   = st.sidebar.number_input("φₚ (°)", 0.0, 45.0, 35.0)
+c_p     = st.sidebar.number_input("cₚ (kPa)", 0.0, 50.0, 0.0)
 
-# ---------------- Passive soil ----------------
-st.sidebar.header("Passive soil parameters (input only)")
+fig = draw_wall(Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb,
+                gamma_a, phi_a, c_a,
+                gamma_p, phi_p, c_p)
 
-gamma_p = st.sidebar.number_input("Density γₚ (kN/m³)", 14.0, 25.0, 18.0)
-phi_p   = st.sidebar.number_input("Friction angle φₚ (°)", 0.0, 45.0, 35.0)
-c_p     = st.sidebar.number_input("Cohesion cₚ (kPa)", 0.0, 50.0, 0.0)
-
-# ---------------- Draw ----------------
-fig = draw_wall(Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb)
 st.pyplot(fig)
