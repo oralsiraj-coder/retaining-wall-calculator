@@ -320,7 +320,7 @@ stress_table = pd.DataFrame({
     "Total vertical stress σv (kPa)": sigma_v_total
 })
 
-st.header("📋 Vertical Stress Calculation Table")
+
 st.markdown("Slice thickness = **0.1 m**")
 
 st.dataframe(
