@@ -179,6 +179,13 @@ st.sidebar.header("Active soil (display only)")
 gamma_a = st.sidebar.number_input("γₐ", 14.0, 25.0, 18.0)
 phi_a = st.sidebar.number_input("φₐ", 0.0, 45.0, 30.0)
 c_a = st.sidebar.number_input("cₐ", 0.0, 50.0, 0.0)
+beta = st.sidebar.number_input(
+    "Backfill inclination β (deg)",
+    min_value=0.0,
+    max_value=45.0,
+    value=0.0,
+    step=1.0
+)
 
 st.sidebar.header("Passive soil (display only)")
 gamma_p = st.sidebar.number_input("γₚ", 14.0, 25.0, 18.0)
