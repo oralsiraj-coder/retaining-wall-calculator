@@ -410,50 +410,31 @@ st.latex(
     r"\boxed{\sigma_h(z) = K \cdot \sigma'_v(z) + \sigma_{h,\text{water}}(z)}"
 )
 
-# ---- Symbol definitions ----
-st.markdown("### Definition of symbols")
+# =======================
+# SYMBOL DEFINITIONS
+# =======================
+st.subheader("Symbols")
 
 st.markdown(
-    r"""
-- **\( z \)** – Depth below ground surface *(m)*  
+    """
+    **\( z \)** – Depth below ground surface *(m)*  
 
-- **\( \sigma_v(z) \)** – Total vertical stress at depth *z*  
-  \\[
-  \sigma_v = \gamma z + q
-  \\]
+    **\( \sigma'_v(z) \)** – Effective vertical stress at depth *z* *(kPa)*  
 
-- **\( \sigma'_v(z) \)** – Effective vertical stress at depth *z*  
-  \\[
-  \sigma'_v = \sigma_v - u
-  \\]
+    **\( \sigma_h(z) \)** – Horizontal earth stress acting on the wall *(kPa)*  
 
-- **\( u(z) \)** – Pore water pressure *(kPa)*  
-  \\[
-  u = \gamma_w (z - z_w), \quad z > z_w
-  \\]
+    **\( K \)** – Earth pressure coefficient  
+    *(Rankine active \(K_a\) or passive \(K_p\))*  
 
-- **\( \sigma_h(z) \)** – Total horizontal earth stress acting on the wall *(kPa)*  
+    **\( u(z) \)** – Pore water pressure *(kPa)*  
 
-- **\( K \)** – Earth pressure coefficient  
-  *(Rankine active \(K_a\) or passive \(K_p\))*  
+    **\( \gamma_w \)** – Unit weight of water *(9.81 kN/m³)*  
 
-- **\( \gamma \)** – Unit weight of soil *(kN/m³)*  
-
-- **\( \gamma_w \)** – Unit weight of water *(9.81 kN/m³)*  
-
-- **\( q \)** – Uniform surface surcharge *(kPa)*  
-
-- **\( H_a \)** – Total height of the soil or wall *(m)*  
-
-- **\( H_w \)** – Height of water above the base of the soil mass *(m)*  
-
-- **\( z_w \)** – Depth to groundwater table *(m)*  
-  \\[
-  z_w = H_a - H_w
-  \\]
-
-- **\( \varphi \)** – Soil internal friction angle *(degrees)*  
-
-- **\( \beta \)** – Backfill surface inclination relative to the horizontal *(degrees)*
-"""
+    **\( z_w \)** – Depth to groundwater table *(m)*  
+    """
 )
+
+st.latex(r"\sigma_h(z) = K \, \sigma'_v(z) + u(z)")
+st.latex(r"u(z) = \gamma_w (z - z_w), \quad z > z_w")
+st.latex(r"z_w = H_a - H_w")
+
