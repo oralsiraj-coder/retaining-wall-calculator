@@ -220,14 +220,45 @@ st.pyplot(draw_wall(
     gamma_p,phi_p,c_p
 ))
 
+# =======================
+# RANKINE EARTH PRESSURE COEFFICIENTS
+# =======================
 st.header("📐 Rankine Earth Pressure Coefficients")
+
+st.markdown(
+    "The earth pressure coefficients are calculated using **Rankine earth pressure theory** "
+    "for a vertical, smooth wall and an inclined backfill."
+)
 
 try:
     Ka = rankine_active_coefficient(phi_a, beta)
     Kp = rankine_passive_coefficient(phi_p)
 
-    st.success(f"Ka (active) = {Ka:.4f}")
-    st.success(f"Kp (passive) = {Kp:.4f}")
+    st.subheader("Active Earth Pressure Coefficient (Ka)")
+
+    st.latex(
+        r"""
+        K_a =
+        \cos \beta
+        \frac{\cos \beta - \sqrt{\cos^2 \beta - \cos^2 \varphi}}
+        {\cos \beta + \sqrt{\cos^2 \beta - \cos^2 \varphi}}
+        """
+    )
+
+    st.success(f"Ka = {Ka:.4f}")
+
+    st.subheader("Passive Earth Pressure Coefficient (Kp)")
+
+    st.latex(
+        r"""
+        K_p =
+        \cos \beta
+        \frac{\cos \beta + \sqrt{\cos^2 \beta - \cos^2 \varphi}}
+        {\cos \beta - \sqrt{\cos^2 \beta - \cos^2 \varphi}}
+        """
+    )
+
+    st.success(f"Kp = {Kp:.4f}")
 
 except ValueError as e:
     st.error(str(e))
