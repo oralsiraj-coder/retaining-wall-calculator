@@ -317,6 +317,52 @@ st.latex(
 st.latex(r"\boxed{\sigma'_v(z) = \sigma_v(z)}")
 
 # =======================
+# EFFECTIVE VERTICAL STRESS
+# =======================
+st.header("📐 Effective Vertical Stress Calculation")
+
+# ---- Governing equations ----
+st.latex(r"\sigma_{v,\text{soil}}(z) = \gamma \, z")
+st.latex(r"\sigma_{v,\text{surcharge}}(z) = q")
+st.latex(r"\sigma_{v,\text{water}}(z) = -\gamma_w (z - z_w), \quad z > z_w")
+st.latex(r"z_w = H_a - H_w")
+
+st.latex(r"\sigma_v(z) = \sigma_{v,\text{soil}} + \sigma_{v,\text{surcharge}} + \sigma_{v,\text{water}")
+st.latex(r"\boxed{\sigma'_v(z) = \sigma_v(z)}")
+
+# ---- Depth discretization ----
+z = np.linspace(0, Ha, 300)   # depth below ground surface (m)
+
+# ---- Stress components (kPa) ----
+sigma_v_soil = gamma_a * z
+sigma_v_surcharge = q * np.ones_like(z)
+
+z_wt = Ha - Hw
+gamma_w = 9.81
+sigma_v_water = -gamma_w * np.maximum(0, z - z_wt)
+
+# ---- Effective stress ----
+sigma_v_effective = sigma_v_soil + sigma_v_surcharge + sigma_v_water
+
+# ---- Plot ----
+fig_eff, ax_eff = plt.subplots(figsize=(6, 4))
+
+ax_eff.plot(sigma_v_soil, z, "--", label="Soil self‑weight (γ·z)")
+ax_eff.plot(sigma_v_surcharge, z, "--", label="Surcharge (q)")
+ax_eff.plot(sigma_v_water, z, "--", label="Water pressure (−γw·h)")
+ax_eff.plot(sigma_v_effective, z, linewidth=2.5, label="Effective stress σ′ᵥ")
+
+ax_eff.invert_yaxis()   # depth increases downward
+
+ax_eff.set_xlabel("Stress (kPa)")
+ax_eff.set_ylabel("Depth below ground surface z (m)")
+ax_eff.set_title("Effective Vertical Stress Distribution")
+ax_eff.grid(True)
+ax_eff.legend()
+
+st.pyplot(fig_eff)
+
+# =======================
 # VERTICAL STRESS TABLE (0.1 m SLICES)
 # =======================
 import pandas as pd
