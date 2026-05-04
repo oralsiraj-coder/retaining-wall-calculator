@@ -435,58 +435,42 @@ st.markdown(
 """
 )
 # =======================
-# HORIZONTAL STRESS DISTRIBUTION (SEPARATE CONTRIBUTIONS)
+# HORIZONTAL STRESS DISTRIBUTION
 # =======================
 st.header("📊 Horizontal Stress Distribution with Depth")
 
 st.markdown(
-    "Horizontal earth stresses are calculated using a **total stress approach**, "
-    "with soil self‑weight, surcharge, and groundwater pressure evaluated "
-    "independently and then superimposed."
+    "The horizontal stress is calculated using a total stress approach, "
+    "where the contributions from soil self-weight, surface surcharge, and "
+    "groundwater pressure are evaluated independently and superimposed."
 )
 
-# ---- Depth discretization ----
-z = np.linspace(0, Ha, 300)  # depth below ground surface (m)
+z = np.linspace(0, Ha, 300)
 
-# ---- Parameters ----
 gamma_w = 9.81
 z_wt = Ha - Hw
 
-# ---- Earth pressure coefficient (Rankine active) ----
 Ka = rankine_active_coefficient(phi_a, beta)
 
-# ---- Horizontal stress components ----
-sigma_h_soil = Ka * gamma_a * z                  # soil contribution
-sigma_h_surcharge = Ka * q * np.ones_like(z)      # surcharge contribution
-sigma_h_water = gamma_w * np.maximum(0, z - z_wt) # water pressure
+sigma_h_soil = Ka * gamma_a * z
+sigma_h_surcharge = Ka * q * np.ones_like(z)
+sigma_h_water = gamma_w * np.maximum(0, z - z_wt)
 
-# ---- Resultant horizontal stress ----
 sigma_h_total = sigma_h_soil + sigma_h_surcharge + sigma_h_water
 
-# ---- Plot ----
 fig_h, ax_h = plt.subplots(figsize=(6, 8))
 
-ax_h.plot(sigma_h_soil, z, label="Soil: $K·γz$")
-ax_h.plot(sigma_h_surcharge, z, label="Surcharge: $K·q$")
-ax_h.plot(sigma_h_water, z, label="Water: $γ_w(z-z_w)$")
-ax_h.plot(
-    sigma_h_total,
-    z,
-    linewidth=2.5,
-    label="Resultant: $σ_h$"
-)
+ax_h.plot(sigma_h_soil, z, label="Soil: K·γz")
+ax_h.plot(sigma_h_surcharge, z, label="Surcharge: K·q")
+ax_h.plot(sigma_h_water, z, label="Water: γw(z − zw)")
+ax_h.plot(sigma_h_total, z, linewidth=2.5, label="Resultant σh")
 
-# Geotechnical convention
 ax_h.invert_yaxis()
-ax_h.set_xlabel("Horizontal stress σₕ (kPa)")
-ax_h.set_ylabel("Depth below ground surface z (m)")
-ax_h.set_title("Horizontal Earth Stress Distribution")
+ax_h.set_xlabel("Horizontal stress σh (kPa)")
+ax_h.set_ylabel("Depth z (m)")
+ax_h.set_title("Horizontal Stress Distribution")
 ax_h.grid(True)
 ax_h.legend()
 
 st.pyplot(fig_h)
-``
-
-st.pyplot(fig_h)
-``
 
