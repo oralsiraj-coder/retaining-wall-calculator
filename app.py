@@ -255,29 +255,34 @@ import matplotlib.pyplot as plt
 import streamlit as st
 
 # =======================
-# VERTICAL STRESS DISTRIBUTION (ROTATED)
+# VERTICAL STRESS DISTRIBUTION
+# Depth vertical, Stress horizontal
 # =======================
 
-z = np.linspace(0, Ha, 300)
+z = np.linspace(0, Ha, 300)   # depth below ground surface (m)
 
 # Vertical stresses (kPa)
-sigma_v_soil = gamma_a * z
-sigma_v_surcharge = q * np.ones_like(z)
+sigma_v_soil = gamma_a * z               # Soil self-weight
+sigma_v_surcharge = q * np.ones_like(z)  # Uniform surcharge
 
-z_wt = Ha - Hw          # Water table depth
-gamma_w = 9.81          # kN/m³
+# Water pressure (below water table)
+z_wt = Ha - Hw                            # depth to water table
+gamma_w = 9.81                            # kN/m³
 sigma_v_water = gamma_w * np.maximum(0, z - z_wt)
 
-# Plot
-fig_vs, ax_vs = plt.subplots(figsize=(8, 5))
+# ---- Plot ----
+fig_vs, ax_vs = plt.subplots(figsize=(6, 8))
 
-ax_vs.plot(z, sigma_v_soil, label="Soil self-weight (γ·z)")
-ax_vs.plot(z, sigma_v_surcharge, label="Surcharge (q)")
-ax_vs.plot(z, sigma_v_water, label="Water (γw·h)")
+ax_vs.plot(sigma_v_soil, z, label="Soil self‑weight (γ·z)")
+ax_vs.plot(sigma_v_surcharge, z, label="Surcharge (q)")
+ax_vs.plot(sigma_v_water, z, label="Water pressure (γw·h)")
 
-ax_vs.set_xlabel("Depth below ground surface z (m)")
-ax_vs.set_ylabel("Vertical stress σᵥ (kPa)")
-ax_vs.set_title("Vertical Stress Distribution (Rotated View)")
+# ✅ Geotechnical convention
+ax_vs.invert_yaxis()   # depth increases downward
+
+ax_vs.set_xlabel("Vertical stress σᵥ (kPa)")
+ax_vs.set_ylabel("Depth below ground surface z (m)")
+ax_vs.set_title("Vertical Stress Distribution with Depth")
 
 ax_vs.grid(True)
 ax_vs.legend()
