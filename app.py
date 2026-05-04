@@ -434,7 +434,6 @@ st.markdown(
   $z_w = H_a - H_w$
 """
 )
-
 # =======================
 # HORIZONTAL STRESS DISTRIBUTION (SEPARATE CONTRIBUTIONS)
 # =======================
@@ -483,6 +482,10 @@ ax_h.set_xlabel("Horizontal stress σₕ (kPa)")
 ax_h.set_ylabel("Depth below ground surface z (m)")
 ax_h.set_title("Horizontal Earth Stress Distribution")
 ax_h.grid(True)
+ax_h.legend()
+
+st.pyplot(fig_h)
+``
 ax_h.legend()
 
 st.pyplot(fig_h)
