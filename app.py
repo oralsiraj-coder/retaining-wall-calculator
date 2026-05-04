@@ -310,7 +310,6 @@ def plot_vertical_stress(Ha, Hw, gamma_soil, gamma_water, q):
     ax.set_title("Vertical Stress Distribution with Depth")
     ax.grid(True)
     ax.legend()
-
     return fig
 
 
