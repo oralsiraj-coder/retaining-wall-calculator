@@ -435,7 +435,5 @@ st.markdown("**\( z_w \)** – Depth to groundwater table *(m)*")
 st.latex(r"z_w = H_a - H_w")
 ``
 
-st.latex(r"\sigma_h(z) = K \, \sigma'_v(z) + u(z)")
-st.latex(r"u(z) = \gamma_w (z - z_w), \quad z > z_w")
-st.latex(r"z_w = H_a - H_w")
+
 
