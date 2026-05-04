@@ -411,29 +411,32 @@ st.latex(
 )
 
 # =======================
-# SYMBOL DEFINITIONS – HORIZONTAL EARTH STRESS
+# SYMBOLS (HORIZONTAL EARTH STRESS)
 # =======================
-st.subheader("Definition of symbols")
+st.subheader("Symbols")
 
-st.markdown("**\( z \)** – Depth below ground surface *(m)*")
+st.latex(r"z")
+st.markdown("Depth below ground surface *(m)*")
 
-st.markdown("**\( \sigma'_v(z) \)** – Effective vertical stress at depth *z* *(kPa)*")
-st.latex(r"\sigma'_v(z) = \sigma_v(z) - u(z)")
+st.latex(r"\sigma'_v(z)")
+st.markdown("Effective vertical stress at depth *z* *(kPa)*")
 
-st.markdown("**\( \sigma_h(z) \)** – Total horizontal earth stress acting on the wall *(kPa)*")
-st.latex(r"\sigma_h(z) = K \, \sigma'_v(z) + u(z)")
+st.latex(r"\sigma_h(z)")
+st.markdown("Horizontal earth stress acting on the wall *(kPa)*")
 
-st.markdown("**\( u(z) \)** – Pore water pressure at depth *z* *(kPa)*")
-st.latex(r"u(z) = \gamma_w (z - z_w), \quad z > z_w")
+st.latex(r"K")
+st.markdown("Earth pressure coefficient (Rankine active $K_a$ or passive $K_p$)")
 
-st.markdown("**\( K \)** – Earth pressure coefficient")
-st.markdown("*Rankine active* \(K_a\) *or passive* \(K_p\)")
+st.latex(r"u(z)")
+st.markdown("Pore water pressure *(kPa)*")
 
-st.markdown("**\( \gamma_w \)** – Unit weight of water *(9.81 kN/m³)*")
+st.latex(r"\gamma_w")
+st.markdown("Unit weight of water *(9.81 kN/m³)*")
 
-st.markdown("**\( z_w \)** – Depth to groundwater table *(m)*")
+st.latex(r"z_w")
+st.markdown("Depth to groundwater table *(m)*")
+
 st.latex(r"z_w = H_a - H_w")
-``
 
 
 
