@@ -15,7 +15,7 @@ LW_DIM = 0.6
 LW_EXT = 0.4
 
 # Drafting gap (1 mm in model space)
-DRAFT_GAP = 0.001
+DRAFT_GAP = 0.1
 
 # =======================
 # DIMENSION DRAWING
