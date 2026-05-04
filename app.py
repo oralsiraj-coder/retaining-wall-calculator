@@ -436,56 +436,42 @@ st.markdown(
 )
 
 # =======================
-# HORIZONTAL STRESS DISTRIBUTION (TOTAL STRESS)
+# HORIZONTAL STRESS – SOIL CONTRIBUTION ONLY
 # =======================
-st.header("📊 Horizontal Stress Distribution with Depth (Total Stress)")
+st.header("📐 Horizontal Stress Due to Soil Self‑Weight")
 
-st.markdown(
-    """
-    The horizontal stress is calculated using a **total stress approach**.
-    Soil self‑weight, surcharge, and groundwater pressure are evaluated
-    independently and linearly superimposed.
-    """
-)
-
-# ---- Depth discretization ----
 z = np.linspace(0, Ha, 300)   # depth below ground surface (m)
 
-# ---- Parameters ----
 gamma_w = 9.81
 z_wt = Ha - Hw
 
-# ---- Earth pressure coefficient (active case) ----
-Ka = rankine_active_coefficient(phi_a, beta)
+# --- Vertical stress due to soil self‑weight ---
+sigma_v_soil = gamma_a * z   # γ · z  ✅ exactly as you stated
 
-# ---- Horizontal stress components ----
-sigma_h_soil = Ka * gamma_a * z                   # soil contribution
-sigma_h_surcharge = Ka * q * np.ones_like(z)       # surcharge contribution
-sigma_h_water = gamma_w * np.maximum(0, z - z_wt)  # water pressure
-
-# ---- Resultant horizontal stress ----
-sigma_h_total = sigma_h_soil + sigma_h_surcharge + sigma_h_water
-
-# ---- Plot ----
-fig_h, ax_h = plt.subplots(figsize=(6, 8))
-
-ax_h.plot(sigma_h_soil, z, label="Soil: $K·\\gamma z$")
-ax_h.plot(sigma_h_surcharge, z, label="Surcharge: $K·q$")
-ax_h.plot(sigma_h_water, z, label="Water: $\\gamma_w (z - z_w)$")
-ax_h.plot(
-    sigma_h_total,
-    z,
-    linewidth=2.5,
-    label="Resultant horizontal stress $\\sigma_h$"
+# --- Effective vertical stress due to soil ---
+sigma_v_eff_soil = np.where(
+    z <= z_wt,
+    sigma_v_soil,
+    sigma_v_soil - gamma_w * (z - z_wt)
 )
 
-# Geotechnical convention
-ax_h.invert_yaxis()
-ax_h.set_xlabel("Horizontal stress σₕ (kPa)")
-ax_h.set_ylabel("Depth below ground surface z (m)")
-ax_h.set_title("Horizontal Earth Stress Distribution (Total Stress)")
-ax_h.grid(True)
-ax_h.legend()
+# --- Earth pressure coefficient ---
+Ka = rankine_active_coefficient(phi_a, beta)
 
-st.pyplot(fig_h)
-``
+# --- Horizontal stress due to SOIL contribution only ---
+sigma_h_soil = Ka * sigma_v_eff_soil
+
+# --- Plot ---
+fig, ax = plt.subplots(figsize=(6, 8))
+
+ax.plot(sigma_h_soil, z, label="Soil contribution  $K·(\\gamma z - u)$")
+
+ax.invert_yaxis()
+ax.set_xlabel("Horizontal stress (kPa)")
+ax.set_ylabel("Depth z (m)")
+ax.set_title("Horizontal Stress Due to Soil Self‑Weight")
+ax.grid(True)
+ax.legend()
+
+st.pyplot(fig)
+
