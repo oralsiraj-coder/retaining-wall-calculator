@@ -321,7 +321,7 @@ stress_table = pd.DataFrame({
 })
 
 
-st.markdown("Slice thickness = **0.1 m**")
+st.markdown("Vertical stress distribution ")
 
 st.dataframe(
     stress_table.style.format({
