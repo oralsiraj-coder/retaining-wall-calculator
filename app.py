@@ -186,7 +186,16 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
 # STREAMLIT UI
 # =======================
 st.title("🧱 Retaining Wall Geometry Tool")
+st.sidebar.header("Surface Loads")
 
+q = st.sidebar.number_input(
+    "q – uniform surcharge (kPa)",
+    min_value=0.0,
+    max_value=500.0,
+    value=0.0,
+    step=5.0,
+    help="Uniform surcharge acting on the backfill surface (e.g. traffic or storage load)"
+)
 st.sidebar.header("Geometry (m)")
 Ha = st.sidebar.number_input("Ha",1.0,20.0,6.0)
 Hw = st.sidebar.number_input("Hw",0.0,Ha,2.0)
