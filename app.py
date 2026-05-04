@@ -195,7 +195,7 @@ st.pyplot(draw_wall(
 # =======================
 # RANKINE CALCULATION
 # =======================
-st.header("📐 Rankine Earth Pressure Coefficients")
+st.header("Rankine Earth Pressure Coefficients")
 
 try:
     Ka = rankine_active_coefficient(phi_a, beta)
