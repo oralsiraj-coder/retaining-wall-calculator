@@ -189,7 +189,7 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
     ax.set_title("Retaining Wall Geometry – With Labels & Rankine")
 
     return fig
-
+#Surface loads
 st.sidebar.header("Surface Loads")
 
 q = st.sidebar.number_input(
