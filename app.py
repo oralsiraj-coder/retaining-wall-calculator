@@ -58,17 +58,16 @@ def compute_scale(Ha, Hp, Th, Lh, Lt, Tsb):
     )
 
 # =======================
-# RANKINE COEFFICIENTS (GENERAL CASE ONLY)
+# RANKINE COEFFICIENTS (GENERAL FORM)
 # =======================
 def rankine_active_coefficient(phi_deg, beta_deg):
     phi = math.radians(phi_deg)
     beta = math.radians(beta_deg)
 
     if beta > phi:
-        raise ValueError("Rankine theory not valid: β must be ≤ φ")
+        raise ValueError("Rankine not valid: β must be ≤ φ")
 
     term = math.sqrt(math.cos(beta)**2 - math.cos(phi)**2)
-
     Ka = (
         math.cos(beta)
         * (math.cos(beta) - term)
@@ -82,10 +81,9 @@ def rankine_passive_coefficient(phi_deg, beta_deg=0.0):
     beta = math.radians(beta_deg)
 
     if beta > phi:
-        raise ValueError("Rankine theory not valid: β must be ≤ φ")
+        raise ValueError("Rankine not valid: β must be ≤ φ")
 
     term = math.sqrt(math.cos(beta)**2 - math.cos(phi)**2)
-
     Kp = (
         math.cos(beta)
         * (math.cos(beta) + term)
@@ -102,7 +100,6 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
 
     scale = compute_scale(Ha, Hp, Th, Lh, Lt, Tsb)
 
-    # Scale geometry
     Ha_s = Ha * scale
     Hw_s = Hw * scale
     Hp_s = Hp * scale
@@ -133,13 +130,21 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
         closed=True, fc="#f4a261", ec="none", alpha=0.85
     ))
 
+    ax.text(
+        xL + 0.45 * Lh_s, yB + 0.55 * Ha_s,
+        f"Active soil\nγ={gamma_a:.1f}\nφ={phi_a:.0f}°\nc={c_a:.1f}",
+        ha="center", va="center", fontsize=8
+    )
+
     # WATER
     if Hw > 0:
         yWBL, yWBR = yTL - Hw_s, yTR - Hw_s
         ax.add_patch(Polygon(
             [(xL,yWBL),(xR,yWBR),(xR,yTR),(xL,yTL)],
-            closed=True, fc="#74c0fc", ec="none", alpha=0.6
+            fc="#74c0fc", ec="none", alpha=0.6
         ))
+        ax.plot([xL,xR],[yTL,yTR],"--",color="#1c7ed6")
+        draw_dimension(ax,(xL-0.5,yWBL),(xL-0.5,yTL),"Hw",vertical=True)
 
     # PASSIVE SOIL
     ax.add_patch(Rectangle(
@@ -148,18 +153,40 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
         fc="#b7e4c7", ec="none", alpha=0.85
     ))
 
+    ax.text(
+        x0 + Lh_s + Tsb_s + 0.5 * Lt_s,
+        y0 + base_h + 0.5 * Hp_s,
+        f"Passive soil\nγ={gamma_p:.1f}\nφ={phi_p:.0f}°\nc={c_p:.1f}",
+        ha="center", va="center", fontsize=8
+    )
+
     # CONCRETE
-    ax.add_patch(Rectangle((x0, y0), base_L, base_h,
-                           fc="0.85", ec="black", lw=LW_CONCRETE))
-    ax.add_patch(Rectangle((x0 + Lh_s, y0 + base_h),
-                           Tsb_s, Ha_s,
-                           fc="0.85", ec="black", lw=LW_CONCRETE))
+    ax.add_patch(Rectangle((x0,y0),base_L,base_h,
+                           fc="0.85",ec="black",lw=LW_CONCRETE))
+    ax.add_patch(Rectangle((x0+Lh_s,y0+base_h),
+                           Tsb_s,Ha_s,
+                           fc="0.85",ec="black",lw=LW_CONCRETE))
+
+    # DIMENSIONS
+    draw_dimension(ax,(x0,y0+base_h),(x0,y0+base_h+Ha_s),"Ha",-0.7,True)
+    draw_dimension(ax,(x0+base_L,y0+base_h),
+                   (x0+base_L,y0+base_h+Hp_s),"Hp",0.7,True)
+    draw_dimension(ax,(x0,y0),(x0+Lh_s,y0),"Lh",-0.6)
+    draw_dimension(ax,(x0+Lh_s+Tsb_s,y0),(x0+base_L,y0),"Lt",-0.6)
+    draw_dimension(ax,(x0,y0),(x0,y0+Th_s),"Th",-0.5,True)
+    draw_dimension(ax,(x0+Lh_s,y0+base_h),
+                   (x0+Lh_s+Tsb_s,y0+base_h),"Tsb",0.3)
+
+    # GROUND SURFACE
+    ax.plot([xL,xR],[yTL,yTR],"--",color="black")
+    ax.text((xL+xR)/2,(yTL+yTR)/2+0.1,f"β={beta:.0f}°",
+            ha="center",fontsize=8)
 
     ax.set_xlim(0,VIEW_W)
     ax.set_ylim(0,VIEW_H)
     ax.set_aspect("equal")
     ax.axis("off")
-    ax.set_title("Retaining Wall Geometry")
+    ax.set_title("Retaining Wall Geometry – With Labels & Rankine")
 
     return fig
 
@@ -179,12 +206,13 @@ Tsb = st.sidebar.number_input("Tsb",0.2,2.0,0.4)
 beta = st.sidebar.number_input("β (deg)",0.0,45.0,10.0)
 
 st.sidebar.header("Soil parameters")
-phi_a = st.sidebar.number_input("φₐ (deg)",0.0,45.0,30.0)
-phi_p = st.sidebar.number_input("φₚ (deg)",0.0,45.0,35.0)
-gamma_a = 18.0
-gamma_p = 18.0
-c_a = 0.0
-c_p = 0.0
+gamma_a = st.sidebar.number_input("γₐ",14.0,25.0,18.0)
+phi_a = st.sidebar.number_input("φₐ",0.0,45.0,30.0)
+c_a = st.sidebar.number_input("cₐ",0.0,50.0,0.0)
+
+gamma_p = st.sidebar.number_input("γₚ",14.0,25.0,18.0)
+phi_p = st.sidebar.number_input("φₚ",0.0,45.0,35.0)
+c_p = st.sidebar.number_input("cₚ",0.0,50.0,0.0)
 
 st.pyplot(draw_wall(
     Ha,Hw,Hp,Th,Lh,Lt,Tsb,beta,
@@ -192,26 +220,14 @@ st.pyplot(draw_wall(
     gamma_p,phi_p,c_p
 ))
 
-# =======================
-# RANKINE CALCULATION
-# =======================
-st.header("Rankine Earth Pressure Coefficients")
+st.header("📐 Rankine Earth Pressure Coefficients")
 
 try:
     Ka = rankine_active_coefficient(phi_a, beta)
-    Kp = rankine_passive_coefficient(phi_p, 0.0)
+    Kp = rankine_passive_coefficient(phi_p)
 
-    st.latex(
-        r"K_a = \cos\beta \frac{\cos\beta - \sqrt{\cos^2\beta - \cos^2\varphi}}"
-        r"{\cos\beta + \sqrt{\cos^2\beta - \cos^2\varphi}}"
-    )
-    st.success(f"Ka = {Ka:.4f}")
-
-    st.latex(
-        r"K_p = \cos\beta \frac{\cos\beta + \sqrt{\cos^2\beta - \cos^2\varphi}}"
-        r"{\cos\beta - \sqrt{\cos^2\beta - \cos^2\varphi}}"
-    )
-    st.success(f"Kp = {Kp:.4f}")
+    st.success(f"Ka (active) = {Ka:.4f}")
+    st.success(f"Kp (passive) = {Kp:.4f}")
 
 except ValueError as e:
     st.error(str(e))
