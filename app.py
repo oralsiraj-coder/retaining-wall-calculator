@@ -252,7 +252,7 @@ st.success(f"Kp = {Kp:.4f}")
 # =======================
 # EFFECTIVE VERTICAL STRESS – THEORY
 # =======================
-
+st.header("Vertical stress calculation")
 st.markdown(
     """
     **Effective vertical stress** represents the portion of the total stress
