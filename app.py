@@ -272,7 +272,7 @@ gamma_w = 9.81                            # kN/m³
 sigma_v_water = -gamma_w * np.maximum(0, z - z_wt)
 
 # ---- Plot ----
-fig_vs, ax_vs = plt.subplots(figsize=(6, 8))
+fig_vs, ax_vs = plt.subplots(figsize=(6, 4))
 
 ax_vs.plot(sigma_v_soil, z, label="Soil self‑weight (γ·z)")
 ax_vs.plot(sigma_v_surcharge, z, label="Surcharge (q)")
