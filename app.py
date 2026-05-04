@@ -4,7 +4,7 @@ from matplotlib.patches import Rectangle, FancyArrowPatch, Polygon
 import numpy as np
 
 # =======================
-# VIEWPORT & STYLE
+# VIEWPORT
 # =======================
 VIEW_W = 10.0
 VIEW_H = 10.0
@@ -16,7 +16,7 @@ LW_EXT = 0.4
 DRAFT_GAP = 0.1
 
 # =======================
-# DIMENSION FUNCTION
+# DIMENSIONS
 # =======================
 def draw_dimension(ax, p1, p2, label, offset=0.0, vertical=False):
     if vertical:
@@ -27,8 +27,11 @@ def draw_dimension(ax, p1, p2, label, offset=0.0, vertical=False):
         ))
         ax.plot([p1[0], x], [p1[1], p1[1]], lw=LW_EXT, color="black")
         ax.plot([p2[0], x], [p2[1], p2[1]], lw=LW_EXT, color="black")
-        ax.text(x - 0.15, (p1[1] + p2[1]) / 2,
-                label, rotation=90, ha="center", va="center", fontsize=8)
+        ax.text(
+            x - 0.15, (p1[1] + p2[1]) / 2,
+            label, rotation=90,
+            ha="center", va="center", fontsize=8
+        )
 
 # =======================
 # SCALE
@@ -37,8 +40,10 @@ def compute_scale(Ha, Hp, Th, Tt, Lh, Lt, Tsb):
     base_h = max(Th, Tt)
     base_L = Lh + Tsb + Lt
     total_H = base_h + max(Ha, Hp)
-    return min((VIEW_W * MARGIN) / base_L,
-               (VIEW_H * MARGIN) / total_H)
+    return min(
+        (VIEW_W * MARGIN) / base_L,
+        (VIEW_H * MARGIN) / total_H
+    )
 
 # =======================
 # DRAW WALL
@@ -47,7 +52,7 @@ def draw_wall(Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb, beta):
 
     scale = compute_scale(Ha, Hp, Th, Tt, Lh, Lt, Tsb)
 
-    # Scale all geometry
+    # Scale geometry
     Ha_s = Ha * scale
     Hw_s = Hw * scale
     Hp_s = Hp * scale
@@ -68,28 +73,27 @@ def draw_wall(Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb, beta):
 
     fig, ax = plt.subplots(figsize=(7, 7))
 
-    # ======================================================
-    # ACTIVE SOIL – CORRECT TRAPEZOID (β FROM HORIZONTAL)
-    # ======================================================
-    x_left = x0 + gap                      # wall face
-    x_bottom_right = x0 + Lh_s - gap       # heel end at base
+    # =======================
+    # ACTIVE SOIL (CORRECT – SLOPES DOWNWARD)
+    x_left = x0 + gap
+    x_right = x0 + Lh_s - gap
 
     y_bottom = y0 + base_h + gap
-    y_top = y_bottom + Ha_s
+    y_top_left = y_bottom + Ha_s
 
-    # Horizontal retreat of ground surface
-    dx = Ha_s / np.tan(beta_rad) if beta > 0 else 0.0
-    x_top_right = x_bottom_right - dx
+    # Vertical drop over heel
+    dy = Lh_s * np.tan(beta_rad)
+    y_top_right = y_top_left - dy
 
-    active_soil = [
-        (x_left, y_bottom),           # bottom-left (wall)
-        (x_bottom_right, y_bottom),   # bottom-right (heel)
-        (x_top_right, y_top),         # top-right (retreated)
-        (x_left, y_top)               # top-left (wall)
+    active_poly = [
+        (x_left, y_bottom),
+        (x_right, y_bottom),
+        (x_right, y_top_right),
+        (x_left, y_top_left)
     ]
 
     ax.add_patch(Polygon(
-        active_soil,
+        active_poly,
         closed=True,
         facecolor="#f4a261",
         edgecolor="none",
@@ -98,17 +102,17 @@ def draw_wall(Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb, beta):
 
     # =======================
     # WATER (PARALLEL TO GROUND)
-    # =======================
     if Hw > 0:
-        y_wb = y_top - Hw_s
-        dx_w = Hw_s / np.tan(beta_rad) if beta > 0 else 0.0
-        x_wtr = x_bottom_right - dx_w
+        y_wl_left = y_top_left
+        y_wl_right = y_top_right
+        y_wb_left = y_wl_left - Hw_s
+        y_wb_right = y_wl_right - Hw_s
 
         water_poly = [
-            (x_left, y_wb),
-            (x_bottom_right, y_wb),
-            (x_wtr, y_top),
-            (x_left, y_top)
+            (x_left, y_wb_left),
+            (x_right, y_wb_right),
+            (x_right, y_wl_right),
+            (x_left, y_wl_left)
         ]
 
         ax.add_patch(Polygon(
@@ -119,25 +123,23 @@ def draw_wall(Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb, beta):
             alpha=0.6
         ))
 
-        # Water level dashed
         ax.plot(
-            [x_left, x_wtr],
-            [y_top, y_top],
+            [x_left, x_right],
+            [y_wl_left, y_wl_right],
             linestyle="--",
             color="#1c7ed6"
         )
 
         draw_dimension(
             ax,
-            (x_left - 0.4, y_wb),
-            (x_left - 0.4, y_top),
+            (x_left - 0.4, y_wb_left),
+            (x_left - 0.4, y_wl_left),
             f"Hw = {Hw:.2f} m",
             vertical=True
         )
 
     # =======================
     # PASSIVE SOIL
-    # =======================
     ax.add_patch(Rectangle(
         (x0 + Lh_s + Tsb_s + gap, y0 + base_h + gap),
         Lt_s - gap,
@@ -148,37 +150,30 @@ def draw_wall(Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb, beta):
     ))
 
     # =======================
-    # CONCRETE WALL
-    # =======================
+    # CONCRETE
     ax.add_patch(Rectangle(
         (x0, y0),
         base_L, base_h,
-        fc="0.85",
-        ec="black",
-        lw=LW_CONCRETE
+        fc="0.85", ec="black", lw=LW_CONCRETE
     ))
     ax.add_patch(Rectangle(
         (x0 + Lh_s, y0 + base_h),
-        Tsb_s,
-        Ha_s,
-        fc="0.85",
-        ec="black",
-        lw=LW_CONCRETE
+        Tsb_s, Ha_s,
+        fc="0.85", ec="black", lw=LW_CONCRETE
     ))
 
     # =======================
-    # GROUND SURFACE (INCLINED)
-    # =======================
+    # GROUND SURFACE
     ax.plot(
-        [x_left, x_top_right],
-        [y_top, y_top],
+        [x_left, x_right],
+        [y_top_left, y_top_right],
         linestyle="--",
         color="black"
     )
 
     ax.text(
-        (x_left + x_top_right) / 2,
-        y_top + 0.12,
+        (x_left + x_right) / 2,
+        (y_top_left + y_top_right) / 2 + 0.1,
         f"β = {beta:.0f}°",
         ha="center",
         fontsize=8
@@ -186,7 +181,6 @@ def draw_wall(Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb, beta):
 
     # =======================
     # DIMENSIONS
-    # =======================
     draw_dimension(
         ax,
         (x0, y0 + base_h),
@@ -198,12 +192,11 @@ def draw_wall(Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb, beta):
 
     # =======================
     # VIEW
-    # =======================
     ax.set_xlim(0, VIEW_W)
     ax.set_ylim(0, VIEW_H)
     ax.set_aspect("equal")
     ax.axis("off")
-    ax.set_title("Retaining Wall – Backfill Inclined from Horizontal")
+    ax.set_title("Retaining Wall – Backfill Sloping Downward")
 
     return fig
 
@@ -221,7 +214,10 @@ Tt = st.sidebar.number_input("Toe thickness Tt", 0.2, 2.0, 0.6)
 Lh = st.sidebar.number_input("Heel length Lh", 0.5, 15.0, 3.0)
 Lt = st.sidebar.number_input("Toe length Lt", 0.5, 15.0, 2.0)
 Tsb = st.sidebar.number_input("Stem thickness Tsb", 0.2, 2.0, 0.4)
-beta = st.sidebar.number_input("Backfill inclination β (deg from horizontal)", 0.0, 45.0, 10.0)
+beta = st.sidebar.number_input(
+    "Backfill slope β (deg from horizontal, downward)",
+    0.0, 45.0, 10.0
+)
 
 fig = draw_wall(Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb, beta)
 st.pyplot(fig)
