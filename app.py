@@ -463,7 +463,7 @@ z_wt = Ha - Hw
 sigma_v_eff_soil = np.where(
     z <= z_wt,
     gamma_a * z,
-    gamma_a * z - gamma_w * (z - z_wt)
+    gamma_a * z - gamma_w * z
 )
 
 # ---- Earth pressure coefficient (active case) ----
