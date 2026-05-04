@@ -435,15 +435,55 @@ st.markdown(
 """
 )
 
+# =======================
+# HORIZONTAL STRESS DISTRIBUTION (TOTAL STRESS)
+# =======================
 st.header("📊 Horizontal Stress Distribution with Depth (Total Stress)")
 
 st.markdown(
-    "The horizontal stress is calculated using a total stress approach, "
-    "where soil self‑weight, surcharge, and groundwater pressure are "
-    "evaluated independently and superimposed."
+    """
+    The horizontal stress is calculated using a **total stress approach**.
+    Soil self‑weight, surcharge, and groundwater pressure are evaluated
+    independently and linearly superimposed.
+    """
 )
 
-st.latex(r"\sigma_h(z) = K \cdot \gamma z + K \cdot q + \gamma_w (z - z_w)")
+# ---- Depth discretization ----
+z = np.linspace(0, Ha, 300)   # depth below ground surface (m)
+
+# ---- Parameters ----
+gamma_w = 9.81
+z_wt = Ha - Hw
+
+# ---- Earth pressure coefficient (active case) ----
+Ka = rankine_active_coefficient(phi_a, beta)
+
+# ---- Horizontal stress components ----
+sigma_h_soil = Ka * gamma_a * z                   # soil contribution
+sigma_h_surcharge = Ka * q * np.ones_like(z)       # surcharge contribution
+sigma_h_water = gamma_w * np.maximum(0, z - z_wt)  # water pressure
+
+# ---- Resultant horizontal stress ----
+sigma_h_total = sigma_h_soil + sigma_h_surcharge + sigma_h_water
+
+# ---- Plot ----
+fig_h, ax_h = plt.subplots(figsize=(6, 8))
+
+ax_h.plot(sigma_h_soil, z, label="Soil: $K·\\gamma z$")
+ax_h.plot(sigma_h_surcharge, z, label="Surcharge: $K·q$")
+ax_h.plot(sigma_h_water, z, label="Water: $\\gamma_w (z - z_w)$")
+ax_h.plot(
+    sigma_h_total,
+    z,
+    linewidth=2.5,
+    label="Resultant horizontal stress $\\sigma_h$"
+)
+
+# Geotechnical convention
+ax_h.invert_yaxis()
+ax_h.set_xlabel("Horizontal stress σₕ (kPa)")
+ax_h.set_ylabel("Depth below ground surface z (m)")
+ax_h.set_title("Horizontal Earth Stress Distribution (Total Stress)")
 ax_h.grid(True)
 ax_h.legend()
 
