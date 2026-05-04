@@ -314,19 +314,7 @@ def plot_vertical_stress(Ha, Hw, gamma_soil, gamma_water, q):
     return fig
 
 
-# =======================
-# STREAMLIT UI
-# =======================
-st.header("📊 Vertical Stress Distribution")
 
-Ha = st.number_input("Soil height Ha (m)", 1.0, 20.0, 6.0)
-Hw = st.number_input("Water height Hw (m)", 0.0, Ha, 2.0)
-q = st.number_input("Uniform surcharge q (kPa)", 0.0, 300.0, 20.0)
-gamma_soil = st.number_input("Soil unit weight γ (kN/m³)", 14.0, 25.0, 18.0)
-gamma_water = 9.81  # kN/m³
-
-fig = plot_vertical_stress(Ha, Hw, gamma_soil, gamma_water, q)
-st.pyplot(fig)
 
 except ValueError as e:
     st.error(str(e))
