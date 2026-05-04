@@ -249,14 +249,23 @@ st.latex(
 )
 st.success(f"Kp = {Kp:.4f}")
 
+# =======================
+# EFFECTIVE VERTICAL STRESS – THEORY
+# =======================
 
-import numpy as np
-import matplotlib.pyplot as plt
-import streamlit as st
+st.markdown(
+    """
+    **Effective vertical stress** represents the portion of the total stress
+    that is transmitted through the soil skeleton.
+    It governs shear strength, settlement, and earth pressure.
 
-st.header("📐 Effective Vertical Stress Calculation")
+    In saturated soil, pore water pressure does not contribute to strength
+    and therefore reduces the effective stress.
+    """
+)
 
-st.latex(r"\sigma_{v,\text{soil}}(z) = \gamma z")
+# ---- Governing equations ----
+st.latex(r"\sigma_{v,\text{soil}}(z) = \gamma \, z")
 st.latex(r"\sigma_{v,\text{surcharge}}(z) = q")
 st.latex(r"\sigma_{v,\text{water}}(z) = -\gamma_w (z - z_w), \quad z > z_w")
 st.latex(r"z_w = H_a - H_w")
@@ -268,6 +277,29 @@ st.latex(
 )
 
 st.latex(r"\boxed{\sigma'_v(z) = \sigma_v(z)}")
+
+# ---- Symbol definitions ----
+st.markdown("### Definition of symbols")
+
+st.markdown(
+    """
+    - **\( z \)** – Depth below ground surface *(m)*  
+    - **\( H_a \)** – Total soil / wall height *(m)*  
+    - **\( H_w \)** – Height of water above the base *(m)*  
+    - **\( z_w \)** – Depth to water table *(m)*  
+      \\[
+      z_w = H_a - H_w
+      \\]
+
+    - **\( \gamma \)** – Unit weight of soil *(kN/m³)*  
+    - **\( \gamma_w \)** – Unit weight of water *(≈ 9.81 kN/m³)*  
+    - **\( q \)** – Uniform surface surcharge *(kPa)*  
+
+    - **\( \sigma_v \)** – Total vertical stress *(kPa)*  
+    - **\( \sigma'_v \)** – Effective vertical stress *(kPa)*  
+    - **\( u \)** – Pore water pressure *(kPa)*
+    """
+)
 
 # =======================
 # VERTICAL STRESS TABLE (0.1 m SLICES)
