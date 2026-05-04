@@ -436,53 +436,53 @@ st.markdown(
 )
 
 # =======================
-# HORIZONTAL STRESS DISTRIBUTION
+# HORIZONTAL STRESS DISTRIBUTION (SEPARATED COMPONENTS)
 # =======================
 st.header("📊 Horizontal Stress Distribution with Depth")
 
-# ---- Explanation ----
 st.markdown(
     """
-    The following figure shows the **horizontal stress distribution acting on the wall**
-    due to soil, surcharge, and groundwater.  
-    The resultant curve represents the **total lateral pressure** to be used
-    for force and moment calculations.
+    The following figure presents the **horizontal stress distribution acting on the wall**,
+    with **separate contributions** from soil self‑weight, surcharge load, and groundwater.
+    The resultant curve represents the total lateral pressure acting on the wall.
     """
 )
 
 # ---- Depth discretization ----
-z = np.linspace(0, Ha, 300)     # depth below ground surface (m)
+z = np.linspace(0, Ha, 300)  # depth below ground surface (m)
 
-# ---- Effective vertical stress ----
-z_wt = Ha - Hw
+# ---- Parameters ----
 gamma_w = 9.81
+z_wt = Ha - Hw
 
-sigma_v_soil = gamma_a * z
-sigma_v_surcharge = q * np.ones_like(z)
-sigma_v_water = -gamma_w * np.maximum(0, z - z_wt)
-
-sigma_v_eff = sigma_v_soil + sigma_v_surcharge + sigma_v_water
+# ---- Effective vertical stress components ----
+sigma_v_eff_soil = gamma_a * z - gamma_w * np.maximum(0, z - z_wt)
+sigma_v_eff_surcharge = q * np.ones_like(z)
 
 # ---- Earth pressure coefficient (active case) ----
 Ka = rankine_active_coefficient(phi_a, beta)
 
 # ---- Horizontal stress components ----
-sigma_h_soil = Ka * sigma_v_eff                  # soil + surcharge
-sigma_h_water = gamma_w * np.maximum(0, z - z_wt)  # water pressure
-sigma_h_total = sigma_h_soil + sigma_h_water     # resultant
+sigma_h_soil = Ka * sigma_v_eff_soil          # soil self‑weight contribution
+sigma_h_surcharge = Ka * sigma_v_eff_surcharge  # surcharge contribution
+sigma_h_water = gamma_w * np.maximum(0, z - z_wt)  # water pressure (direct)
+
+# ---- Resultant ----
+sigma_h_total = sigma_h_soil + sigma_h_surcharge + sigma_h_water
 
 # ---- Plot ----
 fig_h, ax_h = plt.subplots(figsize=(6, 8))
 
-ax_h.plot(sigma_h_soil, z, "--", label="Soil + surcharge (K·σ′ᵥ)")
-ax_h.plot(sigma_h_water, z, "--", label="Water pressure")
-ax_h.plot(sigma_h_total, z, linewidth=2.5, label="Total horizontal stress σₕ")
+ax_h.plot(sigma_h_soil, z, label="Soil contribution  $K \\cdot (\\gamma z - u)$")
+ax_h.plot(sigma_h_surcharge, z, label="Surcharge contribution  $K \\cdot q$")
+ax_h.plot(sigma_h_water, z, label="Water pressure  $u$")
+ax_h.plot(sigma_h_total, z, linewidth=2.5, label="Resultant horizontal stress $\\sigma_h$")
 
 # Geotechnical convention
-ax_h.invert_yaxis()   # depth increases downward
+ax_h.invert_yaxis()
 ax_h.set_xlabel("Horizontal stress σₕ (kPa)")
 ax_h.set_ylabel("Depth below ground surface z (m)")
-ax_h.set_title("Horizontal Earth Pressure Distribution")
+ax_h.set_title("Horizontal Earth Stress Distribution")
 ax_h.grid(True)
 ax_h.legend()
 
