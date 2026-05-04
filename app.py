@@ -486,7 +486,6 @@ ax_h.legend()
 
 st.pyplot(fig_h)
 ``
-ax_h.legend()
 
 st.pyplot(fig_h)
 ``
