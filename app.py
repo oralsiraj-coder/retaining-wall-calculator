@@ -424,7 +424,7 @@ st.markdown(
 
     - **\( q \)** – Uniform surface surcharge *(kPa)*  
     - **\( \gamma \)** – Unit weight of soil *(kN/m³)*  
-    - **\( \gamma_w \)** – Unit weight of water *(≈ 9.81 kN/m³)*  
+    - **\( gamma_w \)** – Unit weight of water *(≈ 9.81 kN/m³)*  
 
     - **\( \sigma_{h,\text{water}} \)** – Horizontal water pressure acting directly
       on the wall *(kPa)*  
