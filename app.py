@@ -255,39 +255,43 @@ import matplotlib.pyplot as plt
 import streamlit as st
 
 # =======================
-# VERTICAL STRESS DISTRIBUTION
+# EFFECTIVE VERTICAL STRESS DISTRIBUTION
 # Depth vertical, stress horizontal
-# Water pressure shown as NEGATIVE
 # =======================
-st.header("📐 Effective stress calculation ")
+
+st.header("📐 Effective Vertical Stress Distribution")
+
 z = np.linspace(0, Ha, 300)   # depth below ground surface (m)
 
-# Vertical stresses (kPa)
-sigma_v_soil = gamma_a * z               # Soil self-weight (positive)
-sigma_v_surcharge = q * np.ones_like(z)  # Surcharge (positive)
+# --- Stress components (kPa) ---
+sigma_v_soil = gamma_a * z
+sigma_v_surcharge = q * np.ones_like(z)
 
-# Water pressure (negative contribution)
-z_wt = Ha - Hw                            # depth to water table
-gamma_w = 9.81                            # kN/m³
-sigma_v_water = -gamma_w * np.maximum(0, z - z_wt)
+z_wt = Ha - Hw
+gamma_w = 9.81
+sigma_v_water = -gamma_w * np.maximum(0, z - z_wt)  # negative pore pressure
 
-# ---- Plot ----
-fig_vs, ax_vs = plt.subplots(figsize=(6, 4))
+# --- Effective stress ---
+sigma_v_effective = sigma_v_soil + sigma_v_surcharge + sigma_v_water
 
-ax_vs.plot(sigma_v_soil, z, label="Soil self‑weight (γ·z)")
-ax_vs.plot(sigma_v_surcharge, z, label="Surcharge (q)")
-ax_vs.plot(sigma_v_water, z, label="Water pressure (−γw·h)")
+# --- Plot ---
+fig_eff, ax_eff = plt.subplots(figsize=(6, 4))
+
+ax_eff.plot(sigma_v_soil, z, "--", label="Soil self‑weight (γ·z)")
+ax_eff.plot(sigma_v_surcharge, z, "--", label="Surcharge (q)")
+ax_eff.plot(sigma_v_water, z, "--", label="Water pressure (−u)")
+ax_eff.plot(sigma_v_effective, z, linewidth=2.5, label="Effective stress σ′ᵥ")
 
 # Geotechnical convention
-ax_vs.invert_yaxis()   # depth increases downward
+ax_eff.invert_yaxis()
 
-ax_vs.set_xlabel("Vertical stress σᵥ (kPa)")
-ax_vs.set_ylabel("Depth below ground surface z (m)")
-ax_vs.set_title("Vertical Stress Distribution with Depth")
-ax_vs.grid(True)
-ax_vs.legend()
+ax_eff.set_xlabel("Stress (kPa)")
+ax_eff.set_ylabel("Depth below ground surface z (m)")
+ax_eff.set_title("Effective Vertical Stress with Depth")
+ax_eff.grid(True)
+ax_eff.legend()
 
-st.pyplot(fig_vs)
+st.pyplot(fig_eff)
 
 # =======================
 # VERTICAL STRESS TABLE (0.1 m SLICES)
