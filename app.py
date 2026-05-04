@@ -48,7 +48,9 @@ def compute_scale(Ha, Hp, Th, Tt, Lh, Lt, Tsb):
 # =======================
 # DRAW WALL
 # =======================
-def draw_wall(Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb, beta):
+def draw_wall(Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb, beta,
+              gamma_a, phi_a, c_a,
+              gamma_p, phi_p, c_p):
 
     scale = compute_scale(Ha, Hp, Th, Tt, Lh, Lt, Tsb)
 
@@ -74,16 +76,13 @@ def draw_wall(Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb, beta):
     fig, ax = plt.subplots(figsize=(7, 7))
 
     # =======================
-    # ACTIVE SOIL (CORRECT – SLOPES DOWNWARD)
+    # ACTIVE SOIL (SLOPING DOWNWARD)
     x_left = x0 + gap
     x_right = x0 + Lh_s - gap
 
     y_bottom = y0 + base_h + gap
     y_top_left = y_bottom + Ha_s
-
-    # Vertical drop over heel
-    dy = Lh_s * np.tan(beta_rad)
-    y_top_right = y_top_left - dy
+    y_top_right = y_top_left - Lh_s * np.tan(beta_rad)
 
     active_poly = [
         (x_left, y_bottom),
@@ -100,8 +99,18 @@ def draw_wall(Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb, beta):
         alpha=0.85
     ))
 
+    # Active soil label
+    ax.text(
+        x_left + Lh_s * 0.45,
+        y_bottom + Ha_s * 0.55,
+        f"Active soil\nγ = {gamma_a:.1f} kN/m³\nφ = {phi_a:.0f}°\nc = {c_a:.1f} kPa",
+        ha="center",
+        va="center",
+        fontsize=8
+    )
+
     # =======================
-    # WATER (PARALLEL TO GROUND)
+    # WATER
     if Hw > 0:
         y_wl_left = y_top_left
         y_wl_right = y_top_right
@@ -148,6 +157,15 @@ def draw_wall(Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb, beta):
         ec="none",
         alpha=0.85
     ))
+
+    ax.text(
+        x0 + Lh_s + Tsb_s + Lt_s * 0.5,
+        y0 + base_h + Hp_s * 0.5,
+        f"Passive soil\nγ = {gamma_p:.1f} kN/m³\nφ = {phi_p:.0f}°\nc = {c_p:.1f} kPa",
+        ha="center",
+        va="center",
+        fontsize=8
+    )
 
     # =======================
     # CONCRETE
@@ -196,7 +214,7 @@ def draw_wall(Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb, beta):
     ax.set_ylim(0, VIEW_H)
     ax.set_aspect("equal")
     ax.axis("off")
-    ax.set_title("Retaining Wall – Backfill Sloping Downward")
+    ax.set_title("Retaining Wall – Sloping Backfill with Soil Parameters")
 
     return fig
 
@@ -214,10 +232,22 @@ Tt = st.sidebar.number_input("Toe thickness Tt", 0.2, 2.0, 0.6)
 Lh = st.sidebar.number_input("Heel length Lh", 0.5, 15.0, 3.0)
 Lt = st.sidebar.number_input("Toe length Lt", 0.5, 15.0, 2.0)
 Tsb = st.sidebar.number_input("Stem thickness Tsb", 0.2, 2.0, 0.4)
-beta = st.sidebar.number_input(
-    "Backfill slope β (deg from horizontal, downward)",
-    0.0, 45.0, 10.0
+beta = st.sidebar.number_input("Backfill slope β (deg, downward)", 0.0, 45.0, 10.0)
+
+st.sidebar.header("Active soil")
+gamma_a = st.sidebar.number_input("γₐ (kN/m³)", 14.0, 25.0, 18.0)
+phi_a = st.sidebar.number_input("φₐ (deg)", 0.0, 45.0, 30.0)
+c_a = st.sidebar.number_input("cₐ (kPa)", 0.0, 50.0, 0.0)
+
+st.sidebar.header("Passive soil")
+gamma_p = st.sidebar.number_input("γₚ (kN/m³)", 14.0, 25.0, 18.0)
+phi_p = st.sidebar.number_input("φₚ (deg)", 0.0, 45.0, 35.0)
+c_p = st.sidebar.number_input("cₚ (kPa)", 0.0, 50.0, 0.0)
+
+fig = draw_wall(
+    Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb, beta,
+    gamma_a, phi_a, c_a,
+    gamma_p, phi_p, c_p
 )
 
-fig = draw_wall(Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb, beta)
 st.pyplot(fig)
