@@ -414,30 +414,46 @@ st.latex(
 st.markdown("### Definition of symbols")
 
 st.markdown(
-    """
-    - **\( z \)** – Depth below ground surface *(m)*  
-    - **\( \sigma'_v(z) \)** – Effective vertical stress at depth *z* *(kPa)*  
-    - **\( \sigma_h(z) \)** – Total horizontal earth stress *(kPa)*  
+    r"""
+- **\( z \)** – Depth below ground surface *(m)*  
 
-    - **\( K \)** – Earth pressure coefficient  
-      (Rankine active \(K_a\) or passive \(K_p\), depending on the case)
+- **\( \sigma_v(z) \)** – Total vertical stress at depth *z*  
+  \\[
+  \sigma_v = \gamma z + q
+  \\]
 
-    - **\( q \)** – Uniform surface surcharge *(kPa)*  
-    - **\( \gamma \)** – Unit weight of soil *(kN/m³)*  
-    - **\( gamma_w \)** – Unit weight of water *(≈ 9.81 kN/m³)*  
+- **\( \sigma'_v(z) \)** – Effective vertical stress at depth *z*  
+  \\[
+  \sigma'_v = \sigma_v - u
+  \\]
 
-    - **\( \sigma_{h,\text{water}} \)** – Horizontal water pressure acting directly
-      on the wall *(kPa)*  
+- **\( u(z) \)** – Pore water pressure *(kPa)*  
+  \\[
+  u = \gamma_w (z - z_w), \quad z > z_w
+  \\]
 
-    - **\( H_a \)** – Total soil / wall height *(m)*  
-    - **\( H_w \)** – Height of water above the base *(m)*  
-    - **\( z_w \)** – Depth to water table *(m)*  
-      \\[
-      z_w = H_a - H_w
-      \\]
+- **\( \sigma_h(z) \)** – Total horizontal earth stress acting on the wall *(kPa)*  
 
-    - **\( \varphi \)** – Soil internal friction angle *(deg)*  
-    - **\( \beta \)** – Backfill surface inclination relative to horizontal *(deg)*  
-    """
+- **\( K \)** – Earth pressure coefficient  
+  *(Rankine active \(K_a\) or passive \(K_p\))*  
+
+- **\( \gamma \)** – Unit weight of soil *(kN/m³)*  
+
+- **\( \gamma_w \)** – Unit weight of water *(9.81 kN/m³)*  
+
+- **\( q \)** – Uniform surface surcharge *(kPa)*  
+
+- **\( H_a \)** – Total height of the soil or wall *(m)*  
+
+- **\( H_w \)** – Height of water above the base of the soil mass *(m)*  
+
+- **\( z_w \)** – Depth to groundwater table *(m)*  
+  \\[
+  z_w = H_a - H_w
+  \\]
+
+- **\( \varphi \)** – Soil internal friction angle *(degrees)*  
+
+- **\( \beta \)** – Backfill surface inclination relative to the horizontal *(degrees)*
+"""
 )
-
