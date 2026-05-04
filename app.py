@@ -248,3 +248,66 @@ st.latex(
     r"{\cos\beta - \sqrt{\cos^2\beta - \cos^2\varphi}}"
 )
 st.success(f"Kp = {Kp:.4f}")
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+import streamlit as st
+
+# =======================
+# VERTICAL STRESS PLOT FUNCTION
+# =======================
+def plot_vertical_stress(Ha, Hw, gamma_soil, q):
+    """
+    Draw vertical stress vs depth due to:
+    - Soil self-weight
+    - Uniform surcharge
+    - Water
+    """
+
+    gamma_w = 9.81  # kN/m³ (unit weight of water)
+
+    # Depth array (z = 0 at ground surface, positive downward)
+    z = np.linspace(0, Ha, 300)
+
+    # Vertical stresses (kPa)
+    sigma_v_soil = gamma_soil * z          # Soil self-weight
+    sigma_v_surcharge = q * np.ones_like(z)  # Surcharge
+
+    # Water table depth
+    z_wt = Ha - Hw
+
+    # Water pressure below water table
+    sigma_v_water = gamma_w * np.maximum(0, z - z_wt)
+
+    # =======================
+    # PLOT
+    # =======================
+    fig, ax = plt.subplots(figsize=(6, 8))
+
+    ax.plot(sigma_v_soil, z, label="Soil self-weight (γ·z)")
+    ax.plot(sigma_v_surcharge, z, label="Surcharge (q)")
+    ax.plot(sigma_v_water, z, label="Water (γw·h)")
+
+    ax.invert_yaxis()  # Depth increases downward
+    ax.set_xlabel("Vertical stress σᵥ (kPa)")
+    ax.set_ylabel("Depth below ground surface z (m)")
+    ax.set_title("Vertical Stress Distribution with Depth")
+    ax.grid(True)
+    ax.legend()
+
+    return fig
+
+# =======================
+# STREAMLIT UI
+# =======================
+st.header("📊 Vertical Stress Distribution")
+
+Ha = st.number_input("Soil height Ha (m)", 1.0, 30.0, 6.0)
+Hw = st.number_input("Water height Hw (m)", 0.0, Ha, 2.0)
+gamma_soil = st.number_input("Soil unit weight γ (kN/m³)", 14.0, 25.0, 18.0)
+q = st.number_input("Uniform surcharge q (kPa)", 0.0, 300.0, 20.0)
+
+fig = plot_vertical_stress(Ha, Hw, gamma_soil, q)
+st.pyplot(fig)
+
