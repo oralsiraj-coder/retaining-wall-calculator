@@ -51,24 +51,21 @@ def compute_scale(Ha, Hp, Th, Lh, Lt, Tsb):
                (VIEW_H * MARGIN) / total_H)
 
 # =======================
-# RANKINE COEFFICIENTS (GENERAL FORM)
+# RANKINE COEFFICIENTS
 # =======================
 def rankine_active_coefficient(phi_deg, beta_deg):
     phi = math.radians(phi_deg)
     beta = math.radians(beta_deg)
     if beta > phi:
         raise ValueError("Rankine theory invalid: β must be ≤ φ")
-
     term = math.sqrt(math.cos(beta)**2 - math.cos(phi)**2)
     return math.cos(beta) * (math.cos(beta) - term) / (math.cos(beta) + term)
-
 
 def rankine_passive_coefficient(phi_deg, beta_deg=0.0):
     phi = math.radians(phi_deg)
     beta = math.radians(beta_deg)
     if beta > phi:
         raise ValueError("Rankine theory invalid: β must be ≤ φ")
-
     term = math.sqrt(math.cos(beta)**2 - math.cos(phi)**2)
     return math.cos(beta) * (math.cos(beta) + term) / (math.cos(beta) - term)
 
@@ -164,9 +161,6 @@ st.pyplot(draw_wall(
     gamma_p,phi_p,c_p
 ))
 
-# =======================
-# RANKINE COEFFICIENTS
-# =======================
 st.header("📐 Rankine Earth Pressure Coefficients")
 
 Ka = rankine_active_coefficient(phi_a,beta)
