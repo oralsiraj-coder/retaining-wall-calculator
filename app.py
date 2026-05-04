@@ -334,4 +334,72 @@ st.dataframe(
     use_container_width=True
 )
 
+# =======================
+# VERTICAL STRESS: GRAPH + TABLE SIDE BY SIDE
+# =======================
+
+import pandas as pd
+
+dz = 0.1  # slice thickness (m)
+z = np.arange(0, Ha + dz, dz)
+
+# Water table depth
+z_wt = Ha - Hw
+gamma_w = 9.81  # kN/m³
+
+# Vertical stresses (kPa)
+sigma_v_soil = gamma_a * z
+sigma_v_surcharge = q * np.ones_like(z)
+sigma_v_water = -gamma_w * np.maximum(0, z - z_wt)
+sigma_v_total = sigma_v_soil + sigma_v_surcharge + sigma_v_water
+
+# Create DataFrame
+stress_table = pd.DataFrame({
+    "Depth z (m)": z,
+    "Soil γ·z (kPa)": sigma_v_soil,
+    "Surcharge q (kPa)": sigma_v_surcharge,
+    "Water −γw·h (kPa)": sigma_v_water,
+    "Total σᵥ (kPa)": sigma_v_total
+})
+
+st.header("📊 Vertical Stress Distribution")
+
+# =======================
+# LAYOUT
+# =======================
+col_plot, col_table = st.columns(2)
+
+# -------- LEFT: GRAPH --------
+with col_plot:
+    fig_vs, ax_vs = plt.subplots(figsize=(6, 8))  # fixed size
+
+    ax_vs.plot(sigma_v_soil, z, label="Soil self‑weight (γ·z)")
+    ax_vs.plot(sigma_v_surcharge, z, label="Surcharge (q)")
+    ax_vs.plot(sigma_v_water, z, label="Water pressure (−γw·h)")
+
+    ax_vs.invert_yaxis()  # depth downward
+    ax_vs.set_xlabel("Vertical stress σᵥ (kPa)")
+    ax_vs.set_ylabel("Depth below ground surface z (m)")
+    ax_vs.set_title("Vertical Stress vs Depth")
+    ax_vs.grid(True)
+    ax_vs.legend()
+
+    st.pyplot(fig_vs)
+
+# -------- RIGHT: TABLE --------
+with col_table:
+    st.markdown("**Slice thickness = 0.1 m**")
+
+    st.dataframe(
+        stress_table.style.format({
+            "Depth z (m)": "{:.2f}",
+            "Soil γ·z (kPa)": "{:.2f}",
+            "Surcharge q (kPa)": "{:.2f}",
+            "Water −γw·h (kPa)": "{:.2f}",
+            "Total σᵥ (kPa)": "{:.2f}",
+        }),
+        height=550,           # 👈 keeps same visual height
+        use_container_width=True
+    )
+``
 
