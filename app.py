@@ -259,7 +259,7 @@ import streamlit as st
 # Depth vertical, stress horizontal
 # Water pressure shown as NEGATIVE
 # =======================
-
+st.header("📐 Effective stress calculation ")
 z = np.linspace(0, Ha, 300)   # depth below ground surface (m)
 
 # Vertical stresses (kPa)
