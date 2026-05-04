@@ -461,3 +461,41 @@ z_wt = Ha - Hw
 
 # ---- Effective vertical stress due to soil ONLY ----
 sigma_v_eff_soil = np.where(
+    z <= z_wt,
+    gamma_a * z,
+    gamma_a * z - gamma_w * (z - z_wt)
+)
+
+# ---- Earth pressure coefficient (active case) ----
+Ka = rankine_active_coefficient(phi_a, beta)
+
+# ---- Horizontal stress components ----
+sigma_h_soil = Ka * sigma_v_eff_soil          # soil contribution ONLY
+sigma_h_surcharge = Ka * q * np.ones_like(z)  # surcharge contribution
+sigma_h_water = gamma_w * np.maximum(0, z - z_wt)  # water pressure
+
+# ---- Resultant ----
+sigma_h_total = sigma_h_soil + sigma_h_surcharge + sigma_h_water
+
+# ---- Plot ----
+fig_h, ax_h = plt.subplots(figsize=(6, 8))
+
+ax_h.plot(sigma_h_soil, z, label="Soil contribution  $K·\\sigma'_{v,soil}$")
+ax_h.plot(sigma_h_surcharge, z, label="Surcharge contribution  $K·q$")
+ax_h.plot(sigma_h_water, z, label="Water pressure  $u$")
+ax_h.plot(
+    sigma_h_total,
+    z,
+    linewidth=2.5,
+    label="Resultant horizontal stress $\\sigma_h$"
+)
+
+# Geotechnical convention
+ax_h.invert_yaxis()
+ax_h.set_xlabel("Horizontal stress σₕ (kPa)")
+ax_h.set_ylabel("Depth below ground surface z (m)")
+ax_h.set_title("Horizontal Earth Stress Distribution")
+ax_h.grid(True)
+ax_h.legend()
+
+st.pyplot(fig_h)
