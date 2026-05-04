@@ -4,7 +4,7 @@ from matplotlib.patches import Rectangle, FancyArrowPatch, Polygon
 import numpy as np
 
 # =======================
-# VIEWPORT
+# VIEWPORT & STYLE
 # =======================
 VIEW_W = 10.0
 VIEW_H = 10.0
@@ -16,7 +16,7 @@ LW_EXT = 0.4
 DRAFT_GAP = 0.1
 
 # =======================
-# DIMENSIONS
+# DIMENSION FUNCTION
 # =======================
 def draw_dimension(ax, p1, p2, label, offset=0.0, vertical=False):
     if vertical:
@@ -27,11 +27,18 @@ def draw_dimension(ax, p1, p2, label, offset=0.0, vertical=False):
         ))
         ax.plot([p1[0], x], [p1[1], p1[1]], lw=LW_EXT, color="black")
         ax.plot([p2[0], x], [p2[1], p2[1]], lw=LW_EXT, color="black")
-        ax.text(
-            x - 0.15, (p1[1] + p2[1]) / 2,
-            label, rotation=90,
-            ha="center", va="center", fontsize=8
-        )
+        ax.text(x - 0.15, (p1[1] + p2[1]) / 2,
+                label, rotation=90, ha="center", va="center", fontsize=8)
+    else:
+        y = p1[1] + offset
+        ax.add_patch(FancyArrowPatch(
+            (p1[0], y), (p2[0], y),
+            arrowstyle="<->", lw=LW_DIM, mutation_scale=8, color="black"
+        ))
+        ax.plot([p1[0], p1[0]], [p1[1], y], lw=LW_EXT, color="black")
+        ax.plot([p2[0], p2[0]], [p2[1], y], lw=LW_EXT, color="black")
+        ax.text((p1[0] + p2[0]) / 2, y + 0.1,
+                label, ha="center", va="bottom", fontsize=8)
 
 # =======================
 # SCALE
@@ -54,15 +61,10 @@ def draw_wall(Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb, beta,
 
     scale = compute_scale(Ha, Hp, Th, Tt, Lh, Lt, Tsb)
 
-    # Scale geometry
-    Ha_s = Ha * scale
-    Hw_s = Hw * scale
-    Hp_s = Hp * scale
-    Th_s = Th * scale
-    Tt_s = Tt * scale
-    Lh_s = Lh * scale
-    Lt_s = Lt * scale
-    Tsb_s = Tsb * scale
+    # Scale
+    Ha_s, Hw_s, Hp_s = Ha*scale, Hw*scale, Hp*scale
+    Th_s, Tt_s = Th*scale, Tt*scale
+    Lh_s, Lt_s, Tsb_s = Lh*scale, Lt*scale, Tsb*scale
 
     base_h = max(Th_s, Tt_s)
     base_L = Lh_s + Tsb_s + Lt_s
@@ -70,184 +72,132 @@ def draw_wall(Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb, beta,
     x0 = (VIEW_W - base_L) / 2
     y0 = 0.8
     gap = DRAFT_GAP
-
     beta_rad = np.deg2rad(beta)
 
     fig, ax = plt.subplots(figsize=(7, 7))
 
     # =======================
-    # ACTIVE SOIL (SLOPING DOWNWARD)
-    x_left = x0 + gap
-    x_right = x0 + Lh_s - gap
-
-    y_bottom = y0 + base_h + gap
-    y_top_left = y_bottom + Ha_s
-    y_top_right = y_top_left - Lh_s * np.tan(beta_rad)
-
-    active_poly = [
-        (x_left, y_bottom),
-        (x_right, y_bottom),
-        (x_right, y_top_right),
-        (x_left, y_top_left)
-    ]
+    # ACTIVE SOIL (DOWNWARD SLOPE)
+    xL = x0 + gap
+    xR = x0 + Lh_s - gap
+    yB = y0 + base_h + gap
+    yTL = yB + Ha_s
+    yTR = yTL - Lh_s * np.tan(beta_rad)
 
     ax.add_patch(Polygon(
-        active_poly,
-        closed=True,
-        facecolor="#f4a261",
-        edgecolor="none",
-        alpha=0.85
+        [(xL,yB),(xR,yB),(xR,yTR),(xL,yTL)],
+        closed=True, fc="#f4a261", ec="none", alpha=0.85
     ))
 
-    # Active soil label
-    ax.text(
-        x_left + Lh_s * 0.45,
-        y_bottom + Ha_s * 0.55,
-        f"Active soil\nγ = {gamma_a:.1f} kN/m³\nφ = {phi_a:.0f}°\nc = {c_a:.1f} kPa",
-        ha="center",
-        va="center",
-        fontsize=8
-    )
+    ax.text(xL + Lh_s*0.45, yB + Ha_s*0.55,
+            f"Active soil\nγ={gamma_a:.1f}\nφ={phi_a:.0f}°\nc={c_a:.1f}",
+            ha="center", va="center", fontsize=8)
 
     # =======================
     # WATER
     if Hw > 0:
-        y_wl_left = y_top_left
-        y_wl_right = y_top_right
-        y_wb_left = y_wl_left - Hw_s
-        y_wb_right = y_wl_right - Hw_s
-
-        water_poly = [
-            (x_left, y_wb_left),
-            (x_right, y_wb_right),
-            (x_right, y_wl_right),
-            (x_left, y_wl_left)
-        ]
-
+        yWBL, yWBR = yTL-Hw_s, yTR-Hw_s
         ax.add_patch(Polygon(
-            water_poly,
-            closed=True,
-            facecolor="#74c0fc",
-            edgecolor="none",
-            alpha=0.6
+            [(xL,yWBL),(xR,yWBR),(xR,yTR),(xL,yTL)],
+            closed=True, fc="#74c0fc", ec="none", alpha=0.6
         ))
 
-        ax.plot(
-            [x_left, x_right],
-            [y_wl_left, y_wl_right],
-            linestyle="--",
-            color="#1c7ed6"
-        )
+        ax.plot([xL,xR],[yTL,yTR],"--",color="#1c7ed6")
 
-        draw_dimension(
-            ax,
-            (x_left - 0.4, y_wb_left),
-            (x_left - 0.4, y_wl_left),
-            f"Hw = {Hw:.2f} m",
-            vertical=True
-        )
+        draw_dimension(ax,
+            (xL-0.5,yWBL),(xL-0.5,yTL),
+            f"Hw = {Hw:.2f} m", vertical=True)
 
     # =======================
     # PASSIVE SOIL
     ax.add_patch(Rectangle(
-        (x0 + Lh_s + Tsb_s + gap, y0 + base_h + gap),
-        Lt_s - gap,
-        Hp_s - gap,
-        fc="#b7e4c7",
-        ec="none",
-        alpha=0.85
+        (x0+Lh_s+Tsb_s+gap,y0+base_h+gap),
+        Lt_s-gap, Hp_s-gap,
+        fc="#b7e4c7", ec="none", alpha=0.85
     ))
 
-    ax.text(
-        x0 + Lh_s + Tsb_s + Lt_s * 0.5,
-        y0 + base_h + Hp_s * 0.5,
-        f"Passive soil\nγ = {gamma_p:.1f} kN/m³\nφ = {phi_p:.0f}°\nc = {c_p:.1f} kPa",
-        ha="center",
-        va="center",
-        fontsize=8
-    )
+    ax.text(x0+Lh_s+Tsb_s+Lt_s*0.5,
+            y0+base_h+Hp_s*0.5,
+            f"Passive soil\nγ={gamma_p:.1f}\nφ={phi_p:.0f}°\nc={c_p:.1f}",
+            ha="center", va="center", fontsize=8)
 
     # =======================
     # CONCRETE
-    ax.add_patch(Rectangle(
-        (x0, y0),
-        base_L, base_h,
-        fc="0.85", ec="black", lw=LW_CONCRETE
-    ))
-    ax.add_patch(Rectangle(
-        (x0 + Lh_s, y0 + base_h),
-        Tsb_s, Ha_s,
-        fc="0.85", ec="black", lw=LW_CONCRETE
-    ))
+    ax.add_patch(Rectangle((x0,y0),base_L,base_h,
+                           fc="0.85",ec="black",lw=LW_CONCRETE))
+    ax.add_patch(Rectangle((x0+Lh_s,y0+base_h),
+                           Tsb_s,Ha_s,
+                           fc="0.85",ec="black",lw=LW_CONCRETE))
+
+    # =======================
+    # DIMENSIONS (ALL GEOMETRY)
+    draw_dimension(ax,(x0,y0+base_h),(x0,y0+base_h+Ha_s),
+                   f"Ha",offset=-0.7,vertical=True)
+
+    draw_dimension(ax,(x0+base_L,y0+base_h),
+                   (x0+base_L,y0+base_h+Hp_s),
+                   f"Hp",offset=0.7,vertical=True)
+
+    draw_dimension(ax,(x0,y0),(x0+Lh_s,y0),
+                   "Lh",offset=-0.6)
+
+    draw_dimension(ax,(x0+Lh_s+Tsb_s,y0),
+                   (x0+base_L,y0),
+                   "Lt",offset=-0.6)
+
+    draw_dimension(ax,(x0+Lh_s,y0+base_h),
+                   (x0+Lh_s+Tsb_s,y0+base_h),
+                   "Tsb",offset=0.3)
+
+    draw_dimension(ax,(x0,y0),(x0,y0+Th_s),
+                   "Th",offset=-0.4,vertical=True)
+
+    draw_dimension(ax,(x0+base_L,y0),
+                   (x0+base_L,y0+Tt_s),
+                   "Tt",offset=0.4,vertical=True)
 
     # =======================
     # GROUND SURFACE
-    ax.plot(
-        [x_left, x_right],
-        [y_top_left, y_top_right],
-        linestyle="--",
-        color="black"
-    )
+    ax.plot([xL,xR],[yTL,yTR],"--",color="black")
+    ax.text((xL+xR)/2,(yTL+yTR)/2+0.1,f"β={beta:.0f}°",
+            ha="center",fontsize=8)
 
-    ax.text(
-        (x_left + x_right) / 2,
-        (y_top_left + y_top_right) / 2 + 0.1,
-        f"β = {beta:.0f}°",
-        ha="center",
-        fontsize=8
-    )
-
-    # =======================
-    # DIMENSIONS
-    draw_dimension(
-        ax,
-        (x0, y0 + base_h),
-        (x0, y0 + base_h + Ha_s),
-        f"Ha = {Ha:.2f} m",
-        offset=-0.6,
-        vertical=True
-    )
-
-    # =======================
-    # VIEW
-    ax.set_xlim(0, VIEW_W)
-    ax.set_ylim(0, VIEW_H)
+    ax.set_xlim(0,VIEW_W)
+    ax.set_ylim(0,VIEW_H)
     ax.set_aspect("equal")
     ax.axis("off")
-    ax.set_title("Retaining Wall – Sloping Backfill with Soil Parameters")
+    ax.set_title("Retaining Wall Geometry – Fully Labeled")
 
     return fig
 
 # =======================
 # STREAMLIT UI
 # =======================
-st.title("🧱 Retaining Wall Geometry")
+st.title("🧱 Retaining Wall Geometry Tool")
 
 st.sidebar.header("Geometry (m)")
-Ha = st.sidebar.number_input("Active height Ha", 1.0, 20.0, 6.0)
-Hw = st.sidebar.number_input("Water height Hw", 0.0, Ha, 2.0)
-Hp = st.sidebar.number_input("Passive height Hp", 0.0, 20.0, 3.0)
-Th = st.sidebar.number_input("Heel thickness Th", 0.2, 2.0, 0.8)
-Tt = st.sidebar.number_input("Toe thickness Tt", 0.2, 2.0, 0.6)
-Lh = st.sidebar.number_input("Heel length Lh", 0.5, 15.0, 3.0)
-Lt = st.sidebar.number_input("Toe length Lt", 0.5, 15.0, 2.0)
-Tsb = st.sidebar.number_input("Stem thickness Tsb", 0.2, 2.0, 0.4)
-beta = st.sidebar.number_input("Backfill slope β (deg, downward)", 0.0, 45.0, 10.0)
+Ha = st.sidebar.number_input("Ha",1.0,20.0,6.0)
+Hw = st.sidebar.number_input("Hw",0.0,Ha,2.0)
+Hp = st.sidebar.number_input("Hp",0.0,20.0,3.0)
+Th = st.sidebar.number_input("Th",0.2,2.0,0.8)
+Tt = st.sidebar.number_input("Tt",0.2,2.0,0.6)
+Lh = st.sidebar.number_input("Lh",0.5,15.0,3.0)
+Lt = st.sidebar.number_input("Lt",0.5,15.0,2.0)
+Tsb = st.sidebar.number_input("Tsb",0.2,2.0,0.4)
+beta = st.sidebar.number_input("β (deg)",0.0,45.0,10.0)
 
 st.sidebar.header("Active soil")
-gamma_a = st.sidebar.number_input("γₐ (kN/m³)", 14.0, 25.0, 18.0)
-phi_a = st.sidebar.number_input("φₐ (deg)", 0.0, 45.0, 30.0)
-c_a = st.sidebar.number_input("cₐ (kPa)", 0.0, 50.0, 0.0)
+gamma_a = st.sidebar.number_input("γₐ",14.0,25.0,18.0)
+phi_a = st.sidebar.number_input("φₐ",0.0,45.0,30.0)
+c_a = st.sidebar.number_input("cₐ",0.0,50.0,0.0)
 
 st.sidebar.header("Passive soil")
-gamma_p = st.sidebar.number_input("γₚ (kN/m³)", 14.0, 25.0, 18.0)
-phi_p = st.sidebar.number_input("φₚ (deg)", 0.0, 45.0, 35.0)
-c_p = st.sidebar.number_input("cₚ (kPa)", 0.0, 50.0, 0.0)
+gamma_p = st.sidebar.number_input("γₚ",14.0,25.0,18.0)
+phi_p = st.sidebar.number_input("φₚ",0.0,45.0,35.0)
+c_p = st.sidebar.number_input("cₚ",0.0,50.0,0.0)
 
-fig = draw_wall(
-    Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb, beta,
-    gamma_a, phi_a, c_a,
-    gamma_p, phi_p, c_p
-)
-
-st.pyplot(fig)
+st.pyplot(draw_wall(
+    Ha,Hw,Hp,Th,Tt,Lh,Lt,Tsb,beta,
+    gamma_a,phi_a,c_a,
+    gamma_p,phi_p,c_p
+))
