@@ -309,15 +309,6 @@ st.latex(r"\boxed{\sigma'_v(z) = \sigma_v(z)}")
 # =======================
 st.header("📐 Effective Vertical Stress Calculation")
 
-# ---- Governing equations ----
-st.latex(r"\sigma_{v,\text{soil}}(z) = \gamma \, z")
-st.latex(r"\sigma_{v,\text{surcharge}}(z) = q")
-st.latex(r"\sigma_{v,\text{water}}(z) = -\gamma_w (z - z_w), \quad z > z_w")
-st.latex(r"z_w = H_a - H_w")
-
-st.latex(r"\sigma_v(z) = \sigma_{v,\text{soil}} + \sigma_{v,\text{surcharge}} + \sigma_{v,\text{water}")
-st.latex(r"\boxed{\sigma'_v(z) = \sigma_v(z)}")
-
 # ---- Depth discretization ----
 z = np.linspace(0, Ha, 300)   # depth below ground surface (m)
 
