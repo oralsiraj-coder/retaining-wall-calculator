@@ -301,9 +301,6 @@ st.markdown(
     """
 )
 
-
-st.latex(r"\boxed{\sigma'_v(z) = \sigma_v(z)}")
-
 # =======================
 # EFFECTIVE VERTICAL STRESS
 # =======================
