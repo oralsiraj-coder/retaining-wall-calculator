@@ -213,7 +213,7 @@ st.pyplot(draw_wall(
     gamma_p,phi_p,c_p
 ))
 
-#=============================
+
 
 
 
@@ -237,7 +237,7 @@ def rankine_active_coefficient(phi_deg, beta_deg):
     )
     return Ka
 ``
-#===========================================
+
 def rankine_passive_coefficient(phi_deg, beta_deg=0.0):
     """
     Rankine passive earth pressure coefficient (general form).
@@ -258,7 +258,7 @@ def rankine_passive_coefficient(phi_deg, beta_deg=0.0):
     )
     return Kp
 ``
-#=======================================
+
 st.header("📐 Rankine Earth Pressure Coefficients")
 
 try:
