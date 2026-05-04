@@ -435,43 +435,5 @@ st.markdown(
 """
 )
 
-# =======================
-# HORIZONTAL STRESS – SOIL CONTRIBUTION ONLY
-# =======================
-st.header("📐 Horizontal Stress Due to Soil Self‑Weight")
 
-z = np.linspace(0, Ha, 300)   # depth below ground surface (m)
-
-gamma_w = 9.81
-z_wt = Ha - Hw
-
-# --- Vertical stress due to soil self‑weight ---
-sigma_v_soil = gamma_a * z   # γ · z  ✅ exactly as you stated
-
-# --- Effective vertical stress due to soil ---
-sigma_v_eff_soil = np.where(
-    z <= z_wt,
-    sigma_v_soil,
-    sigma_v_soil - gamma_w * (z - z_wt)
-)
-
-# --- Earth pressure coefficient ---
-Ka = rankine_active_coefficient(phi_a, beta)
-
-# --- Horizontal stress due to SOIL contribution only ---
-sigma_h_soil = Ka * sigma_v_eff_soil
-
-# --- Plot ---
-fig, ax = plt.subplots(figsize=(6, 8))
-
-ax.plot(sigma_h_soil, z, label="Soil contribution  $K·(\\gamma z - u)$")
-
-ax.invert_yaxis()
-ax.set_xlabel("Horizontal stress (kPa)")
-ax.set_ylabel("Depth z (m)")
-ax.set_title("Horizontal Stress Due to Soil Self‑Weight")
-ax.grid(True)
-ax.legend()
-
-st.pyplot(fig)
 
