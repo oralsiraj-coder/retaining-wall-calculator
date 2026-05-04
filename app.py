@@ -288,3 +288,48 @@ ax_vs.grid(True)
 ax_vs.legend()
 
 st.pyplot(fig_vs)
+
+# =======================
+# VERTICAL STRESS TABLE (0.1 m SLICES)
+# =======================
+import pandas as pd
+
+dz = 0.1  # slice thickness (m)
+
+# Depth array from ground surface to base
+z = np.arange(0, Ha + dz, dz)
+
+# Water table depth
+z_wt = Ha - Hw
+gamma_w = 9.81  # kN/m³
+
+# Vertical stresses (kPa)
+sigma_v_soil = gamma_a * z
+sigma_v_surcharge = q * np.ones_like(z)
+sigma_v_water = -gamma_w * np.maximum(0, z - z_wt)
+
+# Total vertical stress (for completeness)
+sigma_v_total = sigma_v_soil + sigma_v_surcharge + sigma_v_water
+
+# Create table
+stress_table = pd.DataFrame({
+    "Depth z (m)": z,
+    "Soil stress γ·z (kPa)": sigma_v_soil,
+    "Surcharge stress q (kPa)": sigma_v_surcharge,
+    "Water pressure −γw·h (kPa)": sigma_v_water,
+    "Total vertical stress σv (kPa)": sigma_v_total
+})
+
+st.header("📋 Vertical Stress Calculation Table")
+st.markdown("Slice thickness = **0.1 m**")
+
+st.dataframe(
+    stress_table.style.format({
+        "Depth z (m)": "{:.2f}",
+        "Soil stress γ·z (kPa)": "{:.2f}",
+        "Surcharge stress q (kPa)": "{:.2f}",
+        "Water pressure −γw·h (kPa)": "{:.2f}",
+        "Total vertical stress σv (kPa)": "{:.2f}"
+    }),
+    use_container_width=True
+)
