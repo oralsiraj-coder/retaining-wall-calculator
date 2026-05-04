@@ -14,14 +14,8 @@ LW_CONCRETE = 1.2
 LW_DIM = 0.6
 LW_EXT = 0.4
 
-# Drafting gap (visible)
+# Drafting gap (1 mm in model space)
 DRAFT_GAP = 0.1
-
-# =======================
-# HELPERS
-# =======================
-def safe(value, min_value=0.001):
-    return max(value, min_value)
 
 # =======================
 # DIMENSION DRAWING
@@ -29,29 +23,31 @@ def safe(value, min_value=0.001):
 def draw_dimension(ax, p1, p2, label, offset=0.0, vertical=False):
     if vertical:
         x = p1[0] + offset
+        y1, y2 = p1[1], p2[1]
+
         ax.add_patch(FancyArrowPatch(
-            (x, p1[1]), (x, p2[1]),
+            (x, y1), (x, y2),
             arrowstyle="<->", lw=LW_DIM, mutation_scale=8
         ))
-        ax.plot([p1[0], x], [p1[1], p1[1]], lw=LW_EXT, color="black")
-        ax.plot([p2[0], x], [p2[1], p2[1]], lw=LW_EXT, color="black")
-        ax.text(
-            x - 0.15, (p1[1] + p2[1]) / 2,
-            label, rotation=90,
-            ha="center", va="center", fontsize=8
-        )
+        ax.plot([p1[0], x], [y1, y1], lw=LW_EXT, color="black")
+        ax.plot([p2[0], x], [y2, y2], lw=LW_EXT, color="black")
+
+        ax.text(x - 0.15, (y1 + y2) / 2,
+                label, rotation=90, ha="center", va="center", fontsize=8)
+
     else:
         y = p1[1] + offset
+        x1, x2 = p1[0], p2[0]
+
         ax.add_patch(FancyArrowPatch(
-            (p1[0], y), (p2[0], y),
+            (x1, y), (x2, y),
             arrowstyle="<->", lw=LW_DIM, mutation_scale=8
         ))
-        ax.plot([p1[0], p1[0]], [p1[1], y], lw=LW_EXT, color="black")
-        ax.plot([p2[0], p2[0]], [p2[1], y], lw=LW_EXT, color="black")
-        ax.text(
-            (p1[0] + p2[0]) / 2, y + 0.1,
-            label, ha="center", va="bottom", fontsize=8
-        )
+        ax.plot([x1, x1], [p1[1], y], lw=LW_EXT, color="black")
+        ax.plot([x2, x2], [p2[1], y], lw=LW_EXT, color="black")
+
+        ax.text((x1 + x2) / 2, y + 0.1,
+                label, ha="center", va="bottom", fontsize=8)
 
 # =======================
 # SCALE COMPUTATION
@@ -60,6 +56,7 @@ def compute_scale(Ha, Hp, Th, Tt, Lh, Lt, Tsb):
     base_h = max(Th, Tt)
     base_L = Lh + Tsb + Lt
     total_H = base_h + max(Ha, Hp)
+
     return min(
         (VIEW_W * MARGIN) / base_L,
         (VIEW_H * MARGIN) / total_H
@@ -68,11 +65,10 @@ def compute_scale(Ha, Hp, Th, Tt, Lh, Lt, Tsb):
 # =======================
 # WALL DRAWING (GEOMETRY)
 # =======================
-def draw_wall(
-    Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb,
-    gamma_a, phi_a, c_a,
-    gamma_p, phi_p, c_p
-):
+def draw_wall(Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb,
+              gamma_a, phi_a, c_a,
+              gamma_p, phi_p, c_p):
+
     scale = compute_scale(Ha, Hp, Th, Tt, Lh, Lt, Tsb)
 
     # Scale geometry
@@ -89,32 +85,34 @@ def draw_wall(
 
     fig, ax = plt.subplots(figsize=(7, 7))
 
-    # ACTIVE SOIL
+    # =======================
+    # ACTIVE SOIL (1 mm gap from stem)
     ax.add_patch(Rectangle(
         (x0 + gap, y0 + base_h + gap),
-        safe(Lh - gap),
-        safe(Ha - gap),
+        Lh - gap,
+        Ha - gap,
         fc="#f4a261", ec="none", alpha=0.85
     ))
 
-    # WATER
-    if Hw > gap:
+    # WATER (inherits active soil gap)
+    if Hw > 0:
         ax.add_patch(Rectangle(
             (x0 + gap, y0 + base_h + Ha - Hw + gap),
-            safe(Lh - gap),
-            safe(Hw - gap),
+            Lh - gap,
+            Hw - gap,
             fc="#74c0fc", ec="none", alpha=0.6
         ))
 
-    # PASSIVE SOIL
+    # PASSIVE SOIL (1 mm gap from stem)
     ax.add_patch(Rectangle(
         (x0 + Lh + Tsb + gap, y0 + base_h + gap),
-        safe(Lt - gap),
-        safe(Hp - gap),
+        Lt - gap,
+        Hp - gap,
         fc="#b7e4c7", ec="none", alpha=0.85
     ))
 
-    # CONCRETE
+    # =======================
+    # CONCRETE (drawn last)
     ax.add_patch(Rectangle(
         (x0, y0), base_L, base_h,
         fc="0.85", ec="black", lw=LW_CONCRETE
@@ -125,55 +123,37 @@ def draw_wall(
         fc="0.85", ec="black", lw=LW_CONCRETE
     ))
 
+    # =======================
     # SOIL LABELS
-    ax.text(
-        x0 + Lh * 0.5, y0 + base_h + Ha * 0.5,
+    ax.text(x0 + Lh * 0.5, y0 + base_h + Ha * 0.5,
         f"Active soil\nγ={gamma_a:.1f}\nφ={phi_a:.0f}°\nc={c_a:.1f}",
-        ha="center", va="center", fontsize=8
-    )
-    ax.text(
-        x0 + Lh + Tsb + Lt * 0.5, y0 + base_h + Hp * 0.5,
+        ha="center", va="center", fontsize=8)
+
+    ax.text(x0 + Lh + Tsb + Lt * 0.5, y0 + base_h + Hp * 0.5,
         f"Passive soil\nγ={gamma_p:.1f}\nφ={phi_p:.0f}°\nc={c_p:.1f}",
-        ha="center", va="center", fontsize=8
-    )
+        ha="center", va="center", fontsize=8)
 
+    # =======================
     # DIMENSIONS
-    draw_dimension(
-        ax,
-        (x0, y0 + base_h),
-        (x0, y0 + base_h + Ha),
-        "Ha", offset=-0.6, vertical=True
-    )
+    draw_dimension(ax, (x0, y0 + base_h),
+                   (x0, y0 + base_h + Ha),
+                   "Ha", offset=-0.6, vertical=True)
 
-    # ✅ WATER HEIGHT DIMENSION
-    if Hw > gap:
-        draw_dimension(
-            ax,
-            (x0, y0 + base_h + Ha - Hw),
-            (x0, y0 + base_h + Ha),
-            "Hw", offset=-1.1, vertical=True
-        )
+    draw_dimension(ax, (x0 + base_L, y0 + base_h),
+                   (x0 + base_L, y0 + base_h + Hp),
+                   "Hp", offset=0.6, vertical=True)
 
-    draw_dimension(
-        ax,
-        (x0 + base_L, y0 + base_h),
-        (x0 + base_L, y0 + base_h + Hp),
-        "Hp", offset=0.6, vertical=True
-    )
+    draw_dimension(ax, (x0, y0),
+                   (x0 + base_L, y0),
+                   "L", offset=-0.6)
 
-    draw_dimension(
-        ax,
-        (x0, y0),
-        (x0 + base_L, y0),
-        "L", offset=-0.6
-    )
-
+    # =======================
     # FIXED VIEWPORT
     ax.set_xlim(0, VIEW_W)
     ax.set_ylim(0, VIEW_H)
     ax.set_aspect("equal")
     ax.axis("off")
-    ax.set_title("Retaining Wall Geometry (with Water Dimension)")
+    ax.set_title("Retaining Wall Geometry (Corrected Drafting Gaps)")
 
     return fig
 
@@ -202,9 +182,8 @@ gamma_p = st.sidebar.number_input("γₚ", 14.0, 25.0, 18.0)
 phi_p = st.sidebar.number_input("φₚ", 0.0, 45.0, 35.0)
 c_p = st.sidebar.number_input("cₚ", 0.0, 50.0, 0.0)
 
-st.pyplot(draw_wall(
-    Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb,
-    gamma_a, phi_a, c_a,
-    gamma_p, phi_p, c_p
-))
-``
+fig = draw_wall(Ha, Hw, Hp, Th, Tt, Lh, Lt, Tsb,
+                gamma_a, phi_a, c_a,
+                gamma_p, phi_p, c_p)
+
+st.pyplot(fig)
