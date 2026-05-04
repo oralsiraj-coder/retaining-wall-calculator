@@ -255,59 +255,31 @@ import matplotlib.pyplot as plt
 import streamlit as st
 
 # =======================
-# VERTICAL STRESS PLOT FUNCTION
+# VERTICAL STRESS DISTRIBUTION (ROTATED)
 # =======================
-def plot_vertical_stress(Ha, Hw, gamma_soil, q):
-    """
-    Draw vertical stress vs depth due to:
-    - Soil self-weight
-    - Uniform surcharge
-    - Water
-    """
 
-    gamma_w = 9.81  # kN/m³ (unit weight of water)
+z = np.linspace(0, Ha, 300)
 
-    # Depth array (z = 0 at ground surface, positive downward)
-    z = np.linspace(0, Ha, 300)
+# Vertical stresses (kPa)
+sigma_v_soil = gamma_a * z
+sigma_v_surcharge = q * np.ones_like(z)
 
-    # Vertical stresses (kPa)
-    sigma_v_soil = gamma_soil * z          # Soil self-weight
-    sigma_v_surcharge = q * np.ones_like(z)  # Surcharge
+z_wt = Ha - Hw          # Water table depth
+gamma_w = 9.81          # kN/m³
+sigma_v_water = gamma_w * np.maximum(0, z - z_wt)
 
-    # Water table depth
-    z_wt = Ha - Hw
+# Plot
+fig_vs, ax_vs = plt.subplots(figsize=(8, 5))
 
-    # Water pressure below water table
-    sigma_v_water = gamma_w * np.maximum(0, z - z_wt)
+ax_vs.plot(z, sigma_v_soil, label="Soil self-weight (γ·z)")
+ax_vs.plot(z, sigma_v_surcharge, label="Surcharge (q)")
+ax_vs.plot(z, sigma_v_water, label="Water (γw·h)")
 
-    # =======================
-    # PLOT
-    # =======================
-    fig, ax = plt.subplots(figsize=(6, 8))
+ax_vs.set_xlabel("Depth below ground surface z (m)")
+ax_vs.set_ylabel("Vertical stress σᵥ (kPa)")
+ax_vs.set_title("Vertical Stress Distribution (Rotated View)")
 
-    ax.plot(sigma_v_soil, z, label="Soil self-weight (γ·z)")
-    ax.plot(sigma_v_surcharge, z, label="Surcharge (q)")
-    ax.plot(sigma_v_water, z, label="Water (γw·h)")
+ax_vs.grid(True)
+ax_vs.legend()
 
-    ax.invert_yaxis()  # Depth increases downward
-    ax.set_xlabel("Vertical stress σᵥ (kPa)")
-    ax.set_ylabel("Depth below ground surface z (m)")
-    ax.set_title("Vertical Stress Distribution with Depth")
-    ax.grid(True)
-    ax.legend()
-
-    return fig
-
-# =======================
-# STREAMLIT UI
-# =======================
-st.header("📊 Vertical Stress Distribution")
-
-Ha = st.number_input("Soil height Ha (m)", 1.0, 30.0, 6.0)
-Hw = st.number_input("Water height Hw (m)", 0.0, Ha, 2.0)
-gamma_soil = st.number_input("Soil unit weight γ (kN/m³)", 14.0, 25.0, 18.0)
-q = st.number_input("Uniform surcharge q (kPa)", 0.0, 300.0, 20.0)
-
-fig = plot_vertical_stress(Ha, Hw, gamma_soil, q)
-st.pyplot(fig)
-
+st.pyplot(fig_vs)
