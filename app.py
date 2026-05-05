@@ -475,6 +475,136 @@ ax_h.legend()
 st.pyplot(fig_h)
 
 # =======================
+# HORIZONTAL EARTH PRESSURE – THEORY
+# =======================
+
+st.header("📐 Horizontal Earth Pressure Components")
+
+st.markdown(
+    """
+    The horizontal forces acting on a retaining wall are calculated by
+    **separating the different physical mechanisms** contributing to lateral
+    loading. Each component is evaluated independently and later combined
+    for stability and structural design.
+
+    The following horizontal forces are considered **per meter length of wall**:
+
+    1. Active earth pressure due to soil self‑weight  
+    2. Horizontal pressure induced by surface surcharge  
+    3. Hydrostatic water pressure  
+    4. Passive earth pressure (front side resistance)
+    """
+)
+
+# =======================
+# ACTIVE SOIL – SELF WEIGHT
+# =======================
+
+st.subheader("1️⃣ Active Earth Pressure – Soil Self‑Weight")
+
+st.markdown(
+    """
+    The lateral stress caused by the self‑weight of the backfill soil increases
+    linearly with depth. According to **Rankine active earth pressure theory**,
+    the horizontal stress at depth \( z \) is:
+    """
+)
+
+st.latex(r"\sigma_{h,a}(z) = K_a \, \gamma_a \, z")
+
+st.markdown(
+    """
+    Integrating this triangular stress distribution over the full retained height
+    \( H_a \) gives the resultant horizontal force:
+    """
+)
+
+st.latex(
+    r"P_{a,\text{soil}} = \int_0^{H_a} K_a \gamma_a z \, dz"
+    r"= \frac{1}{2} K_a \gamma_a H_a^2"
+)
+
+st.latex(r"\text{Point of application: } z = \frac{H_a}{3} \text{ above base}")
+
+# =======================
+# SURCHARGE
+# =======================
+
+st.subheader("2️⃣ Horizontal Pressure due to Surface Surcharge")
+
+st.markdown(
+    """
+    A uniform surface surcharge \( q \) produces a **constant vertical stress**
+    with depth, which is transferred laterally through the soil mass.
+    """
+)
+
+st.latex(r"\sigma_{h,q}(z) = K_a \, q")
+
+st.markdown("The corresponding horizontal resultant force is:")
+
+st.latex(r"P_{a,q} = K_a \, q \, H_a")
+
+st.latex(r"\text{Point of application: } z = \frac{H_a}{2}")
+
+# =======================
+# WATER PRESSURE
+# =======================
+
+st.subheader("3️⃣ Hydrostatic Water Pressure")
+
+st.markdown(
+    """
+    Water pressure acts **independently of the soil skeleton** and is therefore
+    calculated separately. Below the groundwater table, hydrostatic pressure
+    increases linearly with depth.
+    """
+)
+
+st.latex(
+    r"\sigma_{h,w}(z) = \gamma_w (z - z_w), \quad z > z_w"
+)
+
+st.markdown(
+    """
+    where the groundwater depth is:
+    """
+)
+
+st.latex(r"z_w = H_a - H_w")
+
+st.markdown("The resultant horizontal water force is:")
+
+st.latex(r"P_w = \frac{1}{2} \gamma_w H_w^2")
+
+st.latex(
+    r"\text{Point of application: } z = \frac{H_w}{3} \text{ above water base}"
+)
+
+# =======================
+# PASSIVE PRESSURE
+# =======================
+
+st.subheader("4️⃣ Passive Earth Pressure")
+
+st.markdown(
+    """
+    Passive earth pressure represents the **resistance provided by the soil**
+    in front of the wall when lateral movement occurs. According to Rankine
+    theory, the horizontal stress distribution is:
+    """
+)
+
+st.latex(r"\sigma_{h,p}(z) = K_p \, \gamma_p \, z")
+
+st.markdown("The corresponding passive resultant force is:")
+
+st.latex(
+    r"P_p = \frac{1}{2} K_p \gamma_p H_p^2"
+)
+
+st.latex(r"\text{Point of application: } z = \frac{H_p}{3}")
+# =======================
 # HORIZONTAL RESULTANT FORCES (kN/m)
 # =======================
 
