@@ -526,6 +526,26 @@ st.latex(
 
 st.latex(r"\text{Point of application: } z = \frac{H_a}{3} \text{ above base}")
 
+# ---- Numerical calculation ----
+Pa_soil = 0.5 * Ka * gamma_a * Ha**2
+za_soil = Ha / 3
+
+st.markdown("**Numerical evaluation:**")
+
+st.latex(
+    rf"""
+P_{{a,\text{{soil}}}}
+= \frac{{1}}{{2}} \cdot {Ka:.3f} \cdot {gamma_a:.2f} \cdot {Ha:.2f}^2
+= {Pa_soil:.2f}\ \text{{kN/m}}
+"""
+)
+
+st.markdown(
+    rf"Point of application: **{za_soil:.2f} m above base**"
+)
+``
+
+
 # =======================
 # SURCHARGE
 # =======================
