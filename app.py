@@ -600,4 +600,145 @@ def draw_wall_with_horizontal_stress_components(
     ))
 
 #----------------------------------------------------------------------------------------------------------------------------
+def draw_wall_with_horizontal_stresses(
+    Ha, Hw, Hp,
+    Th, Lh, Lt, Tsb,
+    beta,
+    gamma_a, phi_a,
+    gamma_p, phi_p
+):
+    """
+    Draw retaining wall with:
+    - Active soil stress (back)
+    - Water stress (back)
+    - Passive soil stress (front)
+    """
 
+    Ka = rankine_active_coefficient(phi_a, beta)
+    Kp = rankine_passive_coefficient(phi_p)
+    gamma_w = 9.81
+
+    scale = compute_scale(Ha, Hp, Th, Lh, Lt, Tsb)
+
+    Ha_s, Hw_s, Hp_s = Ha*scale, Hw*scale, Hp*scale
+    Th_s, Lh_s, Lt_s, Tsb_s = Th*scale, Lh*scale, Lt*scale, Tsb*scale
+
+    base_L = Lh_s + Tsb_s + Lt_s
+    x0, y0 = (VIEW_W - base_L)/2, 0.8
+
+    fig, ax = plt.subplots(figsize=(7, 7))
+
+    # --------------------------------------------------
+    # WALL GEOMETRY
+    # --------------------------------------------------
+    ax.add_patch(Rectangle((x0, y0), base_L, Th_s,
+                           ec="black", fc="0.9"))
+    ax.add_patch(Rectangle((x0 + Lh_s, y0 + Th_s),
+                           Tsb_s, Ha_s, ec="black", fc="0.9"))
+
+    y_base = y0 + Th_s
+    y_top = y_base + Ha_s
+
+    # --------------------------------------------------
+    # DEPTH ARRAY
+    # --------------------------------------------------
+    z = np.linspace(0, Ha, 200)
+    z_s = z * scale
+
+    # --------------------------------------------------
+    # ACTIVE SOIL STRESS (BACK)
+    # --------------------------------------------------
+    sigma_ha = Ka * gamma_a * z
+    width_ha = sigma_ha / np.max(sigma_ha) * 0.8
+
+    Xa = np.concatenate([
+        (x0 + Lh_s) + width_ha,
+        np.full_like(z_s, x0 + Lh_s)
+    ])
+    Ya = np.concatenate([
+        y_top - z_s,
+        (y_top - z_s)[::-1]
+    ])
+
+    ax.add_patch(Polygon(
+        np.column_stack([Xa, Ya]),
+        fc="none", ec="black", lw=1.2,
+        label="Active soil stress"
+    ))
+
+    # --------------------------------------------------
+    # WATER STRESS (BACK)
+    # --------------------------------------------------
+    if Hw > 0:
+        z_wt = Ha - Hw
+        sigma_hw = gamma_w * np.maximum(0, z - z_wt)
+        if sigma_hw.max() > 0:
+            width_hw = sigma_hw / sigma_hw.max() * 0.6
+
+            Xw = np.concatenate([
+                (x0 + Lh_s) + width_hw,
+                np.full_like(z_s, x0 + Lh_s)
+            ])
+            Yw = np.concatenate([
+                y_top - z_s,
+                (y_top - z_s)[::-1]
+            ])
+
+            ax.add_patch(Polygon(
+                np.column_stack([Xw, Yw]),
+                fc="none", ec="royalblue", lw=1.2,
+                label="Water stress"
+            ))
+
+    # --------------------------------------------------
+    # PASSIVE SOIL STRESS (FRONT)
+    # --------------------------------------------------
+    z_p = np.linspace(0, Hp, 200)
+    z_p_s = z_p * scale
+
+    sigma_hp = Kp * gamma_p * z_p
+    width_hp = sigma_hp / np.max(sigma_hp) * 0.8
+
+    Xp = np.concatenate([
+        np.full_like(z_p_s, x0 + Lh_s + Tsb_s),
+        (x0 + Lh_s + Tsb_s) - width_hp[::-1]
+    ])
+    Yp = np.concatenate([
+        y_base + z_p_s,
+        (y_base + z_p_s)[::-1]
+    ])
+
+    ax.add_patch(Polygon(
+        np.column_stack([Xp, Yp]),
+        fc="none", ec="seagreen", lw=1.2,
+        label="Passive soil stress"
+    ))
+
+    # --------------------------------------------------
+    # VIEW SETTINGS
+    # --------------------------------------------------
+    ax.set_xlim(0, VIEW_W)
+    ax.set_ylim(0, VIEW_H)
+    ax.set_aspect("equal")
+    ax.axis("off")
+
+    return fig
+``
+st.header("🧱 Retaining Wall – Horizontal Stress Distributions")
+
+fig_stress = draw_wall_with_horizontal_stresses(
+    Ha=Ha,
+    Hw=Hw,
+    Hp=Hp,
+    Th=Th,
+    Lh=Lh,
+    Lt=Lt,
+    Tsb=Tsb,
+    beta=beta,
+    gamma_a=gamma_a,
+    phi_a=phi_a,
+    gamma_p=gamma_p,
+    phi_p=phi_p
+)
+
+st.pyplot(fig_stress)
