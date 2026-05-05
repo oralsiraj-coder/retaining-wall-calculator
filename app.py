@@ -541,84 +541,48 @@ st.dataframe(
 )
 
 # ============================================================
-# EARTH PRESSURE COMPONENT FIGURE (ENGINEERING SKETCH)
-# SAFE TO PASTE AT END OF FILE
+# CLASSICAL EARTH PRESSURE COMPONENT SKETCH (Po1, Po2, Po3)
+# Paste safely at the very end of the file
 # ============================================================
 
-def draw_pressure_components(Ha, Hw, gamma, q, phi, beta):
-    """
-    Classical earth pressure components:
-    - Soil self weight (triangular)
-    - Water pressure (triangular)
-    - Surcharge (rectangular)
-    """
-
+def draw_classical_pressure_sketch(Ha, Hw, gamma, q, phi, beta):
     Ka = rankine_active_coefficient(phi, beta)
     gamma_w = 9.81
 
     z = np.linspace(0, Ha, 300)
 
-    # Horizontal stress components
-    sigma_soil = Ka * gamma * z
-    sigma_water = gamma_w * np.maximum(0, z - (Ha - Hw))
-    sigma_surcharge = Ka * q * np.ones_like(z)
+    soil = Ka * gamma * z
+    water = gamma_w * np.maximum(0, z - (Ha - Hw))
+    surcharge = Ka * q * np.ones_like(z)
 
-    fig, ax = plt.subplots(1, 3, figsize=(10, 4), sharey=True)
+    fig, ax = plt.subplots(1, 3, figsize=(11, 4), sharey=True)
 
-    # ----- SOIL -----
-    ax[0].fill_betweenx(z, 0, sigma_soil, color="lightcoral", alpha=0.8)
-    ax[0].plot(sigma_soil, z, color="black")
+    # ------------------ DUE TO SOIL (Po1) ------------------
+    ax[0].fill_betweenx(z, 0, soil, color="none", edgecolor="black")
+    ax[0].plot(soil, z, color="black")
     ax[0].invert_yaxis()
-    ax[0].set_title("Due to soil")
-    ax[0].set_ylabel("Depth z (m)")
-    ax[0].set_xlabel("σₕ (kPa)")
-    ax[0].text(
-        0.6*np.max(sigma_soil), Ha*2/3, "H/3",
-        va="center", ha="center"
-    )
+    ax[0].set_title("DUE TO SOIL")
+    ax[0].set_ylabel("Depth")
 
-    # ----- WATER -----
-    ax[1].fill_betweenx(z, 0, sigma_water, color="lightskyblue", alpha=0.8)
-    ax[1].plot(sigma_water, z, color="black")
-    ax[1].set_title("Due to water")
-    ax[1].set_xlabel("σₕ (kPa)")
-    ax[1].text(
-        0.6*np.max(sigma_water) if np.max(sigma_water) > 0 else 0.01,
-        Ha - Hw/3, "Hw/3",
-        va="center", ha="center"
-    )
+    ax[0].annotate("Po₁", xy=(soil.max(), Ha/3),
+                   xytext=(soil.max()*1.15, Ha/3),
+                   arrowprops=dict(arrowstyle="<-"))
 
-    # ----- SURCHARGE -----
-    ax[2].fill_betweenx(z, 0, sigma_surcharge, color="lightgray", alpha=0.9)
-    ax[2].plot(sigma_surcharge, z, color="black")
-    ax[2].set_title("Due to surcharge")
-    ax[2].set_xlabel("σₕ (kPa)")
-    ax[2].text(
-        0.6*np.max(sigma_surcharge), Ha/2, "H/2",
-        va="center", ha="center"
-    )
+    ax[0].annotate("H / 3", xy=(soil.max()*0.6, Ha/3),
+                   xytext=(soil.max()*0.6, Ha/3))
 
-    for a in ax:
-        a.grid(True)
+    # ------------------ DUE TO WATER (Po2) ------------------
+    ax[1].fill_betweenx(z, 0, water, color="none", edgecolor="black")
+    ax[1].plot(water, z, color="black")
+    ax[1].set_title("DUE TO WATER")
 
-    plt.tight_layout()
-    return fig
+    if Hw > 0:
+        ax[1].annotate("Po₂", xy=(water.max(), Ha - Hw/3),
+                       xytext=(water.max()*1.15, Ha - Hw/3),
+                       arrowprops=dict(arrowstyle="<-"))
 
+        ax[1].annotate("Hw / 3", xy=(water.max()*0.6, Ha - Hw/3),
+                       xytext=(water.max()*0.6, Ha - Hw/3))
 
-# ============================================================
-# DISPLAY FIGURE IN STREAMLIT
-# ============================================================
-
-st.header("📘 Earth Pressure Components (Engineering Representation)")
-
-fig_pressure_components = draw_pressure_components(
-    Ha=Ha,
-    Hw=Hw,
-    gamma=gamma_a,
-    q=q,
-    phi=phi_a,
-    beta=beta
-)
-
-st.pyplot(fig_pressure_components)
+    # ------------------ DUE TO SURCHARGE (Po3) ------------------
 
