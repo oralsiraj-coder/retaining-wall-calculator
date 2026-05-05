@@ -683,20 +683,4 @@ Kp = rankine_passive_coefficient(phi_p)
 Pp = 0.5 * Kp * gamma_p * Hp**2
 zp = Hp / 3
 
-st.header("📊 Horizontal Resultant Forces (per meter length)")
 
-st.subheader("Active Side")
-
-st.write(f"**Active soil force:** {Pa_soil:.2f} kN/m")
-st.write(f"Acts at {za_soil:.2f} m above base")
-
-st.write(f"**Surcharge force:** {Pa_surcharge:.2f} kN/m")
-st.write(f"Acts at {za_surcharge:.2f} m above base")
-
-st.write(f"**Water force:** {Pw:.2f} kN/m")
-st.write(f"Acts at {zw_water:.2f} m above water base")
-
-st.subheader("Passive Side")
-
-st.write(f"**Passive soil force:** {Pp:.2f} kN/m")
-st.write(f"Acts at {zp:.2f} m above base")
