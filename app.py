@@ -556,3 +556,86 @@ st.markdown(
 )
 
 
+def draw_pressure_components(Ha, Hw, gamma, q, phi, beta):
+    """
+    Draw classical earth pressure diagrams:
+    - due to soil
+    - due to water
+    - due to surcharge
+    """
+
+    Ka = rankine_active_coefficient(phi, beta)
+    gamma_w = 9.81
+
+    z = np.linspace(0, Ha, 200)
+
+    # COMPONENTS
+    sigma_h_soil = Ka * gamma * z
+    sigma_h_water = gamma_w * np.maximum(0, z - (Ha - Hw))
+    sigma_h_surcharge = Ka * q * np.ones_like(z)
+
+    fig, axs = plt.subplots(1, 3, figsize=(9, 4), sharey=True)
+
+    # ---------------------------
+    # DUE TO SOIL
+    # ---------------------------
+    axs[0].fill_betweenx(
+        z, 0, sigma_h_soil,
+        color="lightcoral", alpha=0.7
+    )
+    axs[0].plot(sigma_h_soil, z, color="black")
+    axs[0].invert_yaxis()
+    axs[0].set_title("Due to soil")
+    axs[0].set_xlabel("σₕ")
+    axs[0].set_ylabel("Depth z")
+
+    axs[0].annotate(
+        "H/3",
+        xy=(np.max(sigma_h_soil)*0.7, Ha*2/3),
+        xytext=(np.max(sigma_h_soil)*0.9, Ha*2/3),
+        arrowprops=dict(arrowstyle="<->")
+    )
+
+    # ---------------------------
+    # DUE TO WATER
+    # ---------------------------
+    axs[1].fill_betweenx(
+        z, 0, sigma_h_water,
+        color="lightskyblue", alpha=0.7
+    )
+    axs[1].plot(sigma_h_water, z, color="black")
+    axs[1].set_title("Due to water")
+    axs[1].set_xlabel("σₕ")
+
+    axs[1].annotate(
+        "Hw/3",
+        xy=(np.max(sigma_h_water)*0.7, Ha - Hw/3),
+        xytext=(np.max(sigma_h_water)*0.9, Ha - Hw/3),
+        arrowprops=dict(arrowstyle="<->")
+    )
+
+    # ---------------------------
+    # DUE TO SURCHARGE
+    # ---------------------------
+    axs[2].fill_betweenx(
+        z, 0, sigma_h_surcharge,
+        color="lightgray", alpha=0.9
+    )
+    axs[2].plot(sigma_h_surcharge, z, color="black")
+    axs[2].set_title("Due to surcharge")
+    axs[2].set_xlabel("σₕ")
+
+    axs[2].annotate(
+        "H/2",
+        xy=(Ka*q*0.7, Ha/2),
+        xytext=(Ka*q*0.9, Ha/2),
+        arrowprops=dict(arrowstyle="<->")
+    )
+
+    for ax in axs:
+        ax.grid(True)
+
+    plt.tight_layout()
+    return fig
+
+
