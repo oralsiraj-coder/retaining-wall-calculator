@@ -540,49 +540,152 @@ st.dataframe(
     use_container_width=True
 )
 
-# ============================================================
-# CLASSICAL EARTH PRESSURE COMPONENT SKETCH (Po1, Po2, Po3)
-# Paste safely at the very end of the file
-# ============================================================
+def draw_wall_with_horizontal_stress_components(
+    Ha, Hw, Th, Lh, Lt, Tsb, beta,
+    gamma_a, phi_a, q
+):
+    """
+    Redraw retaining wall and superimpose horizontal stress components:
+    - Soil pressure (triangular)
+    - Water pressure (triangular)
+    - Surcharge pressure (rectangular)
+    """
 
-def draw_classical_pressure_sketch(Ha, Hw, gamma, q, phi, beta):
-    Ka = rankine_active_coefficient(phi, beta)
+    # --------------------------------
+    # Geometry scaling
+    # --------------------------------
+    scale = compute_scale(Ha, 0, Th, Lh, Lt, Tsb)
+
+    Ha_s = Ha * scale
+    Hw_s = Hw * scale
+    Th_s = Th * scale
+    Lh_s = Lh * scale
+    Lt_s = Lt * scale
+    Tsb_s = Tsb * scale
+
+    base_L = Lh_s + Tsb_s + Lt_s
+    x0 = (VIEW_W - base_L) / 2
+    y0 = 0.8
+    beta_rad = np.deg2rad(beta)
+
+    fig, ax = plt.subplots(figsize=(7, 7))
+
+    # --------------------------------
+    # Wall concrete
+    # --------------------------------
+    ax.add_patch(Rectangle(
+        (x0, y0),
+        base_L, Th_s,
+        fc="0.85", ec="black"
+    ))
+
+    ax.add_patch(Rectangle(
+        (x0 + Lh_s, y0 + Th_s),
+        Tsb_s, Ha_s,
+        fc="0.85", ec="black"
+    ))
+
+    # --------------------------------
+    # Active soil wedge (background)
+    # --------------------------------
+    xL = x0 + 0.1
+    xR = x0 + Lh_s - 0.1
+    yB = y0 + Th_s
+    yTL = yB + Ha_s
+    yTR = yTL - Lh_s * np.tan(beta_rad)
+
+    ax.add_patch(Polygon(
+        [(xL, yB), (xR, yB), (xR, yTR), (xL, yTL)],
+        fc="#f4a261", ec="none", alpha=0.4
+    ))
+
+    # --------------------------------
+    # Horizontal stress components
+    # --------------------------------
+    Ka = rankine_active_coefficient(phi_a, beta)
     gamma_w = 9.81
 
     z = np.linspace(0, Ha, 300)
+    z_s = z * scale
 
-    soil = Ka * gamma * z
-    water = gamma_w * np.maximum(0, z - (Ha - Hw))
-    surcharge = Ka * q * np.ones_like(z)
+    # Soil pressure
+    sigma_h_soil = Ka * gamma_a * z
+    width_soil = 0.6 * sigma_h_soil / np.max(sigma_h_soil)
 
-    fig, ax = plt.subplots(1, 3, figsize=(11, 4), sharey=True)
+    # Water pressure
+    z_wt = Ha - Hw
+    sigma_h_water = gamma_w * np.maximum(0, z - z_wt)
+    width_water = (
+        0.6 * sigma_h_water / np.max(sigma_h_water)
+        if np.max(sigma_h_water) > 0 else 0*z
+    )
 
-    # ------------------ DUE TO SOIL (Po1) ------------------
-    ax[0].fill_betweenx(z, 0, soil, color="none", edgecolor="black")
-    ax[0].plot(soil, z, color="black")
-    ax[0].invert_yaxis()
-    ax[0].set_title("DUE TO SOIL")
-    ax[0].set_ylabel("Depth")
+    # Surcharge pressure
+    sigma_h_q = Ka * q * np.ones_like(z)
+    width_q = 0.6 * sigma_h_q / np.max(sigma_h_q) if q > 0 else 0*z
 
-    ax[0].annotate("Po₁", xy=(soil.max(), Ha/3),
-                   xytext=(soil.max()*1.15, Ha/3),
-                   arrowprops=dict(arrowstyle="<-"))
+    x_wall = x0 + Lh_s
+    y_top = y0 + Th_s + Ha_s
 
-    ax[0].annotate("H / 3", xy=(soil.max()*0.6, Ha/3),
-                   xytext=(soil.max()*0.6, Ha/3))
+    # --------------------------------
+    # Draw SOIL stress (red)
+    # --------------------------------
+    Xs = np.concatenate([x_wall + width_soil, np.full_like(z, x_wall)])
+    Ys = np.concatenate([y_top - z_s, (y_top - z_s)[::-1]])
 
-    # ------------------ DUE TO WATER (Po2) ------------------
-    ax[1].fill_betweenx(z, 0, water, color="none", edgecolor="black")
-    ax[1].plot(water, z, color="black")
-    ax[1].set_title("DUE TO WATER")
+    ax.add_patch(Polygon(
+        np.column_stack([Xs, Ys]),
+        fc="crimson", ec="black", alpha=0.35
+    ))
 
+    # --------------------------------
+    # Draw WATER stress (blue)
+    # --------------------------------
     if Hw > 0:
-        ax[1].annotate("Po₂", xy=(water.max(), Ha - Hw/3),
-                       xytext=(water.max()*1.15, Ha - Hw/3),
-                       arrowprops=dict(arrowstyle="<-"))
+        Xw = np.concatenate([x_wall + width_water, np.full_like(z, x_wall)])
+        Yw = np.concatenate([y_top - z_s, (y_top - z_s)[::-1]])
 
-        ax[1].annotate("Hw / 3", xy=(water.max()*0.6, Ha - Hw/3),
-                       xytext=(water.max()*0.6, Ha - Hw/3))
+        ax.add_patch(Polygon(
+            np.column_stack([Xw, Yw]),
+            fc="royalblue", ec="black", alpha=0.35
+        ))
 
-    # ------------------ DUE TO SURCHARGE (Po3) ------------------
+    # --------------------------------
+    # Draw SURCHARGE stress (grey)
+    # --------------------------------
+    if q > 0:
+        Xq = np.concatenate([x_wall + width_q, np.full_like(z, x_wall)])
+        Yq = np.concatenate([y_top - z_s, (y_top - z_s)[::-1]])
+
+        ax.add_patch(Polygon(
+            np.column_stack([Xq, Yq]),
+            fc="grey", ec="black", alpha=0.35
+        ))
+
+    # --------------------------------
+    # View settings
+    # --------------------------------
+    ax.set_xlim(0, VIEW_W)
+    ax.set_ylim(0, VIEW_H)
+    ax.set_aspect("equal")
+    ax.axis("off")
+
+    return fig
+
+st.header("🧱 Wall with Horizontal Stress Components")
+
+fig_stress_components = draw_wall_with_horizontal_stress_components(
+    Ha=Ha,
+    Hw=Hw,
+    Th=Th,
+    Lh=Lh,
+    Lt=Lt,
+    Tsb=Tsb,
+    beta=beta,
+    gamma_a=gamma_a,
+    phi_a=phi_a,
+    q=q
+)
+
+st.pyplot(fig_stress_components)
 
