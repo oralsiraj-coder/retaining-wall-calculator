@@ -599,82 +599,120 @@ def draw_wall_with_horizontal_stress_components(
         fc="#f4a261", ec="none", alpha=0.4
     ))
 
-    # --------------------------------
-    # Horizontal stress components
-    # --------------------------------
+#----------------------------------------------------------------------------------------------------------------------------
+def draw_wall_with_pressure_sketches(
+    Ha, Hw, Th, Lh, Lt, Tsb, beta,
+    gamma_a, phi_a, q
+):
     Ka = rankine_active_coefficient(phi_a, beta)
     gamma_w = 9.81
 
-    z = np.linspace(0, Ha, 300)
-    z_s = z * scale
+    fig, ax = plt.subplots(figsize=(12, 6))
 
-    # Soil pressure
-    sigma_h_soil = Ka * gamma_a * z
-    width_soil = 0.6 * sigma_h_soil / np.max(sigma_h_soil)
+    # --------------------------------------------------
+    # GEOMETRY (LEFT)
+    # --------------------------------------------------
+    scale = compute_scale(Ha, 0, Th, Lh, Lt, Tsb)
 
-    # Water pressure
-    z_wt = Ha - Hw
-    sigma_h_water = gamma_w * np.maximum(0, z - z_wt)
-    width_water = (
-        0.6 * sigma_h_water / np.max(sigma_h_water)
-        if np.max(sigma_h_water) > 0 else 0*z
-    )
+    Ha_s = Ha * scale
+    Th_s = Th * scale
+    Lh_s = Lh * scale
+    Lt_s = Lt * scale
+    Tsb_s = Tsb * scale
 
-    # Surcharge pressure
-    sigma_h_q = Ka * q * np.ones_like(z)
-    width_q = 0.6 * sigma_h_q / np.max(sigma_h_q) if q > 0 else 0*z
+    base_L = Lh_s + Tsb_s + Lt_s
+    x0, y0 = 0.5, 0.6
+    beta_rad = np.deg2rad(beta)
 
-    x_wall = x0 + Lh_s
-    y_top = y0 + Th_s + Ha_s
+    # Concrete
+    ax.add_patch(Rectangle((x0, y0),
+                           base_L, Th_s,
+                           fill=False, ec="black"))
+    ax.add_patch(Rectangle((x0 + Lh_s, y0 + Th_s),
+                           Tsb_s, Ha_s,
+                           fill=False, ec="black"))
 
-    # --------------------------------
-    # Draw SOIL stress (red)
-    # --------------------------------
-    Xs = np.concatenate([x_wall + width_soil, np.full_like(z, x_wall)])
-    Ys = np.concatenate([y_top - z_s, (y_top - z_s)[::-1]])
-
+    # Backfill soil
     ax.add_patch(Polygon(
-        np.column_stack([Xs, Ys]),
-        fc="crimson", ec="black", alpha=0.35
+        [
+            (x0 + 0.05, y0 + Th_s),
+            (x0 + Lh_s - 0.05, y0 + Th_s),
+            (x0 + Lh_s - 0.05, y0 + Th_s + Ha_s - Lh_s*np.tan(beta_rad)),
+            (x0 + 0.05, y0 + Th_s + Ha_s),
+        ],
+        fill=False, ec="black"
     ))
 
-    # --------------------------------
-    # Draw WATER stress (blue)
-    # --------------------------------
+    # --------------------------------------------------
+    # PRESSURE DIAGRAMS (RIGHT)
+    # --------------------------------------------------
+    z = np.linspace(0, Ha, 200)
+    y = y0 + Th_s + Ha_s - z*scale
+
+    x_base = x0 + base_L + 1.0
+
+    # ---------- SOIL PRESSURE ----------
+    soil = Ka * gamma_a * z
+    soil = soil / soil.max() * 0.8
+
+    ax.plot(x_base + soil, y, color="black")
+    ax.plot([x_base]*len(y), y, color="black")
+    ax.plot([x_base, x_base + soil[-1]], [y[-1], y[-1]], color="black")
+
+    ax.text(x_base + 0.4, y0 + Th_s + Ha_s + 0.1, "DUE TO SOIL", ha="center")
+    ax.annotate("Po₁", (x_base + soil[int(len(z)/3)], y[int(len(z)/3)]),
+                (x_base + 1.1, y[int(len(z)/3)]),
+                arrowprops=dict(arrowstyle="<-"))
+    ax.text(x_base + 0.2, y[int(len(z)/3)], "H/3", va="center")
+
+    # ---------- WATER PRESSURE ----------
     if Hw > 0:
-        Xw = np.concatenate([x_wall + width_water, np.full_like(z, x_wall)])
-        Yw = np.concatenate([y_top - z_s, (y_top - z_s)[::-1]])
+        water = gamma_w * np.maximum(0, z - (Ha - Hw))
+        water = water / water.max() * 0.8
 
-        ax.add_patch(Polygon(
-            np.column_stack([Xw, Yw]),
-            fc="royalblue", ec="black", alpha=0.35
-        ))
+        xw = x_base + 2.0
+        ax.plot(xw + water, y, color="black")
+        ax.plot([xw]*len(y), y, color="black")
+        ax.plot([xw, xw + water[-1]],
+                [y[-1], y[-1]], color="black")
 
-    # --------------------------------
-    # Draw SURCHARGE stress (grey)
-    # --------------------------------
+        ax.text(xw + 0.4, y0 + Th_s + Ha_s + 0.1, "DUE TO WATER", ha="center")
+        ax.annotate("Po₂",
+                    (xw + water[int(len(z)*5/6)], y[int(len(z)*5/6)]),
+                    (xw + 1.1, y[int(len(z)*5/6)]),
+                    arrowprops=dict(arrowstyle="<-"))
+        ax.text(xw + 0.2, y[int(len(z)*5/6)], "Hw/3", va="center")
+
+    # ---------- SURCHARGE PRESSURE ----------
     if q > 0:
-        Xq = np.concatenate([x_wall + width_q, np.full_like(z, x_wall)])
-        Yq = np.concatenate([y_top - z_s, (y_top - z_s)[::-1]])
+        surcharge = Ka * q
+        xs = x_base + 4.0
 
-        ax.add_patch(Polygon(
-            np.column_stack([Xq, Yq]),
-            fc="grey", ec="black", alpha=0.35
-        ))
+        ax.plot([xs, xs + 0.8],
+                [y0 + Th_s + Ha_s, y0 + Th_s + Ha_s], color="black")
+        ax.plot([xs, xs + 0.8],
+                [y0 + Th_s, y0 + Th_s], color="black")
+        ax.plot([xs + 0.8, xs + 0.8],
+                [y0 + Th_s, y0 + Th_s + Ha_s], color="black")
 
-    # --------------------------------
-    # View settings
-    # --------------------------------
-    ax.set_xlim(0, VIEW_W)
-    ax.set_ylim(0, VIEW_H)
+        ax.text(xs + 0.4, y0 + Th_s + Ha_s + 0.1,
+                "DUE TO SURCHARGE", ha="center")
+        ax.annotate("Po₃",
+                    (xs + 0.8, y0 + Th_s + Ha_s/2),
+                    (xs + 1.4, y0 + Th_s + Ha_s/2),
+                    arrowprops=dict(arrowstyle="<-"))
+        ax.text(xs + 0.2, y0 + Th_s + Ha_s/2, "H/2", va="center")
+
     ax.set_aspect("equal")
     ax.axis("off")
+    ax.set_xlim(0, x_base + 6)
+    ax.set_ylim(0, y0 + Th_s + Ha_s + 0.6)
 
     return fig
 
-st.header("🧱 Wall with Horizontal Stress Components")
+st.header("🧱 Wall with Classical Horizontal Pressure Components")
 
-fig_stress_components = draw_wall_with_horizontal_stress_components(
+fig_classical = draw_wall_with_pressure_sketches(
     Ha=Ha,
     Hw=Hw,
     Th=Th,
@@ -687,5 +725,4 @@ fig_stress_components = draw_wall_with_horizontal_stress_components(
     q=q
 )
 
-st.pyplot(fig_stress_components)
-
+st.pyplot(fig_classical)
