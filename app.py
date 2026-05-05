@@ -474,5 +474,83 @@ ax_h.legend()
 
 st.pyplot(fig_h)
 
+#===============================================================================
+# =======================
+# HORIZONTAL FORCE RESULTANTS
+# =======================
+st.header("🧮 Horizontal Force Resultants")
 
+gamma_w = 9.81
 
+Ka = rankine_active_coefficient(phi_a, beta)
+Kp = rankine_passive_coefficient(phi_p)
+
+# ---- Active forces ----
+Fa_soil = 0.5 * Ka * gamma_a * Ha**2
+Fa_surcharge = Ka * q * Ha
+Fw = 0.5 * gamma_w * Hw**2
+
+Fa_total = Fa_soil + Fa_surcharge + Fw
+
+# ---- Passive force ----
+Fp_soil = 0.5 * Kp * gamma_p * Hp**2
+
+# ---- Resultant ----
+F_resultant = Fa_total - Fp_soil
+
+# =======================
+# EQUATIONS (RENDERED)
+# =======================
+st.latex(r"F_{a,\gamma} = \frac{1}{2} K_a \gamma_a H_a^2")
+st.latex(r"F_{a,q} = K_a q H_a")
+st.latex(r"F_w = \frac{1}{2} \gamma_w H_w^2")
+st.latex(r"F_{p,\gamma} = \frac{1}{2} K_p \gamma_p H_p^2")
+st.latex(
+    r"\boxed{F_{\text{resultant}}"
+    r"= (F_{a,\gamma}+F_{a,q}+F_w)-F_{p,\gamma}}"
+)
+
+# =======================
+# RESULTS TABLE
+# =======================
+import pandas as pd
+
+force_table = pd.DataFrame({
+    "Component": [
+        "Active – soil self‑weight",
+        "Active – surcharge",
+        "Water pressure",
+        "Total active force",
+        "Passive – soil self‑weight",
+        "Resultant horizontal force"
+    ],
+    "Horizontal force (kN/m)": [
+        Fa_soil,
+        Fa_surcharge,
+        Fw,
+        Fa_total,
+        Fp_soil,
+        F_resultant
+    ]
+})
+
+st.subheader("📊 Horizontal Force Summary (per meter wall length)")
+st.dataframe(
+    force_table.style.format({"Horizontal force (kN/m)": "{:.2f}"}),
+    use_container_width=True
+)
+
+# =======================
+# DESIGN INTERPRETATION
+# =======================
+st.markdown(
+    f"""
+    ✅ **Total active force:** {Fa_total:.2f} kN/m  
+    ✅ **Total passive resistance:** {Fp_soil:.2f} kN/m  
+
+    ### ➤ **Resultant horizontal force**
+    **{F_resultant:.2f} kN/m**
+
+    *(Positive → wall pushed toward passive side)*  
+    """
+)
