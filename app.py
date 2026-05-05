@@ -801,3 +801,29 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
     ax.axis("off")
 
     return fig
+
+
+import streamlit as st
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle, FancyArrowPatch, Polygon
+import numpy as np
+import math
+
+# ==================================================
+# CONSTANTS & STYLE
+# ==================================================
+VIEW_W, VIEW_H = 10, 10
+MARGIN = 0.85
+DRAFT_GAP = 0.1
+GAMMA_W = 9.81
+
+# ==================================================
+# RANKINE COEFFICIENT
+# ==================================================
+def rankine_active(phi_deg, beta_deg):
+    phi = math.radians(phi_deg)
+    beta = math.radians(beta_deg)
+    if beta > phi:
+        raise ValueError("Rankine requires β ≤ φ")
+
+    term = math.sqrt(math.cos(beta)**2 - math.cos(phi)**2)
