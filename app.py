@@ -604,6 +604,46 @@ st.latex(
 )
 
 st.latex(r"\text{Point of application: } z = \frac{H_p}{3}")
+
+=====================================
+# =======================
+# HORIZONTAL RESULTANT FORCES (kN/m)
+# =======================
+
+gamma_w = 9.81
+
+# Active soil
+Pa_soil = 0.5 * Ka * gamma_a * Ha**2
+za_soil = Ha / 3
+
+# Surcharge
+Pa_surcharge = Ka * q * Ha
+za_surcharge = Ha / 2
+
+# Water
+Pw = 0.5 * gamma_w * Hw**2
+zw = Hw / 3
+
+# Passive soil
+Kp = rankine_passive_coefficient(phi_p)
+Pp = 0.5 * Kp * gamma_p * Hp**2
+zp = Hp / 3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # =======================
 # HORIZONTAL RESULTANT FORCES (kN/m)
 # =======================
