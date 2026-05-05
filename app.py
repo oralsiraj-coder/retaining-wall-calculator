@@ -554,3 +554,91 @@ st.markdown(
     *(Positive → wall pushed toward passive side)*  
     """
 )
+
+
+#===================================================================================================
+
+# =======================
+# LOCATION OF HORIZONTAL FORCES
+# =======================
+st.header("📍 Location of Horizontal Forces")
+
+# ---- Individual force locations (from base) ----
+z_Fa_soil = Ha / 3
+z_Fa_surcharge = Ha / 2
+z_Fw = Hw / 3
+z_Fp_soil = Hp / 3
+
+# ---- Resultant active force location ----
+z_Fa_resultant = (
+    Fa_soil * z_Fa_soil
+    + Fa_surcharge * z_Fa_surcharge
+    + Fw * z_Fw
+) / Fa_total
+
+# =======================
+# EQUATIONS (RENDERED)
+# =======================
+st.latex(r"z_{a,\gamma} = \frac{H_a}{3}")
+st.latex(r"z_{a,q} = \frac{H_a}{2}")
+st.latex(r"z_w = \frac{H_w}{3}")
+st.latex(r"z_{p,\gamma} = \frac{H_p}{3}")
+
+st.latex(
+    r"z_{a,\text{res}} = "
+    r"\frac{F_{a,\gamma} z_{a,\gamma} + F_{a,q} z_{a,q} + F_w z_w}"
+    r"{F_{a,\gamma} + F_{a,q} + F_w}"
+)
+
+# =======================
+# RESULTS TABLE
+# =======================
+import pandas as pd
+
+location_table = pd.DataFrame({
+    "Force component": [
+        "Active – soil self‑weight",
+        "Active – surcharge",
+        "Water pressure",
+        "Resultant active force",
+        "Passive – soil self‑weight"
+    ],
+    "Force (kN/m)": [
+        Fa_soil,
+        Fa_surcharge,
+        Fw,
+        Fa_total,
+        Fp_soil
+    ],
+    "Location above base (m)": [
+        z_Fa_soil,
+        z_Fa_surcharge,
+        z_Fw,
+        z_Fa_resultant,
+        z_Fp_soil
+    ]
+})
+
+st.subheader("📊 Force Locations Summary")
+st.dataframe(
+    location_table.style.format({
+        "Force (kN/m)": "{:.2f}",
+        "Location above base (m)": "{:.2f}"
+    }),
+    use_container_width=True
+)
+
+# =======================
+# INTERPRETATION
+# =======================
+st.markdown(
+    f"""
+    ✅ **Resultant active force acts at:**  
+    **{z_Fa_resultant:.2f} m above base**
+
+    This value is used directly for:
+    - Overturning moment calculation  
+    - Stability verification  
+    - Structural wall design
+    """
+)
