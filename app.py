@@ -194,51 +194,58 @@ st.pyplot(draw_wall(
     gamma_p, phi_p, c_p
 ))
 #================================================================================================================#
+st.markdown("""
+<style>
+.katex-display {
+    text-align: left !important;
+    margin-left: 0 !important;
+}
+</style>
+""", unsafe_allow_html=True)
+# =======================
+# Ka (ACTIVE)
+# =======================
 
+st.latex(rf"""
+\begin{{aligned}}
+
+K_a &= \cos\beta \cdot 
+\frac{{\cos\beta - \sqrt{{\cos^2\beta - \cos^2\varphi}}}}
+{{\cos\beta + \sqrt{{\cos^2\beta - \cos^2\varphi}}}} \\[6pt]
+
+K_a &= \cos({beta:.1f}^\circ) \cdot
+\frac{{\cos({beta:.1f}^\circ) - \sqrt{{\cos^2({beta:.1f}^\circ) - \cos^2({phi_a:.1f}^\circ)}}}}
+{{\cos({beta:.1f}^\circ) + \sqrt{{\cos^2({beta:.1f}^\circ) - \cos^2({phi_a:.1f}^\circ)}}}} \\[6pt]
+
+K_a &= {Ka:.4f}
+
+\end{{aligned}}
+""")
+
+st.success(f"Ka = {Ka:.4f}")
 
 # =======================
-# RANKINE COEFFICIENTS
+# Kp (PASSIVE)
 # =======================
-# Calculation 
 
-def rankine_active_coefficient(phi_deg, beta_deg):
-    phi = math.radians(phi_deg)
-    beta = math.radians(beta_deg)
+st.latex(rf"""
+\begin{{aligned}}
 
-    if beta > phi:
-        raise ValueError("Rankine theory invalid: β must be ≤ φ")
+K_p &= \cos\beta \cdot 
+\frac{{\cos\beta + \sqrt{{\cos^2\beta - \cos^2\varphi}}}}
+{{\cos\beta - \sqrt{{\cos^2\beta - \cos^2\varphi}}}} \\[6pt]
 
-    term = math.sqrt(math.cos(beta)**2 - math.cos(phi)**2)
+K_p &= \cos(0^\circ) \cdot
+\frac{{\cos(0^\circ) + \sqrt{{\cos^2(0^\circ) - \cos^2({phi_p:.1f}^\circ)}}}}
+{{\cos(0^\circ) - \sqrt{{\cos^2(0^\circ) - \cos^2({phi_p:.1f}^\circ)}}}} \\[6pt]
 
-    Ka = (
-        math.cos(beta)
-        * (math.cos(beta) - term)
-        / (math.cos(beta) + term)
-    )
-    return Ka
+K_p &= {Kp:.4f}
 
+\end{{aligned}}
+""")
 
-def rankine_passive_coefficient(phi_deg, beta_deg=0.0):
-    phi = math.radians(phi_deg)
-    beta = math.radians(beta_deg)
-
-    if beta > phi:
-        raise ValueError("Rankine theory invalid: β must be ≤ φ")
-
-    term = math.sqrt(math.cos(beta)**2 - math.cos(phi)**2)
-
-    Kp = (
-        math.cos(beta)
-        * (math.cos(beta) + term)
-        / (math.cos(beta) - term)
-    )
-    return Kp
-
-
-st.header("📐 Rankine Earth Pressure Coefficients")
-
-Ka = rankine_active_coefficient(phi_a, beta)
-Kp = rankine_passive_coefficient(phi_p)
+st.success(f"Kp = {Kp:.4f}")
+``
 #=============================================================================
 # =======================
 # Ka (ACTIVE)
