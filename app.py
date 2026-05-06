@@ -236,7 +236,7 @@ Ka = rankine_active_coefficient(phi_a, beta)
 Kp = rankine_passive_coefficient(phi_p)
 
 st.markdown(
-    """Active earth coefficient"""
+    """Active earth coefficient""")
     
 # Render the equation with symboles
 st.latex(
@@ -253,7 +253,7 @@ st.latex(
 st.success(f"Ka = {Ka:.4f}")
 
 st.markdown(
-    """Passive earth coefficient"""
+    """Passive earth coefficient""")
     
 # Render the equation with symboles
 st.latex(
