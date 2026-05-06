@@ -305,24 +305,25 @@ z_w = H_a - H_w \\
 """)
 
 # ---- Symbol definitions ----
-st.markdown("Where:")
 st.latex(r"""
-\begin{aligned}
-\text{Vertical stress due to self weight of soil:} \\ 
-\sigma_{v,\text{soil}}(z) = \gamma z \\
+\begin{array}{l}
 
-\text{Vertical stress due surcharge:} \\ 
-\sigma_{v,\text{surcharge}}(z) = q \\
+\textrm{Vertical stress due to self weight of soil} \\[-3pt]
+\sigma_{v,\textrm{soil}}(z) = \gamma z \\[6pt]
 
-\text{Vertical stress due to water table:} \\ 
-\sigma_{v,\text{water}}(z) = -\gamma_w (z - z_w), \quad z > z_w \\
+\textrm{Vertical stress due surcharge} \\[-3pt]
+\sigma_{v,\textrm{surcharge}}(z) = q \\[6pt]
 
-\text{Effective vertical stress:} \\ 
+\textrm{Vertical stress due to water table (uplift pressure)} \\[-3pt]
+\sigma_{v,\textrm{water}}(z) = -\gamma_w (z - z_w), \quad z > z_w \\[6pt]
+
+\textrm{Effective vertical stress} \\[-3pt]
 z_w = H_a - H_w \\
-\sigma_v(z) = \sigma_{v,\text{soil}} 
-+ \sigma_{v,\text{surcharge}} 
-+ \sigma_{v,\text{water}}
-\end{aligned}
+\sigma_v(z) = \sigma_{v,\textrm{soil}} +
+\sigma_{v,\textrm{surcharge}} +
+\sigma_{v,\textrm{water}}
+
+\end{array}
 """)
 
 # =======================
