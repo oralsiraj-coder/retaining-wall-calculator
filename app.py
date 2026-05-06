@@ -314,53 +314,77 @@ $\sigma_v(z):$ &nbsp; Effective vertical stress
 # =======================
 # EFFECTIVE VERTICAL STRESS
 # =======================
-# ---- Depth discretization ----
-z = np.arange(0, Ha, 0.1)   # depth below ground surface (m)
+# ---- Depth ----
+z = -np.arange(0, Ha, 0.1)
 
-# ---- Stress components (kPa) ----
-sigma_v_soil = gamma_a * z                # Vertical stress due soil selfweight 
-sigma_v_surcharge = q * np.ones_like(z)        # Vertical stress due to surcharge 
+# ---- Water table ----
+z_wt = -Hw
 
-z_wt = Ha - Hw                # determine the top elevation of water 
+# ---- Material constants ----
 gamma_w = 9.81
-sigma_v_water = -gamma_w * np.maximum(0, z - z_wt)
+
+# ---- Stress components ----
+sigma_v_soil = gamma_a * (-z)
+sigma_v_surcharge = q * np.ones_like(z)
+sigma_v_water = -gamma_w * np.maximum(0, z_wt - z)
 
 # ---- Effective stress ----
-sigma_v_effective = sigma_v_soil + sigma_v_surcharge + sigma_v_water
+sigma_v_effective = (
+    sigma_v_soil +
+    sigma_v_surcharge +
+    sigma_v_water
+)
 
 #====================================================================================================
+
+import matplotlib.pyplot as plt
+from matplotlib.ticker import MultipleLocator
 
 fig_eff, ax_eff = plt.subplots(figsize=(6, 5))
 
 # ---- Plot components ----
 ax_eff.plot(sigma_v_soil, z, linestyle="--", color="brown", label="Soil (γ·z)")
-ax_eff.plot(sigma_v_surcharge, z, linestyle="--", color="blue", label="Surcharge (q)")
 ax_eff.plot(sigma_v_water, z, linestyle="--", color="cyan", label="Water (−γw·h)")
 
-# ---- Plot effective stress (main result) ----
-ax_eff.plot(sigma_v_effective, z, linewidth=2.5, color="black", label="Effective stress σ′ᵥ")
-# ---- Fill effective stress area
-ax_eff.fill_betweenx(z, 0, sigma_v_effective, color="gray", alpha=0.2)
-#---- Add water table line
-ax_eff.axhline(z_wt, color="blue", linestyle=":", label="Water table")
+# ---- Effective stress (main curve) ----
+ax_eff.plot(
+    sigma_v_effective, z,
+    linewidth=2.5, color="black",
+    label="Effective stress σ′ᵥ"
+)
 
-# ---- Axis formatting ----
-ax_eff.invert_yaxis()
+# ---- Reference lines ----
+ax_eff.axhline(z_wt, color="blue", linestyle=":", linewidth=1.5, label="Water table")
+ax_eff.axvline(0, color="black", linewidth=1)
+
+# ---- Fill effective stress (nice visual) ----
+ax_eff.fill_betweenx(z, 0, sigma_v_effective, color="gray", alpha=0.2)
+
+# ---- Axis limits (VERY IMPORTANT) ----
+ax_eff.set_ylim(0, z.min())   # negative depth downward
+
+xmin = min(sigma_v_water.min(), sigma_v_effective.min(), 0)
+xmax = max(sigma_v_soil.max(), sigma_v_effective.max())
+ax_eff.set_xlim(xmin, xmax)
+
+# ---- Labels ----
 ax_eff.set_xlabel("Stress (kPa)")
-ax_eff.set_ylabel("Depth z (m)")
+ax_eff.set_ylabel("Elevation z (m)")
 ax_eff.set_title("Effective Vertical Stress Distribution")
 
-# ---- Improve readability ----
-ax_eff.grid(True, linestyle=":", linewidth=0.7)
+# ---- Grid (professional style) ----
+ax_eff.yaxis.set_major_locator(MultipleLocator(1))
+ax_eff.yaxis.set_minor_locator(MultipleLocator(0.25))
+
+ax_eff.grid(True, which='major', linestyle='-', linewidth=0.8)
+ax_eff.grid(True, which='minor', linestyle=':', linewidth=0.5)
+
+# ---- Legend ----
 ax_eff.legend(loc="best")
-ax_eff.set_xlim(left=min(sigma_v_water.min(), 0))  # ensures negative values are visible
 
-# ---- Reduce empty margins ----
-ax_eff.margins(x=0.05, y=0)
-
-
-# ---- Display ----
+# ---- Show ----
 st.pyplot(fig_eff)
+
 
 
 
