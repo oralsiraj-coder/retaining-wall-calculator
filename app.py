@@ -305,8 +305,6 @@ st.latex(r"""
 
 # ---- Symbol definitions ----
 st.markdown("Where:")
-
-st.markdown(r"""
 st.markdown(r"""
 <table style="border-collapse:collapse; margin:0;">
 <tr>
