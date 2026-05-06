@@ -446,7 +446,7 @@ st.latex(r"\sigma_{h,\text{soil}}(z) = K \cdot \gamma \cdot z")
 st.latex(r"\sigma_{h,\text{surcharge}} = K \cdot q")
 st.latex(r"\sigma_{h,\text{water}}(z) = \gamma_w \cdot h")
 st.latex(r"\sigma_h(z) = K\gamma z + Kq + \gamma_w h")
-)
+
 
 # =======================
 # SYMBOLS (COMPACT FORMAT)
