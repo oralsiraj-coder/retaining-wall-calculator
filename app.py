@@ -283,24 +283,18 @@ st.markdown(
 )
 
 # ---- Governing equations ----
-st.latex(r"""
-\begin{array}{l}
+st.markdown(r"""
+Vertical stress due to self weight of soil  
+$\sigma_{v,\text{soil}}(z) = \gamma z$
 
-\textsf{Vertical stress due to self weight of soil} \\[-3pt]
-\sigma_{v,\text{soil}}(z) = \gamma z \\[6pt]
+Vertical stress due surcharge  
+$\sigma_{v,\text{surcharge}}(z) = q$
 
-\textsf{Vertical stress due surcharge} \\[-3pt]
-\sigma_{v,\text{surcharge}}(z) = q \\[6pt]
+Vertical stress due to water table (uplift pressure)  
+$\sigma_{v,\text{water}}(z) = \gamma_w z_w$
 
-\textsf{Vertical stress due to water table (uplift pressure)} \\[-3pt]
-\sigma_{v,\text{water}}(z) = \gamma_w z_w\\[6pt]
-
-\textsf{Effective vertical stress} \\[-3pt]
-\sigma_v(z) = \sigma_{v,\text{soil}} +
-\sigma_{v,\text{surcharge}} -
-\sigma_{v,\text{water}}
-
-\end{array}
+Effective vertical stress  
+$\sigma_v(z) = \sigma_{v,\text{soil}} + \sigma_{v,\text{surcharge}} - \sigma_{v,\text{water}}$
 """)
 
 # ---- Symbol definitions ----
