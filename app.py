@@ -286,13 +286,13 @@ st.markdown(
 st.latex(r"""
 \begin{aligned}
 \text{Vertical stress due to self weight of soil:} 
-\ \sigma_{v,\text{soil}}(z) = \gamma z \\
+\\sigma_{v,\text{soil}}(z) = \gamma z \\
 
 \text{Vertical stress due surcharge:} \quad 
 & \sigma_{v,\text{surcharge}}(z) = q \\
 
 \text{Vertical stress due to water table:} \quad 
-& \sigma_{v,\text{water}}(z) = -\gamma_w (z - z_w), \quad z > z_w \\
+& \\sigma_{v,\text{water}}(z) = -\gamma_w (z - z_w), \quad z > z_w \\
 
 \text{Effective vertical stress:} \quad 
 & z_w = H_a - H_w \\
@@ -307,17 +307,24 @@ st.latex(r"\boxed{\sigma'_v(z) = \sigma_v(z)}")
 
 # ---- Symbol definitions ----
 st.markdown("Where:")
+st.latex(r"""
+\begin{aligned}
+\text{Vertical stress due to self weight of soil:} \\ 
+\sigma_{v,\text{soil}}(z) = \gamma z \\
 
-st.markdown(
-    """
-    - **\( z \)** – Depth below ground surface *(m)*  
-    - **\( \gamma_sat \)** – Saturated unit weight of soil *(kN/m³)*  
-    - **\( \gamma_w \)** – Unit weight of water *(= 9.81 kN/m³)*  
-    - **\( q \)** – Uniform surface surcharge *(kPa)*  
-    - **\( \sigma'_v \)** – Effective vertical stress *(kPa)*  
-   
-    """
-)
+\text{Vertical stress due surcharge:} \\ 
+\sigma_{v,\text{surcharge}}(z) = q \\
+
+\text{Vertical stress due to water table:} \\ 
+\sigma_{v,\text{water}}(z) = -\gamma_w (z - z_w), \quad z > z_w \\
+
+\text{Effective vertical stress:} \\ 
+z_w = H_a - H_w \\
+\sigma_v(z) = \sigma_{v,\text{soil}} 
++ \sigma_{v,\text{surcharge}} 
++ \sigma_{v,\text{water}}
+\end{aligned}
+""")
 
 # =======================
 # EFFECTIVE VERTICAL STRESS
