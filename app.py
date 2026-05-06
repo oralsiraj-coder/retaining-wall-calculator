@@ -285,8 +285,7 @@ st.markdown(
 # ---- Governing equations ----
 st.latex(r"""
 \begin{aligned}
-\text{Vertical stress due to self weight of soil:} \quad 
-& 
+\text{Vertical stress due to self weight of soil:} 
 \sigma_{v,\text{soil}}(z) = \gamma z \\
 
 \text{Vertical stress due surcharge:} \quad 
