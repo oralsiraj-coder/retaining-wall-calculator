@@ -308,7 +308,6 @@ $\sigma_v(z):$ &nbsp; Effective vertical stress
 """)
 #================================================================================================
 #-------------- TEST----TEST---------TEST
-
 import plotly.graph_objects as go
 
 fig = go.Figure()
@@ -320,7 +319,7 @@ fig.add_trace(go.Scatter(
     mode='lines',
     name='Soil (γ·z)',
     line=dict(dash='dash', color='brown'),
-    hovertemplate="Stress: %{x:.2f} kPa<br>z: %{y:.2f} m"
+    hovertemplate="Soil: %{x:.2f} kPa<br>z: %{y:.2f} m"
 ))
 
 # ---- Water pressure ----
@@ -343,19 +342,22 @@ fig.add_trace(go.Scatter(
     hovertemplate="σ′: %{x:.2f} kPa<br>z: %{y:.2f} m"
 ))
 
-# ---- Fill area under effective stress ----
+# ---- Fill area ----
 fig.add_trace(go.Scatter(
     x=list(sigma_v_effective) + [0]*len(z),
     y=list(z) + list(z[::-1]),
     fill='toself',
-    fillcolor='rgba(150,150,150,0.2)',
-    line=dict(color='rgba(255,255,255,0)'),
+    fillcolor='rgba(150,150,150,0.25)',
+    line=dict(color='rgba(0,0,0,0)'),
     showlegend=False
 ))
 
-# ---- Water table line ----
+# ---- Water table ----
+xmin = min(sigma_v_water.min(), sigma_v_effective.min(), 0)
+xmax = max(sigma_v_soil.max(), sigma_v_effective.max())
+
 fig.add_trace(go.Scatter(
-    x=[min(sigma_v_water.min(), 0), max(sigma_v_soil.max(), sigma_v_effective.max())],
+    x=[xmin, xmax],
     y=[z_wt, z_wt],
     mode='lines',
     line=dict(color='blue', dash='dot'),
@@ -381,15 +383,13 @@ fig.update_layout(
     hovermode="closest"
 )
 
-# ---- Y-axis (negative depth system) ----
+# ---- Axis control (important for negative z) ----
 fig.update_yaxes(range=[0, z.min()])
-
-# ---- Optional grid styling ----
-fig.update_yaxes(dtick=1, showgrid=True)
-fig.update_xaxes(showgrid=True)
+fig.update_xaxes(range=[xmin, xmax])
 
 # ---- Show in Streamlit ----
 st.plotly_chart(fig, use_container_width=True)
+
 
 
 #================================================================================================
