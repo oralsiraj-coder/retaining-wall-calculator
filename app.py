@@ -320,6 +320,7 @@ z_w & \text{Water table depth} \\
 
 
 
+
 # =======================
 # EFFECTIVE VERTICAL STRESS
 # =======================
