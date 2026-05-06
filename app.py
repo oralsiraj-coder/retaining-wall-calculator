@@ -442,15 +442,16 @@ st.markdown(
 )
 
 # ---- Governing equations ----
+st.markdown(r"""
+Horizontal stress due to self weight of soil :  
+$\sigma_{h,\text{soil}}(z) = K \, \sigma_{v,\text{soil}}(z)$
 
-st.markdown("**Soil contribution:**")
-st.latex(r"\sigma_{h,\text{soil}}(z) = K \cdot \sigma_{v,\text{soil}}(z)")
+Horizontal stress due surcharge :  
+$\sigma_{h,\text{surcharge}}(z) = K \, \sigma_{v,\text{surcharge}}(z)$
 
-st.markdown("**Surcharge contribution:**")
-st.latex(r"\sigma_{h,\text{surcharge}} = K \cdot \sigma_{v,\text{surcharge}}")
-
-st.markdown("**Water contribution:**")
-st.latex(r"\sigma_{h,\text{water}}(z) = \sigma_{v,\text{water}}(z) = u(z)")
+Horizontal stress due to water table :  
+$\sigma_{h,\text{water}}(z) = \sigma_{v,\text{water}}(z) = u(z)$
+""")
 
 
 
