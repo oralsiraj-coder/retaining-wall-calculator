@@ -272,7 +272,7 @@ st.success(f"Kp = {Kp:.4f}")
 
 
 # ================================================================================
-# EFFECTIVE VERTICAL STRESS – THEORY
+# EFFECTIVE VERTICAL STRESS – THEORY AND EQUATIONS 
 # ================================================================================
 st.header("Effective Vertical stress calculation")
 st.markdown(
@@ -306,9 +306,9 @@ $\sigma_{v,\text{water}}(z):$ &nbsp; Vertical stress due water table
 $z_w:$ &nbsp;&nbsp; Water table depth  
 $\sigma_v(z):$ &nbsp; Effective vertical stress  
 """)
-
+#==========================================================================================================
 # =======================
-# EFFECTIVE VERTICAL STRESS
+# EFFECTIVE VERTICAL STRESS CALCULATIONS
 # =======================
 # ---- Depth ----
 z = -np.arange(0, Ha, 0.1)
@@ -383,23 +383,6 @@ st.pyplot(fig_eff)
 
 #=======================================================================================================
 
-# ---- Plot ----
-fig_eff, ax_eff = plt.subplots(figsize=(6, 4))
-
-ax_eff.plot(sigma_v_soil, z, "--", label="\sigma_{v,\text{soil}}(z)")
-ax_eff.plot(sigma_v_surcharge, z, "--", label="Surcharge (q)")
-ax_eff.plot(sigma_v_water, z, "--", label="Water pressure (−γw·h)")
-ax_eff.plot(sigma_v_effective, z, linewidth=2.5, label="Effective stress σ′ᵥ")
-
-ax_eff.invert_yaxis()   # depth increases downward
-
-ax_eff.set_xlabel("Stress (kPa)")
-ax_eff.set_ylabel("Depth below ground surface z (m)")
-ax_eff.set_title("Effective Vertical Stress Distribution")
-ax_eff.grid(True)
-ax_eff.legend()
-
-st.pyplot(fig_eff)
 
 # =======================
 # VERTICAL STRESS TABLE (0.1 m SLICES)
