@@ -304,7 +304,7 @@ st.latex(r"""
 """)
 
 # ---- Symbol definitions ----
-st.markdown("### Where:")
+st.markdown("Where:")
 
 st.markdown(
     """
