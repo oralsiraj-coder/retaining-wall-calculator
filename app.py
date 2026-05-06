@@ -298,6 +298,7 @@ $\sigma_v(z) = \sigma_{v,\text{soil}} + \sigma_{v,\text{surcharge}} - \sigma_{v,
 """)
 
 # ---- Symbol definitions ----
+st.markdown("Where":)
 st.markdown(r"""
 $\sigma_{v,\text{soil}}(z):$ &nbsp; Vertical stress due to self weight of soil  
 $\sigma_{v,\text{surcharge}}(z):$ &nbsp; Vertical stress due surcharge  
