@@ -307,12 +307,35 @@ st.latex(r"""
 st.markdown("Where:")
 
 st.markdown(r"""
-$\sigma_{v,\text{soil}}(z)$ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Vertical stress due to self weight of soil  
-$\sigma_{v,\text{surcharge}}(z)$ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Vertical stress due surcharge  
-$\sigma_{v,\text{water}}(z)$ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Vertical stress due water table  
-$z_w$ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Water table depth  
-$\sigma_v(z)$ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Effective vertical stress  
-""")
+st.markdown(r"""
+<table style="border-collapse:collapse; margin:0;">
+<tr>
+<td style="padding-right:30pt;">$\sigma_{v,\text{soil}}(z)$</td>
+<td>Vertical stress due to self weight of soil</td>
+</tr>
+
+<tr>
+<td style="padding-right:30pt;">$\sigma_{v,\text{surcharge}}(z)$</td>
+<td>Vertical stress due surcharge</td>
+</tr>
+
+<tr>
+<td style="padding-right:30pt;">$\sigma_{v,\text{water}}(z)$</td>
+<td>Vertical stress due water table (uplift pressure)</td>
+</tr>
+
+<tr>
+<td style="padding-right:30pt;">$z_w$</td>
+<td>Water table depth</td>
+</tr>
+
+<tr>
+<td style="padding-right:30pt;">$\sigma_v(z)$</td>
+<td>Effective vertical stress</td>
+</tr>
+</table>
+""", unsafe_allow_html=True)
+
 
 
 
