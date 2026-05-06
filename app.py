@@ -305,42 +305,18 @@ z_w = H_a - H_w \\
 """)
 
 # ---- Symbol definitions ----
-st.markdown(r"""
-<div style="margin:0; padding:0; text-align:left;">
-
-<p style="margin:0;">
-Vertical stress due to self weight of soil
-</p>
-<p style="margin:0;">
-$\sigma_{v,\text{soil}}(z) = \gamma z$
-</p>
-
-<p style="margin:0;">
-Vertical stress due surcharge
-</p>
-<p style="margin:0;">
-$\sigma_{v,\text{surcharge}}(z) = q$
-</p>
-
-<p style="margin:0;">
-Vertical stress due to water table (uplift pressure)
-</p>
-<p style="margin:0;">
-$\sigma_{v,\text{water}}(z) = -\gamma_w (z - z_w), \quad z > z_w$
-</p>
-
-<p style="margin:0;">
-Effective vertical stress
-</p>
-<p style="margin:0;">
-$z_w = H_a - H_w$
-</p>
-<p style="margin:0;">
-$\sigma_v(z) = \sigma_{v,\text{soil}} + \sigma_{v,\text{surcharge}} + \sigma_{v,\text{water}}$
-</p>
-
-</div>
-""", unsafe_allow_html=True)
+st.markdown("Vertical stress due to self weight of soil :")
+st.latex(r"\sigma_{v,\text{soil}}(z) = \gamma \, z")
+st.markdown("Vertical stress due surcharge :")
+st.latex(r"\sigma_{v,\text{surcharge}}(z) = q")
+st.markdown("Vertical stress due to water table ( uplifting pressure) :")
+st.latex(r"\sigma_{v,\text{water}}(z) = -\gamma_w (z - z_w), \quad z > z_w")
+st.markdown("Effective vertical stress:") 
+st.latex(r"z_w = H_a - H_w")
+st.latex(
+    r"\sigma_v(z) = \sigma_{v,\text{soil}}"
+    r" + \sigma_{v,\text{surcharge}}"
+    r" + \sigma_{v,\text{water}}"
 
 # =======================
 # EFFECTIVE VERTICAL STRESS
