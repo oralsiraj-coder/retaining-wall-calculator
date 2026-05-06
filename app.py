@@ -289,13 +289,13 @@ st.latex(r"""
 \textsf{Vertical stress due to self weight of soil} \\[-3pt]
 \sigma_{v,\text{soil}}(z) = \gamma z \\[6pt]
 
-\text{Vertical stress due surcharge} \\[-3pt]
+\textsf{Vertical stress due surcharge} \\[-3pt]
 \sigma_{v,\text{surcharge}}(z) = q \\[6pt]
 
-\text{Vertical stress due to water table (uplift pressure)} \\[-3pt]
+\textsf{Vertical stress due to water table (uplift pressure)} \\[-3pt]
 \sigma_{v,\text{water}}(z) = \gamma_w z_w
 
-\text{Effective vertical stress} \\[-3pt]
+\textsf{Effective vertical stress} \\[-3pt]
 \sigma_v(z) = \sigma_{v,\text{soil}} +
 \sigma_{v,\text{surcharge}} -
 \sigma_{v,\text{water}}
