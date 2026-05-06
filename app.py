@@ -307,6 +307,106 @@ $z_w:$ &nbsp;&nbsp; Water table depth
 $\sigma_v(z):$ &nbsp; Effective vertical stress  
 """)
 #================================================================================================
+#-------------- TEST----TEST---------TEST
+
+import plotly.graph_objects as go
+
+fig = go.Figure()
+
+# ---- Soil stress ----
+fig.add_trace(go.Scatter(
+    x=sigma_v_soil,
+    y=z,
+    mode='lines',
+    name='Soil (γ·z)',
+    line=dict(dash='dash', color='brown'),
+    hovertemplate="Stress: %{x:.2f} kPa<br>z: %{y:.2f} m"
+))
+
+# ---- Water pressure ----
+fig.add_trace(go.Scatter(
+    x=sigma_v_water,
+    y=z,
+    mode='lines',
+    name='Water (−γw·h)',
+    line=dict(dash='dash', color='cyan'),
+    hovertemplate="Water: %{x:.2f} kPa<br>z: %{y:.2f} m"
+))
+
+# ---- Effective stress ----
+fig.add_trace(go.Scatter(
+    x=sigma_v_effective,
+    y=z,
+    mode='lines',
+    name='Effective stress σ′ᵥ',
+    line=dict(width=3, color='black'),
+    hovertemplate="σ′: %{x:.2f} kPa<br>z: %{y:.2f} m"
+))
+
+# ---- Fill area under effective stress ----
+fig.add_trace(go.Scatter(
+    x=list(sigma_v_effective) + [0]*len(z),
+    y=list(z) + list(z[::-1]),
+    fill='toself',
+    fillcolor='rgba(150,150,150,0.2)',
+    line=dict(color='rgba(255,255,255,0)'),
+    showlegend=False
+))
+
+# ---- Water table line ----
+fig.add_trace(go.Scatter(
+    x=[min(sigma_v_water.min(), 0), max(sigma_v_soil.max(), sigma_v_effective.max())],
+    y=[z_wt, z_wt],
+    mode='lines',
+    line=dict(color='blue', dash='dot'),
+    name='Water table',
+    hoverinfo='skip'
+))
+
+# ---- Zero vertical line ----
+fig.add_trace(go.Scatter(
+    x=[0, 0],
+    y=[0, z.min()],
+    mode='lines',
+    line=dict(color='black'),
+    showlegend=False
+))
+
+# ---- Layout ----
+fig.update_layout(
+    title="Effective Vertical Stress Distribution",
+    xaxis_title="Stress (kPa)",
+    yaxis_title="Elevation z (m)",
+    template="simple_white",
+    hovermode="closest"
+)
+
+# ---- Y-axis (negative depth system) ----
+fig.update_yaxes(range=[0, z.min()])
+
+# ---- Optional grid styling ----
+fig.update_yaxes(dtick=1, showgrid=True)
+fig.update_xaxes(showgrid=True)
+
+# ---- Show in Streamlit ----
+st.plotly_chart(fig, use_container_width=True)
+
+
+#================================================================================================
+#-------------- TEST----TEST---------TEST
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -334,8 +434,6 @@ sigma_v_effective = (
     sigma_v_surcharge +
     sigma_v_water
 )
-
-#====================================================================================================
 
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator
@@ -384,31 +482,6 @@ ax_eff.legend(loc="best")
 ax_eff.invert_yaxis()
 # ---- Show ----
 st.pyplot(fig_eff)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #=======================================================================================================
 
