@@ -284,26 +284,25 @@ st.markdown(
 
 # ---- Governing equations ----
 st.latex(r"""
-\begin{aligned}
-\text{Vertical stress due to self weight of soil:} 
-\\sigma_{v,\text{soil}}(z) = \gamma z \\
+\begin{array}{l}
 
-\text{Vertical stress due surcharge:} \quad 
-\\sigma_{v,\text{surcharge}}(z) = q \\
+\textbf{Vertical stress due to self weight of soil} \\[-3pt]
+\sigma_{v,\text{soil}}(z) = \gamma z \\[6pt]
 
-\text{Vertical stress due to water table:} \quad 
-\\sigma_{v,\text{water}}(z) = -\gamma_w (z - z_w), \quad z > z_w \\
+\textbf{Vertical stress due surcharge} \\[-3pt]
+\sigma_{v,\text{surcharge}}(z) = q \\[6pt]
 
-\text{Effective vertical stress:} \quad 
-\\z_w = H_a - H_w \\
+\textbf{Vertical stress due to water table (uplift pressure)} \\[-3pt]
+\sigma_{v,\text{water}}(z) = -\gamma_w (z - z_w), \quad z > z_w \\[6pt]
 
-& \sigma_v(z) = \sigma_{v,\text{soil}} 
+\textbf{Effective vertical stress} \\[-3pt]
+z_w = H_a - H_w \\
+\sigma_v(z) = \sigma_{v,\text{soil}} 
 + \sigma_{v,\text{surcharge}} 
 + \sigma_{v,\text{water}}
-\end{aligned}
-""")
 
-st.latex(r"\boxed{\sigma'_v(z) = \sigma_v(z)}")
+\end{array}
+""")
 
 # ---- Symbol definitions ----
 st.markdown("Where:")
