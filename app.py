@@ -289,13 +289,13 @@ st.latex(r"""
 \\sigma_{v,\text{soil}}(z) = \gamma z \\
 
 \text{Vertical stress due surcharge:} \quad 
-& \sigma_{v,\text{surcharge}}(z) = q \\
+\\sigma_{v,\text{surcharge}}(z) = q \\
 
 \text{Vertical stress due to water table:} \quad 
-& \\sigma_{v,\text{water}}(z) = -\gamma_w (z - z_w), \quad z > z_w \\
+\\sigma_{v,\text{water}}(z) = -\gamma_w (z - z_w), \quad z > z_w \\
 
 \text{Effective vertical stress:} \quad 
-& z_w = H_a - H_w \\
+\\z_w = H_a - H_w \\
 
 & \sigma_v(z) = \sigma_{v,\text{soil}} 
 + \sigma_{v,\text{surcharge}} 
