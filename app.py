@@ -345,7 +345,7 @@ ax_eff.fill_betweenx(z, 0, sigma_v_effective, color="gray", alpha=0.2)
 ax_eff.axvline(0, color="black", linewidth=1)
 
 # ---- Axis formatting ----
-#ax_eff.invert_yaxis()
+ax_eff.invert_yaxis()
 ax_eff.set_xlabel("Stress (kPa)")
 ax_eff.set_ylabel("Depth z (m)")
 ax_eff.set_title("Effective Vertical Stress Distribution")
