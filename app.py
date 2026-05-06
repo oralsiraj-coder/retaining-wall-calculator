@@ -242,7 +242,7 @@ st.latex(
 )
 
 #Print the result 
-Ka = rankine_active_coefficient(phi_a, beta)
+
 st.success(f"Ka = {Ka:.4f}")
 
 # Render the equation with symboles
