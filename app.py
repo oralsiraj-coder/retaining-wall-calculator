@@ -452,16 +452,14 @@ $\sigma_{h,\text{surcharge}}(z) = K \, \sigma_{v,\text{surcharge}}(z)$
 Horizontal stress due to water table :  
 $\sigma_{h,\text{water}}(z) = \sigma_{v,\text{water}}(z) = u(z)$
 """)
-st.markdown("where")
-
-st.markdown(r"""  
-$\sigma_{h,\text{soil}}(z) = K \, \sigma_{v,\text{soil}}(z)$  
-
-$\sigma_{h,\text{surcharge}}(z) = K \, \sigma_{v,\text{surcharge}}(z)$  
-
-$\sigma_{h,\text{water}}(z) = \sigma_{v,\text{water}}(z) = u(z)$  
+st.markdown("Where:")
+st.markdown(r"""
+$\sigma_{v,\text{soil}}(z):$ &nbsp; Vertical stress due to self weight of soil  
+$\sigma_{v,\text{surcharge}}(z):$ &nbsp; Vertical stress due surcharge  
+$\sigma_{v,\text{water}}(z):$ &nbsp; Vertical stress due water table  
+$z_w:$ &nbsp;&nbsp; Water table depth  
+$\sigma_v(z):$ &nbsp; Effective vertical stress  
 """)
-
 
 
 # =======================
