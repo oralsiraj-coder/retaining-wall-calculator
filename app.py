@@ -293,7 +293,7 @@ st.latex(r"""
 \sigma_{v,\text{surcharge}}(z) = q \\[6pt]
 
 \textsf{Vertical stress due to water table (uplift pressure)} \\[-3pt]
-\sigma_{v,\text{water}}(z) = \gamma_w z_w
+\sigma_{v,\text{water}}(z) = \gamma_w z_w\\[6pt]
 
 \textsf{Effective vertical stress} \\[-3pt]
 \sigma_v(z) = \sigma_{v,\text{soil}} +
