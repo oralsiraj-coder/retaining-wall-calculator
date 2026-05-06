@@ -170,7 +170,7 @@ q = st.sidebar.number_input("Uniform surcharge q (kPa)", 0.0, 500.0, 0.0, 5.0)
 
 st.sidebar.header("Geometry")
 Ha = st.sidebar.number_input("Ha", 1.0, 20.0, 6.0)
-Hw = st.sidebar.number_input("Hw", 0.0, Ha, 2.0)
+Hw = st.sidebar.number_input("Hw", 0.0, Ha, 2.0)                #depth of water table from top of wall
 Hp = st.sidebar.number_input("Hp", 0.0, 20.0, 3.0)
 Th = st.sidebar.number_input("Th", 0.2, 2.0, 0.8)
 Lh = st.sidebar.number_input("Lh", 0.5, 15.0, 3.0)
@@ -271,9 +271,9 @@ st.success(f"Kp = {Kp:.4f}")
 
 
 
-# =======================
+# ================================================================================
 # EFFECTIVE VERTICAL STRESS – THEORY
-# =======================
+# ================================================================================
 st.header("Effective Vertical stress calculation")
 st.markdown(
     """
@@ -306,7 +306,7 @@ $\sigma_{v,\text{water}}(z):$ &nbsp; Vertical stress due water table
 $z_w:$ &nbsp;&nbsp; Water table depth  
 $\sigma_v(z):$ &nbsp; Effective vertical stress  
 """)
-
+#================================================================================================
 
 
 
@@ -314,21 +314,74 @@ $\sigma_v(z):$ &nbsp; Effective vertical stress
 # =======================
 # EFFECTIVE VERTICAL STRESS
 # =======================
-st.header("📐 Effective Vertical Stress Calculation")
-
 # ---- Depth discretization ----
-z = np.linspace(0, Ha, 300)   # depth below ground surface (m)
+z = np.arange(0, Ha, 0.1)   # depth below ground surface (m)
 
 # ---- Stress components (kPa) ----
-sigma_v_soil = gamma_a * z
-sigma_v_surcharge = q * np.ones_like(z)
+sigma_v_soil = gamma_a * z                # Vertical stress due soil selfweight 
+sigma_v_surcharge = q * np.ones_like(z)        # Vertical stress due to surcharge 
 
-z_wt = Ha - Hw
+z_wt = Ha - Hw                # determine the top elevation of water 
 gamma_w = 9.81
 sigma_v_water = -gamma_w * np.maximum(0, z - z_wt)
 
 # ---- Effective stress ----
 sigma_v_effective = sigma_v_soil + sigma_v_surcharge + sigma_v_water
+
+#====================================================================================================
+
+fig_eff, ax_eff = plt.subplots(figsize=(6, 5))
+
+# ---- Plot components ----
+ax_eff.plot(sigma_v_soil, z, linestyle="--", color="brown", label="Soil (γ·z)")
+ax_eff.plot(sigma_v_surcharge, z, linestyle="--", color="blue", label="Surcharge (q)")
+ax_eff.plot(sigma_v_water, z, linestyle="--", color="cyan", label="Water (−γw·h)")
+
+# ---- Plot effective stress (main result) ----
+ax_eff.plot(sigma_v_effective, z, linewidth=2.5, color="black", label="Effective stress σ′ᵥ")
+
+# ---- Axis formatting ----
+ax_eff.invert_yaxis()
+ax_eff.set_xlabel("Stress (kPa)")
+ax_eff.set_ylabel("Depth z (m)")
+ax_eff.set_title("Effective Vertical Stress Distribution")
+
+# ---- Improve readability ----
+ax_eff.grid(True, linestyle=":", linewidth=0.7)
+ax_eff.legend(loc="best")
+ax_eff.set_xlim(left=min(sigma_v_water.min(), 0))  # ensures negative values are visible
+
+# ---- Reduce empty margins ----
+ax_eff.margins(x=0.05, y=0)
+
+# ---- Display ----
+st.pyplot(fig_eff)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#=======================================================================================================
 
 # ---- Plot ----
 fig_eff, ax_eff = plt.subplots(figsize=(6, 4))
