@@ -285,16 +285,12 @@ st.markdown(
 # ---- Governing equations ----
 st.markdown("Vertical stress due to self weight of soil :")
 st.latex(r"\sigma_{v,\text{soil}}(z) = \gamma \, z")
-
 st.markdown("Vertical stress due surcharge :")
 st.latex(r"\sigma_{v,\text{surcharge}}(z) = q")
-
 st.markdown("Vertical stress due to water table ( uplifting pressure) :")
 st.latex(r"\sigma_{v,\text{water}}(z) = -\gamma_w (z - z_w), \quad z > z_w")
-
 st.markdown("Effective vertical stress:") 
 st.latex(r"z_w = H_a - H_w")
-
 st.latex(
     r"\sigma_v(z) = \sigma_{v,\text{soil}}"
     r" + \sigma_{v,\text{surcharge}}"
