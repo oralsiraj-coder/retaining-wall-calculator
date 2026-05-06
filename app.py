@@ -209,7 +209,7 @@ def rankine_active_coefficient(phi_deg, beta_deg):
         * (math.cos(beta) - term)
         / (math.cos(beta) + term)
     )
-    return Ka
+    return K_a
 
 
 def rankine_passive_coefficient(phi_deg, beta_deg=0.0):
@@ -226,7 +226,7 @@ def rankine_passive_coefficient(phi_deg, beta_deg=0.0):
         * (math.cos(beta) + term)
         / (math.cos(beta) - term)
     )
-    return Kp
+    return K_p
 
 #=================================================================================
 
