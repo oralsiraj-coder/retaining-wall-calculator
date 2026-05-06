@@ -259,7 +259,7 @@ st.latex(
     r"{\cos\beta - \sqrt{\cos^2\beta - \cos^2\varphi}}"
 )
 
-2️⃣ Substitute values (β = 0 for passive)
+#2️⃣ Substitute values (β = 0 for passive)
 st.latex(
     rf"K_p = \cos(0^\circ) \cdot \frac{{\cos(0^\circ) + \sqrt{{\cos^2(0^\circ) - \cos^2({phi_p:.1f}^\circ)}}}}{{\cos(0^\circ) - \sqrt{{\cos^2(0^\circ) - \cos^2({phi_p:.1f}^\circ)}}}}"
 )
