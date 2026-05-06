@@ -246,6 +246,15 @@ st.latex(
 st.success(f"Ka = {Ka:.4f}")
 
 st.latex(
+    rf"K_a = \cos({beta:.1f}^\circ) \cdot \frac{{\cos({beta:.1f}^\circ) - \sqrt{{\cos^2({beta:.1f}^\circ) - \cos^2({phi_a:.1f}^\circ)}}}}{{\cos({beta:.1f}^\circ) + \sqrt{{\cos^2({beta:.1f}^\circ) - \cos^2({phi_a:.1f}^\circ)}}}}"
+)
+
+
+
+
+
+
+st.latex(
     r"K_p = \cos\beta \frac{\cos\beta + \sqrt{\cos^2\beta - \cos^2\varphi}}"
     r"{\cos\beta - \sqrt{\cos^2\beta - \cos^2\varphi}}"
 )
