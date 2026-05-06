@@ -277,7 +277,7 @@ st.success(f"Kp = {Kp:.4f}")
 st.header("Effective Vertical stress calculation")
 st.markdown(
     """
-    **Effective vertical stress** represents the portion of the total stress
+    ***Effective vertical stress*** represents the portion of the total stress
     that is transmitted through the soil skeleton.
     It governs shear strength, settlement, and earth pressure.
 
