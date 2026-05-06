@@ -204,12 +204,12 @@ def rankine_active_coefficient(phi_deg, beta_deg):
 
     term = math.sqrt(math.cos(beta)**2 - math.cos(phi)**2)
 
-    K_a = (
+    Ka = (
         math.cos(beta)
         * (math.cos(beta) - term)
         / (math.cos(beta) + term)
     )
-    return K_a
+    return Ka
 
 
 def rankine_passive_coefficient(phi_deg, beta_deg=0.0):
@@ -221,12 +221,12 @@ def rankine_passive_coefficient(phi_deg, beta_deg=0.0):
 
     term = math.sqrt(math.cos(beta)**2 - math.cos(phi)**2)
 
-    K_p = (
+    Kp = (
         math.cos(beta)
         * (math.cos(beta) + term)
         / (math.cos(beta) - term)
     )
-    return K_p
+    return Kp
 
 #=================================================================================
 
@@ -241,6 +241,7 @@ st.latex(
 )
 
 #Print the result 
+Ka = rankine_active_coefficient(phi_a, beta)
 st.success(f"Ka = {Ka:.4f}")
 
 # Render the equation with symboles
@@ -255,7 +256,6 @@ st.latex(
 )
 #Print the result
 st.success(f"Kp = {Kp:.4f}")
-
 
 
 
