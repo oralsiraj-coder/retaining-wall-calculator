@@ -196,6 +196,7 @@ st.pyplot(draw_wall(
 #================================================================================================================#
 
 #=============================================================================
+import math
 def rankine_active_coefficient(phi_deg, beta_deg):
     phi = math.radians(phi_deg)
     beta = math.radians(beta_deg)
