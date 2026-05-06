@@ -194,9 +194,51 @@ st.pyplot(draw_wall(
     gamma_p, phi_p, c_p
 ))
 #================================================================================================================#
+import math
 
+def rankine_active_coefficient(phi_deg, beta_deg):
+    phi = math.radians(phi_deg)
+    beta = math.radians(beta_deg)
+
+    if beta > phi:
+        raise ValueError("Rankine theory invalid: β must be ≤ φ")
+
+    value = math.cos(beta)**2 - math.cos(phi)**2
+    if value < 0:
+        raise ValueError("Invalid input: negative sqrt")
+
+    term = math.sqrt(value)
+
+    Ka = (
+        math.cos(beta)
+        * (math.cos(beta) - term)
+        / (math.cos(beta) + term)
+    )
+    return Ka
+
+
+def rankine_passive_coefficient(phi_deg, beta_deg=0.0):
+    phi = math.radians(phi_deg)
+    beta = math.radians(beta_deg)
+
+    if beta > phi:
+        raise ValueError("Rankine theory invalid: β must be ≤ φ")
+
+    value = math.cos(beta)**2 - math.cos(phi)**2
+    if value < 0:
+        raise ValueError("Invalid input: negative sqrt")
+
+    term = math.sqrt(value)
+
+    Kp = (
+        math.cos(beta)
+        * (math.cos(beta) + term)
+        / (math.cos(beta) - term)
+    )
+    return Kp
 #=============================================================================
 import math
+
 def rankine_active_coefficient(phi_deg, beta_deg):
     phi = math.radians(phi_deg)
     beta = math.radians(beta_deg)
