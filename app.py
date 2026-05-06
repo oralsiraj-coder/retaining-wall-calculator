@@ -286,7 +286,8 @@ st.markdown(
 st.latex(r"""
 \begin{aligned}
 \text{Vertical stress due to self weight of soil:} \quad 
-& \sigma_{v,\text{soil}}(z) = \gamma z \\
+& 
+\sigma_{v,\text{soil}}(z) = \gamma z \\
 
 \text{Vertical stress due surcharge:} \quad 
 & \sigma_{v,\text{surcharge}}(z) = q \\
