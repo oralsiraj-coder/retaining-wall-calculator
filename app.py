@@ -309,7 +309,7 @@ st.latex(r"""
 \begin{array}{l}
 
 \text{Vertical stress due to self weight of soil} \\[-3pt]
-\sigma_{v,\text{soil}}(z) = \gamma z \\[6pt]
+\sigma_{v,\textsf{soil}}(z) = \gamma z \\[6pt]
 
 \text{Vertical stress due surcharge} \\[-3pt]
 \sigma_{v,\text{surcharge}}(z) = q \\[6pt]
