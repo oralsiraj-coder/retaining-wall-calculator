@@ -445,7 +445,6 @@ st.markdown(
 st.latex(r"\sigma_h(z) = K \cdot \sigma'_v(z) + u(z)")
 st.latex(r"\sigma'_v(z) = \sigma_v(z) - u(z)")
 st.latex(r"\sigma_h(z) = K(\sigma_{v,\text{soil}} + \sigma_{v,\text{surcharge}}) + u(z)")
-``
 
 
 # =======================
