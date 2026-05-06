@@ -307,16 +307,17 @@ st.latex(r"""
 st.markdown("Where:")
 
 st.latex(r"""
-\begin{array}{l @{\hspace{30pt}} l}
+\begin{array}{ll}
 
-\sigma_{v,\text{soil}}(z) & \text{Vertical stress due to self weight of soil} \\
-\sigma_{v,\text{surcharge}}(z) & \text{Vertical stress due surcharge} \\
-\sigma_{v,\text{water}}(z) & \text{Vertical stress due water table (uplift pressure)} \\
-z_w & \text{Water table depth} \\
-\sigma_v(z) & \text{Effective vertical stress}
+\sigma_{v,\text{soil}}(z) \quad\quad\quad & \text{Vertical stress due to self weight of soil} \\
+\sigma_{v,\text{surcharge}}(z) \quad\quad\quad & \text{Vertical stress due surcharge} \\
+\sigma_{v,\text{water}}(z) \quad\quad\quad & \text{Vertical stress due water table (uplift pressure)} \\
+z_w \quad\quad\quad & \text{Water table depth} \\
+\sigma_v(z) \quad\quad\quad & \text{Effective vertical stress}
 
 \end{array}
 """)
+
 
 
 
