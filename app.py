@@ -409,10 +409,10 @@ import pandas as pd
 # Create table
 stress_table = pd.DataFrame({
     "Depth z (m)": z,
-    "soil self-weight (kPa)": sigma_v_soil,
+    "Soil self-weight (kPa)": sigma_v_soil,
     "Surcharge (kPa)": sigma_v_surcharge,
     "Water table (kPa)": sigma_v_water,
-    "Effective stress": sigma_v_effective
+    "Effective stress(kPa)": sigma_v_effective
 })
 
 
@@ -421,10 +421,10 @@ st.markdown("Vertical stress distribution ")
 st.dataframe(
     stress_table.style.format({
         "Depth z (m)": "{:.2f}",
-        "Soil stress γ·z (kPa)": "{:.2f}",
-        "Surcharge stress q (kPa)": "{:.2f}",
-        "Water pressure −γw·h (kPa)": "{:.2f}",
-        "Total vertical stress σv (kPa)": "{:.2f}"
+        "Soil self-weight (kPa)": "{:.2f}",
+        "Surcharge (kPa)": "{:.2f}",
+        "Water table (kPa)": "{:.2f}",
+        "Effective stress(kPa)": "{:.2f}"
     }),
     use_container_width=True
 )
