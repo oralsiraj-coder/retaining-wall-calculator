@@ -345,7 +345,7 @@ fig_eff, ax_eff = plt.subplots(figsize=(6, 5))
 # ---- Plot components ----
 ax_eff.plot(sigma_v_soil, z, linestyle="--", color="brown", label="Soil (γ·z)")
 ax_eff.plot(sigma_v_water, z, linestyle="--", color="cyan", label="Water (−γw·h)")
-ax_eff.invert_yaxis()
+
 # ---- Effective stress (main curve) ----
 ax_eff.plot(
     sigma_v_effective, z,
@@ -381,7 +381,7 @@ ax_eff.grid(True, which='minor', linestyle=':', linewidth=0.5)
 
 # ---- Legend ----
 ax_eff.legend(loc="best")
-
+ax_eff.invert_yaxis()
 # ---- Show ----
 st.pyplot(fig_eff)
 
