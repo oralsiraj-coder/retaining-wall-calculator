@@ -304,36 +304,16 @@ st.latex(r"""
 """)
 
 # ---- Symbol definitions ----
-st.markdown("Where:")
 st.markdown(r"""
-<table style="border-collapse:collapse; margin:0;">
-<tr>
-<td style="padding-right:30pt;">$\sigma_{v,\text{soil}}(z)$</td>
-<td>Vertical stress due to self weight of soil</td>
-</tr>
+$\sigma_{v,\text{soil}}(z)$  
+<span style="margin-left:30pt;">Vertical stress due to self weight of soil</span>
 
-<tr>
-<td style="padding-right:30pt;">$\sigma_{v,\text{surcharge}}(z)$</td>
-<td>Vertical stress due surcharge</td>
-</tr>
+$\sigma_{v,\text{surcharge}}(z)$  
+<span style="margin-left:30pt;">Vertical stress due surcharge</span>
 
-<tr>
-<td style="padding-right:30pt;">$\sigma_{v,\text{water}}(z)$</td>
-<td>Vertical stress due water table (uplift pressure)</td>
-</tr>
-
-<tr>
-<td style="padding-right:30pt;">$z_w$</td>
-<td>Water table depth</td>
-</tr>
-
-<tr>
-<td style="padding-right:30pt;">$\sigma_v(z)$</td>
-<td>Effective vertical stress</td>
-</tr>
-</table>
+$\sigma_{v,\text{water}}(z)$  
+<span style="margin-left:30pt;">Vertical stress due water table</span>
 """, unsafe_allow_html=True)
-
 
 
 
