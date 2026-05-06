@@ -353,7 +353,7 @@ ax_eff.set_title("Effective Vertical Stress Distribution")
 # ---- Improve readability ----
 ax_eff.grid(True, linestyle=":", linewidth=0.7)
 ax_eff.legend(loc="best")
-ax_eff.set_xlim(left=min(sigma_v_water.min(), 0))  # ensures negative values are visible
+#ax_eff.set_xlim(left=min(sigma_v_water.min(), 0))  # ensures negative values are visible
 
 # ---- Reduce empty margins ----
 ax_eff.margins(x=0.05, y=0)
