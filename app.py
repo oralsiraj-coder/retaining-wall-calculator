@@ -200,60 +200,7 @@ st.pyplot(draw_wall(
 # Ka (ACTIVE)
 # =======================
 
-st.markdown(
-    f"""
-<div style="text-align: left;">
-$$
-\\begin{{aligned}}
 
-K_a &= \\cos\\beta \\cdot 
-\\frac{{\\cos\\beta - \\sqrt{{\\cos^2\\beta - \\cos^2\\varphi}}}}
-{{\\cos\\beta + \\sqrt{{\\cos^2\\beta - \\cos^2\\varphi}}}} \\\\[6pt]
-
-K_a &= \\cos({beta:.1f}^\\circ) \\cdot
-\\frac{{\\cos({beta:.1f}^\\circ) - \\sqrt{{\\cos^2({beta:.1f}^\\circ) - \\cos^2({phi_a:.1f}^\\circ)}}}}
-{{\\cos({beta:.1f}^\\circ) + \\sqrt{{\\cos^2({beta:.1f}^\\circ) - \\cos^2({phi_a:.1f}^\\circ)}}}} \\\\[6pt]
-
-K_a &= {Ka:.4f}
-
-\\end{{aligned}}
-$$
-</div>
-""",
-    unsafe_allow_html=True
-)
-
-st.success(f"Ka = {Ka:.4f}")
-
-
-# =======================
-# Kp (PASSIVE)
-# =======================
-
-st.markdown(
-    f"""
-<div style="text-align: left;">
-$$
-\\begin{{aligned}}
-
-K_p &= \\cos\\beta \\cdot 
-\\frac{{\\cos\\beta + \\sqrt{{\\cos^2\\beta - \\cos^2\\varphi}}}}
-{{\\cos\\beta - \\sqrt{{\\cos^2\\beta - \\cos^2\\varphi}}}} \\\\[6pt]
-
-K_p &= \\cos(0^\\circ) \\cdot
-\\frac{{\\cos(0^\\circ) + \\sqrt{{\\cos^2(0^\\circ) - \\cos^2({phi_p:.1f}^\\circ)}}}}
-{{\\cos(0^\\circ) - \\sqrt{{\\cos^2(0^\\circ) - \\cos^2({phi_p:.1f}^\\circ)}}}} \\\\[6pt]
-
-K_p &= {Kp:.4f}
-
-\\end{{aligned}}
-$$
-</div>
-""",
-    unsafe_allow_html=True
-)
-
-st.success(f"Kp = {Kp:.4f}")
 
 #=================================================================================
 
