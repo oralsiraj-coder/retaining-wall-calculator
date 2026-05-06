@@ -304,25 +304,16 @@ st.latex(
 st.latex(r"\boxed{\sigma'_v(z) = \sigma_v(z)}")
 
 # ---- Symbol definitions ----
-st.markdown("### Definition of symbols")
+st.markdown("Where:")
 
 st.markdown(
     """
     - **\( z \)** – Depth below ground surface *(m)*  
-    - **\( H_a \)** – Total soil / wall height *(m)*  
-    - **\( H_w \)** – Height of water above the base *(m)*  
-    - **\( z_w \)** – Depth to water table *(m)*  
-      \\[
-      z_w = H_a - H_w
-      \\]
-
-    - **\( \gamma \)** – Unit weight of soil *(kN/m³)*  
-    - **\( \gamma_w \)** – Unit weight of water *(≈ 9.81 kN/m³)*  
+    - **\( \gamma_sat \)** – Saturated unit weight of soil *(kN/m³)*  
+    - **\( \gamma_w \)** – Unit weight of water *(= 9.81 kN/m³)*  
     - **\( q \)** – Uniform surface surcharge *(kPa)*  
-
-    - **\( \sigma_v \)** – Total vertical stress *(kPa)*  
     - **\( \sigma'_v \)** – Effective vertical stress *(kPa)*  
-    - **\( u \)** – Pore water pressure *(kPa)*
+   
     """
 )
 
