@@ -453,25 +453,17 @@ st.latex(
 # =======================
 st.subheader("Symbols")
 
-st.markdown(
-    """
-- **$z$** – Depth below ground surface *(m)*  
+st.markdown(r"""
+| Symbol | Description |
+|--------|------------|
+| $\sigma_{v,\text{soil}}(z)$ | Vertical stress due to self weight of soil |
+| $\sigma_{v,\text{surcharge}}(z)$ | Vertical stress due surcharge |
+| $\sigma_{v,\text{water}}(z)$ | Vertical stress due water table (uplift pressure) |
+| $z_w$ | Water table depth |
+| $\sigma_v(z)$ | Effective vertical stress |
+""")
 
-- **$\\sigma'_v(z)$** – Effective vertical stress at depth $z$ *(kPa)*  
 
-- **$\\sigma_h(z)$** – Horizontal earth stress acting on the wall *(kPa)*  
-
-- **$K$** – Earth pressure coefficient  
-  *(Rankine active $K_a$ or passive $K_p$)*  
-
-- **$u(z)$** – Pore water pressure *(kPa)*  
-
-- **$\\gamma_w$** – Unit weight of water *(9.81 kN/m³)*  
-
-- **$z_w$** – Depth to groundwater table *(m)*  
-  $z_w = H_a - H_w$
-"""
-)
 # =======================
 # HORIZONTAL STRESS DISTRIBUTION
 # =======================
