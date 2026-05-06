@@ -3,7 +3,14 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle, FancyArrowPatch, Polygon
 import numpy as np
 import math
-
+st.markdown("""
+<style>
+.katex-display {
+    text-align: left !important;
+    margin-left: 0 !important;
+}
+</style>
+""", unsafe_allow_html=True)
 # =======================
 # VIEWPORT & STYLE
 # =======================
