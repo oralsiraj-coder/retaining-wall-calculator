@@ -193,8 +193,12 @@ st.pyplot(draw_wall(
     gamma_a, phi_a, c_a,
     gamma_p, phi_p, c_p
 ))
-#================================================================================================================#
+#========================================================================================================
+#Calculation of lateral earth pressure coefficient
+#========================================================================================================
+
 st.title(" Calculation of lateral earth pressure coefficient ")
+
 #calculation of rankine active coefficient
 def rankine_active_coefficient(phi_deg, beta_deg):
     phi = math.radians(phi_deg)
@@ -230,8 +234,10 @@ def rankine_passive_coefficient(phi_deg, beta_deg=0.0):
     return Kp
 Ka = rankine_active_coefficient(phi_a, beta)
 Kp = rankine_passive_coefficient(phi_p)
-#=================================================================================
 
+st.markdown(
+    """Active earth coefficient"""
+    
 # Render the equation with symboles
 st.latex(
     r"K_a = \cos\beta \frac{\cos\beta - \sqrt{\cos^2\beta - \cos^2\varphi}}"
@@ -246,6 +252,9 @@ st.latex(
 
 st.success(f"Ka = {Ka:.4f}")
 
+st.markdown(
+    """Passive earth coefficient"""
+    
 # Render the equation with symboles
 st.latex(
     r"K_p = \cos\beta \frac{\cos\beta + \sqrt{\cos^2\beta - \cos^2\varphi}}"
