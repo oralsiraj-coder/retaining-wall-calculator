@@ -277,17 +277,13 @@ st.success(f"Kp = {Kp:.4f}")
 st.header("Effective Vertical stress calculation")
 st.markdown(
     """
-    ***Effective vertical stress*** represents the portion of the total stress
+    Effective vertical stress represents the portion of the total stress
     that is transmitted through the soil skeleton.
-    It governs shear strength, settlement, and earth pressure.
-
-    In saturated soil, pore water pressure does not contribute to strength
-    and therefore reduces the effective stress.
     """
 )
 
 # ---- Governing equations ----
-st.latex(r"\sigma_{v,\text{soil}}(z) = \gamma \, z")
+st.markdown(("Vertical stress due to self weight of soil",st.latex(r"\sigma_{v,\text{soil}}(z) = \gamma \, z"))
 st.latex(r"\sigma_{v,\text{surcharge}}(z) = q")
 st.latex(r"\sigma_{v,\text{water}}(z) = -\gamma_w (z - z_w), \quad z > z_w")
 st.latex(r"z_w = H_a - H_w")
