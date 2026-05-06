@@ -286,20 +286,20 @@ st.markdown(
 st.latex(r"""
 \begin{array}{l}
 
-\textbf{Vertical stress due to self weight of soil} \\[-3pt]
+\text{Vertical stress due to self weight of soil} \\[-3pt]
 \sigma_{v,\text{soil}}(z) = \gamma z \\[6pt]
 
-\textbf{Vertical stress due surcharge} \\[-3pt]
+\text{Vertical stress due surcharge} \\[-3pt]
 \sigma_{v,\text{surcharge}}(z) = q \\[6pt]
 
-\textbf{Vertical stress due to water table (uplift pressure)} \\[-3pt]
+\text{Vertical stress due to water table (uplift pressure)} \\[-3pt]
 \sigma_{v,\text{water}}(z) = -\gamma_w (z - z_w), \quad z > z_w \\[6pt]
 
-\textbf{Effective vertical stress} \\[-3pt]
+\text{Effective vertical stress} \\[-3pt]
 z_w = H_a - H_w \\
-\sigma_v(z) = \sigma_{v,\text{soil}} 
-+ \sigma_{v,\text{surcharge}} 
-+ \sigma_{v,\text{water}}
+\sigma_v(z) = \sigma_{v,\text{soil}} +
+\sigma_{v,\text{surcharge}} +
+\sigma_{v,\text{water}}
 
 \end{array}
 """)
