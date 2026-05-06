@@ -316,7 +316,7 @@ st.latex(r"z_w = H_a - H_w")
 st.latex(
     r"\sigma_v(z) = \sigma_{v,\text{soil}}"
     r" + \sigma_{v,\text{surcharge}}"
-    r" + \sigma_{v,\text{water}}"
+    r" + \sigma_{v,\text{water}}")
 
 # =======================
 # EFFECTIVE VERTICAL STRESS
