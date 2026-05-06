@@ -305,26 +305,42 @@ z_w = H_a - H_w \\
 """)
 
 # ---- Symbol definitions ----
-st.latex(r"""
-\begin{array}{l}
+st.markdown(r"""
+<div style="margin:0; padding:0; text-align:left;">
 
-\textrm{Vertical stress due to self weight of soil} \\[-3pt]
-\sigma_{v,\textrm{soil}}(z) = \gamma z \\[6pt]
+<p style="margin:0;">
+Vertical stress due to self weight of soil
+</p>
+<p style="margin:0;">
+$\sigma_{v,\text{soil}}(z) = \gamma z$
+</p>
 
-\textrm{Vertical stress due surcharge} \\[-3pt]
-\sigma_{v,\textrm{surcharge}}(z) = q \\[6pt]
+<p style="margin:0;">
+Vertical stress due surcharge
+</p>
+<p style="margin:0;">
+$\sigma_{v,\text{surcharge}}(z) = q$
+</p>
 
-\textrm{Vertical stress due to water table (uplift pressure)} \\[-3pt]
-\sigma_{v,\textrm{water}}(z) = -\gamma_w (z - z_w), \quad z > z_w \\[6pt]
+<p style="margin:0;">
+Vertical stress due to water table (uplift pressure)
+</p>
+<p style="margin:0;">
+$\sigma_{v,\text{water}}(z) = -\gamma_w (z - z_w), \quad z > z_w$
+</p>
 
-\textrm{Effective vertical stress} \\[-3pt]
-z_w = H_a - H_w \\
-\sigma_v(z) = \sigma_{v,\textrm{soil}} +
-\sigma_{v,\textrm{surcharge}} +
-\sigma_{v,\textrm{water}}
+<p style="margin:0;">
+Effective vertical stress
+</p>
+<p style="margin:0;">
+$z_w = H_a - H_w$
+</p>
+<p style="margin:0;">
+$\sigma_v(z) = \sigma_{v,\text{soil}} + \sigma_{v,\text{surcharge}} + \sigma_{v,\text{water}}$
+</p>
 
-\end{array}
-""")
+</div>
+""", unsafe_allow_html=True)
 
 # =======================
 # EFFECTIVE VERTICAL STRESS
