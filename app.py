@@ -204,7 +204,7 @@ def rankine_active_coefficient(phi_deg, beta_deg):
 
     term = math.sqrt(math.cos(beta)**2 - math.cos(phi)**2)
 
-    Ka = (
+    K_a = (
         math.cos(beta)
         * (math.cos(beta) - term)
         / (math.cos(beta) + term)
@@ -221,7 +221,7 @@ def rankine_passive_coefficient(phi_deg, beta_deg=0.0):
 
     term = math.sqrt(math.cos(beta)**2 - math.cos(phi)**2)
 
-    Kp = (
+    K_p = (
         math.cos(beta)
         * (math.cos(beta) + term)
         / (math.cos(beta) - term)
