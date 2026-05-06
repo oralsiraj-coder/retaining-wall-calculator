@@ -442,9 +442,9 @@ st.markdown(
 )
 
 # ---- Governing equations ----
-st.latex(r"\sigma_h(z) = K \cdot \sigma'_v(z) + u(z)")
-st.latex(r"\sigma'_v(z) = \sigma_v(z) - u(z)")
-st.latex(r"\sigma_h(z) = K(\sigma_{v,\text{soil}} + \sigma_{v,\text{surcharge}}) + u(z)")
+st.latex(r"\sigma_{h,\text{soil}}(z) = K \cdot \sigma_{v,\text{soil}}(z)")
+st.latex(r"\sigma_{h,\text{surcharge}} = K \cdot \sigma_{v,\text{surcharge}}")
+st.latex(r"\sigma_{h,\text{water}}(z) = \sigma_{v,\text{water}}(z) = u(z)")
 
 
 # =======================
