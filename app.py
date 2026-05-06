@@ -248,7 +248,7 @@ st.latex(
     rf"K_a = \cos({beta:.1f}^\circ) \cdot \frac{{\cos({beta:.1f}^\circ) - \sqrt{{\cos^2({beta:.1f}^\circ) - \cos^2({phi_a:.1f}^\circ)}}}}{{\cos({beta:.1f}^\circ) + \sqrt{{\cos^2({beta:.1f}^\circ) - \cos^2({phi_a:.1f}^\circ)}}}}"
 )
 
-
+st.success(f"Ka = {Ka:.4f}")
 
 
 
