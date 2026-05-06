@@ -306,30 +306,6 @@ $\sigma_{v,\text{water}}(z):$ &nbsp; Vertical stress due water table
 $z_w:$ &nbsp;&nbsp; Water table depth  
 $\sigma_v(z):$ &nbsp; Effective vertical stress  
 """)
-#================================================================================================
-#-------------- TEST----TEST---------TEST
-
-
-
-
-#================================================================================================
-#-------------- TEST----TEST---------TEST
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # =======================
 # EFFECTIVE VERTICAL STRESS
@@ -363,6 +339,8 @@ fig_eff, ax_eff = plt.subplots(figsize=(6, 5))
 # ---- Plot components ----
 ax_eff.plot(sigma_v_soil, z, linestyle="--", color="brown", label="Soil (γ·z)")
 ax_eff.plot(sigma_v_water, z, linestyle="--", color="cyan", label="Water (−γw·h)")
+ax_eff.plot(sigma_v_surcharge, z, linestyle="--", color="green", label=sigma_{v,\text{surcharge})
+
 
 # ---- Effective stress (main curve) ----
 ax_eff.plot(
