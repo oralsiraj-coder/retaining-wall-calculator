@@ -196,10 +196,38 @@ st.pyplot(draw_wall(
 #================================================================================================================#
 
 #=============================================================================
-# =======================
-# Ka (ACTIVE)
-# =======================
+def rankine_active_coefficient(phi_deg, beta_deg):
+    phi = math.radians(phi_deg)
+    beta = math.radians(beta_deg)
 
+    if beta > phi:
+        raise ValueError("Rankine theory invalid: β must be ≤ φ")
+
+    term = math.sqrt(math.cos(beta)**2 - math.cos(phi)**2)
+
+    Ka = (
+        math.cos(beta)
+        * (math.cos(beta) - term)
+        / (math.cos(beta) + term)
+    )
+    return Ka
+
+
+def rankine_passive_coefficient(phi_deg, beta_deg=0.0):
+    phi = math.radians(phi_deg)
+    beta = math.radians(beta_deg)
+
+    if beta > phi:
+        raise ValueError("Rankine theory invalid: β must be ≤ φ")
+
+    term = math.sqrt(math.cos(beta)**2 - math.cos(phi)**2)
+
+    Kp = (
+        math.cos(beta)
+        * (math.cos(beta) + term)
+        / (math.cos(beta) - term)
+    )
+    return Kp
 
 
 #=================================================================================
