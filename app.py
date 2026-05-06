@@ -442,13 +442,17 @@ st.markdown(
 )
 
 # ---- Governing equations ----
-st.markdown("Soil contribution:")  
-$st.latex(r"\sigma_{h,\text{soil}}(z) = K \cdot \sigma_{v,\text{soil}}(z)")$  
+st.write("**Soil contribution:**")
+st.latex(r"\sigma_{h,\text{soil}}(z) = K \cdot \sigma_{v,\text{soil}}(z)")
 
-st.markdown("Surcharge contribution")  
-st.latex(r"\sigma_{h,\text{surcharge}} = K \cdot \sigma_{v,\text{surcharge}}")  
+st.write("")
 
-st.markdown("Water contribution")  
+st.write("**Surcharge contribution:**")
+st.latex(r"\sigma_{h,\text{surcharge}} = K \cdot \sigma_{v,\text{surcharge}}")
+
+st.write("")
+
+st.write("**Water contribution:**")
 st.latex(r"\sigma_{h,\text{water}}(z) = \sigma_{v,\text{water}}(z) = u(z)")  
 
 
