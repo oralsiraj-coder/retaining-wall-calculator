@@ -442,8 +442,8 @@ st.markdown(
 )
 
 # ---- Governing equations ----
-st.markdown("Soil contribution")  
-st.latex(r"\sigma_{h,\text{soil}}(z) = K \cdot \sigma_{v,\text{soil}}(z)")  
+st.markdown("Soil contribution:")  
+$st.latex(r"\sigma_{h,\text{soil}}(z) = K \cdot \sigma_{v,\text{soil}}(z)")$  
 
 st.markdown("Surcharge contribution")  
 st.latex(r"\sigma_{h,\text{surcharge}} = K \cdot \sigma_{v,\text{surcharge}}")  
