@@ -340,7 +340,7 @@ ax_eff.plot(sigma_v_water, z, linestyle="--", color="cyan", label="Water (−γw
 # ---- Plot effective stress (main result) ----
 ax_eff.plot(sigma_v_effective, z, linewidth=2.5, color="black", label="Effective stress σ′ᵥ")
 
-ax_eff.axhline(hw, color="blue", linestyle=":", label="Water table")
+ax_eff.axhline(-Hw, color="blue", linestyle=":", label="Water table")
 ax_eff.fill_betweenx(z, 0, sigma_v_effective, color="gray", alpha=0.2)
 ax_eff.axvline(0, color="black", linewidth=1)
 
