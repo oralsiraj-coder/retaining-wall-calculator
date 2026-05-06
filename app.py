@@ -199,6 +199,8 @@ st.pyplot(draw_wall(
 # =======================
 # RANKINE COEFFICIENTS
 # =======================
+# Calculation 
+
 def rankine_active_coefficient(phi_deg, beta_deg):
     phi = math.radians(phi_deg)
     beta = math.radians(beta_deg)
@@ -233,11 +235,76 @@ def rankine_passive_coefficient(phi_deg, beta_deg=0.0):
     return Kp
 
 
-
 st.header("📐 Rankine Earth Pressure Coefficients")
 
 Ka = rankine_active_coefficient(phi_a, beta)
 Kp = rankine_passive_coefficient(phi_p)
+#=============================================================================
+# =======================
+# Ka (ACTIVE)
+# =======================
+
+st.markdown(
+    rf"""
+<div style="text-align: left;">
+$$
+K_a = \cos\beta \frac{{\cos\beta - \sqrt{{\cos^2\beta - \cos^2\varphi}}}}
+{{\cos\beta + \sqrt{{\cos^2\beta - \cos^2\varphi}}}}
+$$
+
+$$
+K_a = \cos({beta:.1f}^\circ) \cdot
+\frac{{\cos({beta:.1f}^\circ) - \sqrt{{\cos^2({beta:.1f}^\circ) - \cos^2({phi_a:.1f}^\circ)}}}}
+{{\cos({beta:.1f}^\circ) + \sqrt{{\cos^2({beta:.1f}^\circ) - \cos^2({phi_a:.1f}^\circ)}}}}
+$$
+</div>
+""",
+    unsafe_allow_html=True
+)
+
+st.success(f"Ka = {Ka:.4f}")
+
+
+# =======================
+# Kp (PASSIVE)
+# =======================
+
+st.markdown(
+    rf"""
+<div style="text-align: left;">
+$$
+K_p = \cos\beta \frac{{\cos\beta + \sqrt{{\cos^2\beta - \cos^2\varphi}}}}
+{{\cos\beta - \sqrt{{\cos^2\beta - \cos^2\varphi}}}}
+$$
+
+$$
+K_p = \cos(0^\circ) \cdot
+\frac{{\cos(0^\circ) + \sqrt{{\cos^2(0^\circ) - \cos^2({phi_p:.1f}^\circ)}}}}
+{{\cos(0^\circ) - \sqrt{{\cos^2(0^\circ) - \cos^2({phi_p:.1f}^\circ)}}}}
+$$
+</div>
+""",
+    unsafe_allow_html=True
+)
+
+st.success(f"Kp = {Kp:.4f}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Render the equation with symboles
 st.latex(
     r"K_a = \cos\beta \frac{\cos\beta - \sqrt{\cos^2\beta - \cos^2\varphi}}"
