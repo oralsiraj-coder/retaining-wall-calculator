@@ -315,7 +315,7 @@ $\sigma_v(z):$ &nbsp; Effective vertical stress
 # EFFECTIVE VERTICAL STRESS
 # =======================
 # ---- Depth discretization ----
-z = np.arange(0, Ha, 0.1)   # depth below ground surface (m)
+z = -np.arange(0, Ha, 0.1)   # depth below ground surface (m)
 
 # ---- Stress components (kPa) ----
 sigma_v_soil = gamma_a * z                # Vertical stress due soil selfweight 
