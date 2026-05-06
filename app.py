@@ -286,7 +286,7 @@ st.markdown(
 st.latex(r"""
 \begin{array}{l}
 
-\texttt{Vertical stress due to self weight of soil} \\[-3pt]
+\textsf{Vertical stress due to self weight of soil} \\[-3pt]
 \sigma_{v,\text{soil}}(z) = \gamma z \\[6pt]
 
 \text{Vertical stress due surcharge} \\[-3pt]
