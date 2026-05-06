@@ -386,7 +386,7 @@ st.pyplot(fig_eff)
 # ---- Plot ----
 fig_eff, ax_eff = plt.subplots(figsize=(6, 4))
 
-ax_eff.plot(sigma_v_soil, z, "--", label="Soil self‑weight (γ·z)")
+ax_eff.plot(sigma_v_soil, z, "--", label=\sigma_{v,\text{soil}}(z))
 ax_eff.plot(sigma_v_surcharge, z, "--", label="Surcharge (q)")
 ax_eff.plot(sigma_v_water, z, "--", label="Water pressure (−γw·h)")
 ax_eff.plot(sigma_v_effective, z, linewidth=2.5, label="Effective stress σ′ᵥ")
