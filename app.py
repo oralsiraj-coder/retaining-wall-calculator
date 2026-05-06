@@ -339,6 +339,10 @@ ax_eff.plot(sigma_v_water, z, linestyle="--", color="cyan", label="Water (−γw
 
 # ---- Plot effective stress (main result) ----
 ax_eff.plot(sigma_v_effective, z, linewidth=2.5, color="black", label="Effective stress σ′ᵥ")
+# ---- Fill effective stress area
+ax_eff.fill_betweenx(z, 0, sigma_v_effective, color="gray", alpha=0.2)
+#---- Add water table line
+ax_eff.axhline(z_wt, color="blue", linestyle=":", label="Water table")
 
 # ---- Axis formatting ----
 ax_eff.invert_yaxis()
@@ -353,6 +357,7 @@ ax_eff.set_xlim(left=min(sigma_v_water.min(), 0))  # ensures negative values are
 
 # ---- Reduce empty margins ----
 ax_eff.margins(x=0.05, y=0)
+
 
 # ---- Display ----
 st.pyplot(fig_eff)
