@@ -334,8 +334,8 @@ fig_eff, ax_eff = plt.subplots(figsize=(6, 5))
 
 # ---- Plot components ----
 ax_eff.plot(sigma_v_soil, z, linestyle="--", color="brown", label="Soil (γ·z)")
-ax_eff.plot(sigma_v_surcharge, z, linestyle="--", color="blue", label="Surcharge (q)")
-ax_eff.plot(sigma_v_water, z, linestyle="--", color="cyan", label="Water (−γw·h)")
+#ax_eff.plot(sigma_v_surcharge, z, linestyle="--", color="blue", label="Surcharge (q)")
+#ax_eff.plot(sigma_v_water, z, linestyle="--", color="cyan", label="Water (−γw·h)")
 
 # ---- Plot effective stress (main result) ----
 ax_eff.plot(sigma_v_effective, z, linewidth=2.5, color="black", label="Effective stress σ′ᵥ")
