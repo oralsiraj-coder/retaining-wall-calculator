@@ -306,19 +306,17 @@ st.latex(r"""
 # ---- Symbol definitions ----
 st.markdown("Where:")
 
-st.markdown(
-    """
-    - **\( z \)** – Depth below ground surface *(m)*   
-    - **\( z_w \)** – Depth to water table *(m)* 
-    - **\( \gamma \)** – Unit weight of soil *(kN/m³)*  
-    - **\( \gamma_w \)** – Unit weight of water *(= 9.81 kN/m³)*  
-    - **\( q \)** – Uniform surface surcharge *(kPa)*  
+st.latex(r"""
+\begin{array}{l @{\hspace{30pt}} l}
 
-    - **\( \sigma_v \)** – Total vertical stress *(kPa)*  
-    - **\( \sigma'_v \)** – Effective vertical stress *(kPa)*  
-   
-    """
-)
+\sigma_{v,\text{soil}}(z) & \text{Vertical stress due to self weight of soil} \\
+\sigma_{v,\text{surcharge}}(z) & \text{Vertical stress due surcharge} \\
+\sigma_{v,\text{water}}(z) & \text{Vertical stress due water table (uplift pressure)} \\
+z_w & \text{Water table depth} \\
+\sigma_v(z) & \text{Effective vertical stress}
+
+\end{array}
+""")
 
 
 
