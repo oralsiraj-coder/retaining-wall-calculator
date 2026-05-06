@@ -305,15 +305,12 @@ st.latex(r"""
 
 # ---- Symbol definitions ----
 st.markdown(r"""
-$\sigma_{v,\text{soil}}(z)$  
-<span style="margin-left:30pt;">Vertical stress due to self weight of soil</span>
-
-$\sigma_{v,\text{surcharge}}(z)$  
-<span style="margin-left:30pt;">Vertical stress due surcharge</span>
-
-$\sigma_{v,\text{water}}(z)$  
-<span style="margin-left:30pt;">Vertical stress due water table</span>
-""", unsafe_allow_html=True)
+$\sigma_{v,\text{soil}}(z):$ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Vertical stress due to self weight of soil  
+$\sigma_{v,\text{surcharge}}(z):$ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Vertical stress due surcharge  
+$\sigma_{v,\text{water}}(z):$ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Vertical stress due water table  
+$z_w:$ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Water table depth  
+$\sigma_v(z):$ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Effective vertical stress  
+""")
 
 
 
