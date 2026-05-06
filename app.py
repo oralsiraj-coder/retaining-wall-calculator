@@ -245,20 +245,22 @@ Kp = rankine_passive_coefficient(phi_p)
 # =======================
 
 st.markdown(
-    rf"""
+    f"""
 <div style="text-align: left;">
 $$
-\begin{{aligned}}
-K_a &= \cos\beta \cdot 
-\frac{{\cos\beta - \sqrt{{\cos^2\beta - \cos^2\varphi}}}}
-{{\cos\beta + \sqrt{{\cos^2\beta - \cos^2\varphi}}}} \\[6pt]
+\\begin{{aligned}}
 
-K_a &= \cos({beta:.1f}^\circ) \cdot
-\frac{{\cos({beta:.1f}^\circ) - \sqrt{{\cos^2({beta:.1f}^\circ) - \cos^2({phi_a:.1f}^\circ)}}}}
-{{\cos({beta:.1f}^\circ) + \sqrt{{\cos^2({beta:.1f}^\circ) - \cos^2({phi_a:.1f}^\circ)}}}} \\[6pt]
+K_a &= \\cos\\beta \\cdot 
+\\frac{{\\cos\\beta - \\sqrt{{\\cos^2\\beta - \\cos^2\\varphi}}}}
+{{\\cos\\beta + \\sqrt{{\\cos^2\\beta - \\cos^2\\varphi}}}} \\\\[6pt]
+
+K_a &= \\cos({beta:.1f}^\\circ) \\cdot
+\\frac{{\\cos({beta:.1f}^\\circ) - \\sqrt{{\\cos^2({beta:.1f}^\\circ) - \\cos^2({phi_a:.1f}^\\circ)}}}}
+{{\\cos({beta:.1f}^\\circ) + \\sqrt{{\\cos^2({beta:.1f}^\\circ) - \\cos^2({phi_a:.1f}^\\circ)}}}} \\\\[6pt]
 
 K_a &= {Ka:.4f}
-\end{{aligned}}
+
+\\end{{aligned}}
 $$
 </div>
 """,
@@ -273,20 +275,22 @@ st.success(f"Ka = {Ka:.4f}")
 # =======================
 
 st.markdown(
-    rf"""
+    f"""
 <div style="text-align: left;">
 $$
-\begin{{aligned}}
-K_p &= \cos\beta \cdot 
-\frac{{\cos\beta + \sqrt{{\cos^2\beta - \cos^2\varphi}}}}
-{{\cos\beta - \sqrt{{\cos^2\beta - \cos^2\varphi}}}} \\[6pt]
+\\begin{{aligned}}
 
-K_p &= \cos(0^\circ) \cdot
-\frac{{\cos(0^\circ) + \sqrt{{\cos^2(0^\circ) - \cos^2({phi_p:.1f}^\circ)}}}}
-{{\cos(0^\circ) - \sqrt{{\cos^2(0^\circ) - \cos^2({phi_p:.1f}^\circ)}}}} \\[6pt]
+K_p &= \\cos\\beta \\cdot 
+\\frac{{\\cos\\beta + \\sqrt{{\\cos^2\\beta - \\cos^2\\varphi}}}}
+{{\\cos\\beta - \\sqrt{{\\cos^2\\beta - \\cos^2\\varphi}}}} \\\\[6pt]
+
+K_p &= \\cos(0^\\circ) \\cdot
+\\frac{{\\cos(0^\\circ) + \\sqrt{{\\cos^2(0^\\circ) - \\cos^2({phi_p:.1f}^\\circ)}}}}
+{{\\cos(0^\\circ) - \\sqrt{{\\cos^2(0^\\circ) - \\cos^2({phi_p:.1f}^\\circ)}}}} \\\\[6pt]
 
 K_p &= {Kp:.4f}
-\end{{aligned}}
+
+\\end{{aligned}}
 $$
 </div>
 """,
