@@ -194,7 +194,8 @@ st.pyplot(draw_wall(
     gamma_p, phi_p, c_p
 ))
 #================================================================================================================#
-
+st.title(" Calculation of lateral earth pressure coefficient ")
+#calculation of rankine active coefficient
 def rankine_active_coefficient(phi_deg, beta_deg):
     phi = math.radians(phi_deg)
     beta = math.radians(beta_deg)
