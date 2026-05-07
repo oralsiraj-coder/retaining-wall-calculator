@@ -526,13 +526,6 @@ st.pyplot(fig_h)
 #===============================================================================TEST==============================================================================================
 # =======================
 
-import matplotlib.pyplot as plt
-from matplotlib.patches import Rectangle, FancyArrowPatch, Polygon
-import numpy as np
-
-# =======================
-# VIEWPORT & STYLE
-# =======================
 VIEW_W = 10.0
 VIEW_H = 10.0
 MARGIN = 0.85
@@ -546,60 +539,65 @@ DRAFT_GAP = 0.1
 # DIMENSION FUNCTION
 # =======================
 def draw_dimension(ax, p1, p2, label, offset=0.0, vertical=False):
-
     if vertical:
         x = p1[0] + offset
         ax.add_patch(FancyArrowPatch(
             (x, p1[1]), (x, p2[1]),
-            arrowstyle="<->", lw=LW_DIM, mutation_scale=8, color="black"
+            arrowstyle="<->",
+            lw=LW_DIM,
+            mutation_scale=8,
+            color="black"
         ))
         ax.plot([p1[0], x], [p1[1], p1[1]], lw=LW_EXT, color="black")
         ax.plot([p2[0], x], [p2[1], p2[1]], lw=LW_EXT, color="black")
-
-        ax.text(x - 0.15, (p1[1] + p2[1]) / 2,
-                label, rotation=90, ha="center", va="center")
-
+        ax.text(
+            x - 0.15,
+            (p1[1] + p2[1]) / 2,
+            label,
+            rotation=90,
+            ha="center",
+            va="center",
+            fontsize=8
+        )
     else:
         y = p1[1] + offset
         ax.add_patch(FancyArrowPatch(
             (p1[0], y), (p2[0], y),
-            arrowstyle="<->", lw=LW_DIM, mutation_scale=8, color="black"
+            arrowstyle="<->",
+            lw=LW_DIM,
+            mutation_scale=8,
+            color="black"
         ))
         ax.plot([p1[0], p1[0]], [p1[1], y], lw=LW_EXT, color="black")
         ax.plot([p2[0], p2[0]], [p2[1], y], lw=LW_EXT, color="black")
-
-        ax.text((p1[0] + p2[0]) / 2, y + 0.1,
-                label, ha="center", va="bottom")
+        ax.text(
+            (p1[0] + p2[0]) / 2,
+            y + 0.1,
+            label,
+            ha="center",
+            va="bottom",
+            fontsize=8
+        )
 
 # =======================
 # SCALE
 # =======================
 def compute_scale(Ha, Hp, Th, Lh, Lt, Tsb):
+    base_L = Lh + Tsb + Lt
+    total_H = Th + max(Ha, Hp)
     return min(
-        (VIEW_W * MARGIN) / (Lh + Tsb + Lt),
-        (VIEW_H * MARGIN) / (Th + max(Ha, Hp))
+        (VIEW_W * MARGIN) / base_L,
+        (VIEW_H * MARGIN) / total_H
     )
 
-# =======================
-# RANKINE COEFFICIENT
-# =======================
-def rankine_active_coefficient(phi_deg, beta_deg):
-    phi = np.radians(phi_deg)
-    beta = np.radians(beta_deg)
 
-    term = np.sqrt(np.cos(beta)**2 - np.cos(phi)**2)
-
-    return (
-        np.cos(beta) *
-        (np.cos(beta) - term) /
-        (np.cos(beta) + term)
-    )
 
 # =======================
-# DRAW WALL + STRESS
+# DRAW WALL
 # =======================
 def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
-              gamma_a, phi_a, q):
+              gamma_a, phi_a, c_a,
+              gamma_p, phi_p, c_p):
 
     scale = compute_scale(Ha, Hp, Th, Lh, Lt, Tsb)
 
@@ -620,16 +618,13 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
 
     fig, ax = plt.subplots(figsize=(7, 7))
 
-    # =======================
-    # GEOMETRY
-    # =======================
+    # Active soil
     xL = x0 + gap
     xR = x0 + Lh_s - gap
     yB = y0 + Th_s + gap
     yTL = yB + Ha_s
     yTR = yTL - Lh_s * np.tan(beta_rad)
 
-    # Active soil
     ax.add_patch(Polygon(
         [(xL, yB), (xR, yB), (xR, yTR), (xL, yTL)],
         fc="#f4a261", ec="none", alpha=0.85
@@ -643,13 +638,46 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
             fc="#74c0fc", ec="none", alpha=0.6
         ))
 
-    # Concrete
-    ax.add_patch(Rectangle((x0, y0), base_L, Th_s,
-                           fc="0.85", ec="black"))
+    # Passive soil
+    ax.add_patch(Rectangle(
+        (x0 + Lh_s + Tsb_s + gap, y0 + Th_s + gap),
+        Lt_s - gap, Hp_s - gap,
+        fc="#b7e4c7", ec="none"
+    ))
 
-    ax.add_patch(Rectangle((x0 + Lh_s, y0 + Th_s),
-                           Tsb_s, Ha_s,
-                           fc="0.85", ec="black"))
+    # Concrete
+    ax.add_patch(Rectangle(
+        (x0, y0), base_L, Th_s,
+        fc="0.85", ec="black"
+    ))
+    ax.add_patch(Rectangle(
+        (x0 + Lh_s, y0 + Th_s),
+        Tsb_s, Ha_s,
+        fc="0.85", ec="black"
+    ))
+
+    # Dimensions
+    draw_dimension(ax, (x0, y0 + Th_s), (x0, y0 + Th_s + Ha_s), "Ha", -0.7, True)
+    draw_dimension(ax, (x0 + base_L, y0 + Th_s),
+                   (x0 + base_L, y0 + Th_s + Hp_s), "Hp", 0.7, True)
+    draw_dimension(ax, (x0, y0), (x0 + Lh_s, y0), "Lh", -0.6)
+    draw_dimension(ax, (x0 + Lh_s + Tsb_s, y0),
+                   (x0 + base_L, y0), "Lt", -0.6)
+    draw_dimension(ax, (x0, y0), (x0, y0 + Th_s), "Th", -0.5, True)
+    draw_dimension(ax, (x0 + Lh_s, y0 + Th_s),
+                   (x0 + Lh_s + Tsb_s, y0 + Th_s), "Tsb", 0.3)
+
+    # Ground surface
+    ax.plot([xL, xR], [yTL, yTR], "--", color="black")
+    ax.text((xL + xR) / 2, (yTL + yTR) / 2 + 0.1,
+            f"β = {beta:.0f}°", ha="center")
+
+    ax.set_xlim(0, VIEW_W)
+    ax.set_ylim(0, VIEW_H)
+    ax.set_aspect("equal")
+    ax.axis("off")
+
+    return fig
 
     # =======================
     # HORIZONTAL STRESS (FIXED)
