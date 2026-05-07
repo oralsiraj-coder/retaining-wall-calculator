@@ -719,22 +719,7 @@ st.pyplot(draw_wall(
     Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
     gamma_a, phi_a, c_a,
     gamma_p, phi_p, c_p
-
-# =======================
-# DESIGN INTERPRETATION
-# =======================
-st.markdown(
-    f"""
-    ✅ **Total active force:** {Fa_total:.2f} kN/m  
-    ✅ **Total passive resistance:** {Fp_soil:.2f} kN/m  
-
-    ### ➤ **Resultant horizontal force**
-    **{F_resultant:.2f} kN/m**
-
-    *(Positive → wall pushed toward passive side)*  
-    """
-)
-
+))
 
 #===================================================================================================
 
