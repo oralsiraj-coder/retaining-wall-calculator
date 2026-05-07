@@ -467,7 +467,7 @@ $\sigma_v(z):$ &nbsp; Effective vertical stress
 
 sigma_h_soil _self_weight = Ka * sigma_v_soil
 sigma_h_soil_submerged = Ka * (gamma_a - gamma_w) * (-z)
-sigma_h_surcharge = Ka * sigma_v_surcharge
+#sigma_h_surcharge = Ka * sigma_v_surcharge
 sigma_h_water = -sigma_v_water
 
 sigma_h_total = sigma_h_soil + sigma_h_surcharge + sigma_h_water
@@ -481,7 +481,7 @@ fig_h, ax_h = plt.subplots(figsize=(6, 5))
 ax_h.plot(sigma_h_soil, z, linestyle="--", color="brown", label="Soil self-weight")
 ax_h.plot(sigma_h_water, z, linestyle="--", color="cyan", label="Water table")
 ax_h.plot(sigma_h_surcharge, z, linestyle="--", color="green", label="Surcharge")
-ax_h.plot(sigma_h_soil_submerged, z, linestyle="--", color="green", label="Soil submerged")
+#ax_h.plot(sigma_h_soil_submerged, z, linestyle="--", color="green", label="Soil submerged")
 # ---- Total horizontal stress (main curve) ----
 ax_h.plot(
     sigma_h_total, z,
