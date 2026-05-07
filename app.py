@@ -525,12 +525,6 @@ st.pyplot(fig_h)
 
 #===============================================================================TEST==============================================================================================
 # =======================
-import streamlit as st
-import matplotlib.pyplot as plt
-from matplotlib.patches import Rectangle, FancyArrowPatch, Polygon
-import numpy as np
-import math
-
 # =======================
 # VIEWPORT & STYLE
 # =======================
