@@ -323,7 +323,7 @@ gamma_w = 9.81
 sigma_v_soil = gamma_a * (-z)
 sigma_v_surcharge = q * np.ones_like(z)
 sigma_v_water = -gamma_w * np.maximum(0, z_wt - z)
-sigma_v_effective = sigma_v_soil - sigma_v_water
+sigma_v_effective = sigma_v_soil + sigma_v_water
 
 # ---- Effective stress ----
 sigma_v_effective = (
