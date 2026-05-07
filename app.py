@@ -533,75 +533,77 @@ st.pyplot(fig_h)
 # TOTAL HORIZONTAL ACTIVE STRESS
 # =======================
 
-Ka = rankine_active_coefficient(phi_a, beta)
-gamma_w = 9.81
-
-# Depth (positive downward from top of wall)
-z = np.linspace(0, Ha, 100)
-
-# Water table depth
-z_wt = Hw
-
-# ---- Vertical stresses ----
-sigma_v_soil = gamma_a * z
-sigma_v_surcharge = q * np.ones_like(z)
-
-# ---- Pore water pressure (only below WT) ----
-u = gamma_w * np.maximum(0, z - z_wt)
-
-# ---- Effective vertical stress ----
-sigma_v_eff = sigma_v_soil + sigma_v_surcharge - u
-
-# ---- Horizontal stress (ACTIVE) ----
-sigma_h = Ka * sigma_v_eff + u
-
 # =======================
-# DRAW ON WALL
-# =======================
+    # TOTAL HORIZONTAL ACTIVE STRESS ON WALL
+    # =======================
 
-# Scale factor for visualization (important!)
-stress_scale = 0.3 * scale
+    # Coefficient
+    Ka = rankine_active_coefficient(phi_a, beta)
 
-# Wall face location
-x_wall = x0 + Lh_s
+    # Water unit weight
+    gamma_w = 9.81
 
-# Coordinates
-y_vals = y0 + Th_s + z * scale
-x_vals = x_wall - sigma_h * stress_scale   # draw INTO soil
+    # Depth (positive downward)
+    z = np.linspace(0, Ha, 100)
 
-# ---- Draw stress curve ----
-ax.plot(x_vals, y_vals, color="crimson", linewidth=2)
+    # Water table depth
+    z_wt = Hw
 
-# ---- Fill stress area ----
-ax.fill_betweenx(
-    y_vals,
-    x_wall,
-    x_vals,
-    color="crimson",
-    alpha=0.3
-)
+    # ---- Vertical stresses ----
+    sigma_v_soil = gamma_a * z
+    sigma_v_surcharge = q * np.ones_like(z)
 
-# ---- Wall face line ----
-ax.plot([x_wall, x_wall],
-        [y0 + Th_s, y0 + Th_s + Ha_s],
-        color="black", linewidth=1)
+    # ---- Pore water pressure (only below WT) ----
+    u = gamma_w * np.maximum(0, z - z_wt)
 
-# ---- Label ----
-ax.text(
-    x_wall - np.max(sigma_h) * stress_scale * 0.5,
-    y0 + Th_s + Ha_s * 0.5,
-    "σh (active)",
-    rotation=90,
-    ha="center",
-    va="center",
-    color="crimson",
-    fontsize=9
-)
+    # ---- Effective vertical stress ----
+    sigma_v_eff = sigma_v_soil + sigma_v_surcharge - u
 
+    # ---- Horizontal stress (ACTIVE) ----
+    sigma_h = Ka * sigma_v_eff + u
 
+    # =======================
+    # DRAW STRESS ON WALL
+    # =======================
 
+    # Scale factor (IMPORTANT for visibility)
+    stress_scale = 0.4 * scale
 
+    # Wall face location
+    x_wall = x0 + Lh_s
 
+    # Coordinates
+    y_vals = y0 + Th_s + z * scale
+    x_vals = x_wall - sigma_h * stress_scale   # draw into soil
+
+    # ---- Draw stress diagram ----
+    ax.plot(x_vals, y_vals, color="crimson", linewidth=2)
+
+    # ---- Fill area ----
+    ax.fill_betweenx(
+        y_vals,
+        x_wall,
+        x_vals,
+        color="crimson",
+        alpha=0.3
+    )
+
+    # ---- Wall reference line ----
+    ax.plot([x_wall, x_wall],
+            [y0 + Th_s, y0 + Th_s + Ha_s],
+            color="black", linewidth=1)
+
+    # ---- Label ----
+    ax.text(
+        x_wall - np.max(sigma_h) * stress_scale * 0.5,
+        y0 + Th_s + Ha_s * 0.5,
+        "σh (active)",
+        rotation=90,
+        ha="center",
+        va="center",
+        color="crimson",
+        fontsize=9
+    )
 
 
 
