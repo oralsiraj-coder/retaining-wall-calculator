@@ -473,19 +473,19 @@ sigma_h_total = sigma_h_soil + sigma_h_surcharge + sigma_h_water
 
 #fig_h, ax_h = plt.subplots(figsize=(6, 8))
 
-#ax_h.plot(sigma_h_soil, z, label="Soil: K·γz")
-#ax_h.plot(sigma_h_surcharge, z, label="Surcharge: K·q")
-#ax_h.plot(sigma_h_water, z, label="Water: γw(z − zw)")
-#ax_h.plot(sigma_h_total, z, linewidth=2.5, label="Resultant σh")
+ax_h.plot(sigma_h_soil, z, label="Soil: K·γz")
+ax_h.plot(sigma_h_surcharge, z, label="Surcharge: K·q")
+ax_h.plot(sigma_h_water, z, label="Water: γw(z − zw)")
+ax_h.plot(sigma_h_total, z, linewidth=2.5, label="Resultant σh")
 
-#ax_h.invert_yaxis()
-#ax_h.set_xlabel("Horizontal stress σh (kPa)")
-#ax_h.set_ylabel("Depth z (m)")
-#ax_h.set_title("Horizontal Stress Distribution")
-#ax_h.grid(True)
-#ax_h.legend()
+ax_h.invert_yaxis()
+ax_h.set_xlabel("Horizontal stress σh (kPa)")
+ax_h.set_ylabel("Depth z (m)")
+ax_h.set_title("Horizontal Stress Distribution")
+ax_h.grid(True)
+ax_h.legend()
 
-#st.pyplot(fig_h)
+st.pyplot(fig_h)
 
 #===============================================================================
 # =======================
