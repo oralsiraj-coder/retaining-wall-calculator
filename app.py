@@ -524,6 +524,87 @@ ax_h.invert_yaxis()
 st.pyplot(fig_h)
 
 #===============================================================================TEST==============================================================================================
+import streamlit as st
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle, FancyArrowPatch, Polygon
+import numpy as np
+import math
+
+# =======================
+# VIEWPORT & STYLE
+# =======================
+VIEW_W = 10.0
+VIEW_H = 10.0
+MARGIN = 0.85
+
+LW_CONCRETE = 1.2
+LW_DIM = 0.6
+LW_EXT = 0.4
+DRAFT_GAP = 0.1
+
+# =======================
+# DIMENSION FUNCTION
+# =======================
+def draw_dimension(ax, p1, p2, label, offset=0.0, vertical=False):
+    if vertical:
+        x = p1[0] + offset
+        ax.add_patch(FancyArrowPatch(
+            (x, p1[1]), (x, p2[1]),
+            arrowstyle="<->",
+            lw=LW_DIM,
+            mutation_scale=8,
+            color="black"
+        ))
+        ax.plot([p1[0], x], [p1[1], p1[1]], lw=LW_EXT, color="black")
+        ax.plot([p2[0], x], [p2[1], p2[1]], lw=LW_EXT, color="black")
+        ax.text(
+            x - 0.15,
+            (p1[1] + p2[1]) / 2,
+            label,
+            rotation=90,
+            ha="center",
+            va="center",
+            fontsize=8
+        )
+    else:
+        y = p1[1] + offset
+        ax.add_patch(FancyArrowPatch(
+            (p1[0], y), (p2[0], y),
+            arrowstyle="<->",
+            lw=LW_DIM,
+            mutation_scale=8,
+            color="black"
+        ))
+        ax.plot([p1[0], p1[0]], [p1[1], y], lw=LW_EXT, color="black")
+        ax.plot([p2[0], p2[0]], [p2[1], y], lw=LW_EXT, color="black")
+        ax.text(
+            (p1[0] + p2[0]) / 2,
+            y + 0.1,
+            label,
+            ha="center",
+            va="bottom",
+            fontsize=8
+        )
+
+# =======================
+# SCALE
+# =======================
+def compute_scale(Ha, Hp, Th, Lh, Lt, Tsb):
+    base_L = Lh + Tsb + Lt
+    total_H = Th + max(Ha, Hp)
+    return min(
+        (VIEW_W * MARGIN) / base_L,
+        (VIEW_H * MARGIN) / total_H
+    )
+st.pyplot(draw_wall(
+    Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
+    gamma_a, phi_a, c_a,
+    gamma_p, phi_p, c_p
+
+
+# =======================
+# DRAW WALL
+# =======================
 def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
               gamma_a, phi_a, c_a,
               gamma_p, phi_p, c_p):
@@ -547,24 +628,19 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
 
     fig, ax = plt.subplots(figsize=(7, 7))
 
-    # =======================
-    # ACTIVE SOIL
-    # =======================
+    # Active soil
     xL = x0 + gap
     xR = x0 + Lh_s - gap
     yB = y0 + Th_s + gap
-
     yTL = yB + Ha_s
     yTR = yTL - Lh_s * np.tan(beta_rad)
 
     ax.add_patch(Polygon(
         [(xL, yB), (xR, yB), (xR, yTR), (xL, yTL)],
-        fc="#f4a261", ec="black", alpha=0.85
+        fc="#f4a261", ec="none", alpha=0.85
     ))
 
-    # =======================
-    # WATER (behind wall)
-    # =======================
+    # Water
     if Hw > 0:
         ax.add_patch(Polygon(
             [(xL, yTL - Hw_s), (xR, yTR - Hw_s),
@@ -572,79 +648,47 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
             fc="#74c0fc", ec="none", alpha=0.6
         ))
 
-        # ✅ Water table line
-        ax.plot([xL, xR], [yTL - Hw_s, yTR - Hw_s],
-                linestyle="--", color="blue")
-
-        ax.text(
-            xR + 0.2,
-            yTL - Hw_s,
-            "Water Table",
-            color="blue",
-            fontsize=8,
-            va="center"
-        )
-
-    # =======================
-    # PASSIVE SOIL
-    # =======================
+    # Passive soil
     ax.add_patch(Rectangle(
         (x0 + Lh_s + Tsb_s + gap, y0 + Th_s + gap),
         Lt_s - gap, Hp_s - gap,
-        fc="#b7e4c7", ec="black"
+        fc="#b7e4c7", ec="none"
     ))
 
-    # =======================
-    # CONCRETE
-    # =======================
+    # Concrete
     ax.add_patch(Rectangle(
         (x0, y0), base_L, Th_s,
-        fc="0.85", ec="black", lw=1.2
+        fc="0.85", ec="black"
     ))
-
     ax.add_patch(Rectangle(
         (x0 + Lh_s, y0 + Th_s),
         Tsb_s, Ha_s,
-        fc="0.85", ec="black", lw=1.2
+        fc="0.85", ec="black"
     ))
 
-    # =======================
-    # DIMENSIONS
-    # =======================
+    # Dimensions
     draw_dimension(ax, (x0, y0 + Th_s), (x0, y0 + Th_s + Ha_s), "Ha", -0.7, True)
     draw_dimension(ax, (x0 + base_L, y0 + Th_s),
                    (x0 + base_L, y0 + Th_s + Hp_s), "Hp", 0.7, True)
-
     draw_dimension(ax, (x0, y0), (x0 + Lh_s, y0), "Lh", -0.6)
     draw_dimension(ax, (x0 + Lh_s + Tsb_s, y0),
                    (x0 + base_L, y0), "Lt", -0.6)
-
     draw_dimension(ax, (x0, y0), (x0, y0 + Th_s), "Th", -0.5, True)
     draw_dimension(ax, (x0 + Lh_s, y0 + Th_s),
                    (x0 + Lh_s + Tsb_s, y0 + Th_s), "Tsb", 0.3)
 
-    # =======================
-    # GROUND SURFACE
-    # =======================
+    # Ground surface
     ax.plot([xL, xR], [yTL, yTR], "--", color="black")
-    ax.text((xL + xR) / 2, (yTL + yTR) / 2 + 0.2,
-            f"β = {beta:.0f}°", ha="center", fontsize=9)
+    ax.text((xL + xR) / 2, (yTL + yTR) / 2 + 0.1,
+            f"β = {beta:.0f}°", ha="center")
 
-    # =======================
-    # LABELS (added for clarity)
-    # =======================
-    ax.text(xL - 0.5, yB + Ha_s / 2, "Active Soil", rotation=90, fontsize=8)
-    ax.text(x0 + base_L + 0.2, yB + Hp_s / 2, "Passive Soil", rotation=90, fontsize=8)
-
-    # =======================
-    # VIEW SETTINGS
-    # =======================
     ax.set_xlim(0, VIEW_W)
     ax.set_ylim(0, VIEW_H)
     ax.set_aspect("equal")
     ax.axis("off")
 
     return fig
+
 
 #===================================================================================================
 
