@@ -470,7 +470,7 @@ sigma_h_soil_self_weight = Ka * sigma_v_soil
 sigma_h_surcharge = Ka * sigma_v_surcharge
 sigma_h_water = -sigma_v_water
 
-sigma_h_total = sigma_h_soil + sigma_h_surcharge + sigma_h_water
+sigma_h_total = sigma_h_soil_self_weight + sigma_h_surcharge + sigma_h_water
 
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator
@@ -478,7 +478,7 @@ from matplotlib.ticker import MultipleLocator
 fig_h, ax_h = plt.subplots(figsize=(6, 5))
 
 # ---- Plot components ----
-ax_h.plot(sigma_h_soil, z, linestyle="--", color="brown", label="Soil self-weight")
+ax_h.plot(sigma_h_soil_self_weight, z, linestyle="--", color="brown", label="Soil self-weight")
 ax_h.plot(sigma_h_water, z, linestyle="--", color="cyan", label="Water table")
 ax_h.plot(sigma_h_surcharge, z, linestyle="--", color="green", label="Surcharge")
 
@@ -500,7 +500,7 @@ ax_h.fill_betweenx(z, 0, sigma_h_total, color="gray", alpha=0.2)
 ax_h.set_ylim(0, z.min())   # keep your negative depth convention
 
 xmin = min(sigma_h_water.min(), sigma_h_total.min(), 0)
-xmax = max(sigma_h_soil.max(), sigma_h_total.max())
+xmax = max(sigma_h_soil_self_weight.max(), sigma_h_total.max())
 ax_h.set_xlim(xmin, xmax)
 
 # ---- Labels ----
