@@ -616,25 +616,23 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
     x0 = (VIEW_W - base_L) / 2
     y0 = 0.8
     gap = DRAFT_GAP
-    beta_rad = np.radians(beta)
+    beta_rad = np.deg2rad(beta)
 
     fig, ax = plt.subplots(figsize=(7, 7))
 
-    # -----------------------
-    # SOIL + WATER
-    # -----------------------
-
+    # =======================
+    # GEOMETRY
+    # =======================
     xL = x0 + gap
     xR = x0 + Lh_s - gap
     yB = y0 + Th_s + gap
-
     yTL = yB + Ha_s
     yTR = yTL - Lh_s * np.tan(beta_rad)
 
     # Active soil
     ax.add_patch(Polygon(
         [(xL, yB), (xR, yB), (xR, yTR), (xL, yTL)],
-        fc="#f4a261", ec="none", alpha=0.8
+        fc="#f4a261", ec="none", alpha=0.85
     ))
 
     # Water
@@ -645,51 +643,78 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
             fc="#74c0fc", ec="none", alpha=0.6
         ))
 
-    # -----------------------
-    # CONCRETE
-    # -----------------------
-
+    # Concrete
     ax.add_patch(Rectangle((x0, y0), base_L, Th_s,
                            fc="0.85", ec="black"))
 
     ax.add_patch(Rectangle((x0 + Lh_s, y0 + Th_s),
-                           Tsb_s, Ha_s, fc="0.85", ec="black"))
+                           Tsb_s, Ha_s,
+                           fc="0.85", ec="black"))
 
-    # -----------------------
-    # TOTAL HORIZONTAL STRESS
-    # -----------------------
+    # =======================
+    # HORIZONTAL STRESS (FIXED)
+    # =======================
 
     Ka = rankine_active_coefficient(phi_a, beta)
     gamma_w = 9.81
 
+    # Depth (positive downward)
     z = np.linspace(0, Ha, 100)
+
+    # Water table
     z_wt = Hw
 
+    # Vertical stress
     sigma_v = gamma_a * z + q
+
+    # Pore pressure (only below WT)
     u = gamma_w * np.maximum(0, z - z_wt)
 
+    # Effective + horizontal stress
     sigma_v_eff = sigma_v - u
     sigma_h = Ka * sigma_v_eff + u
 
-    stress_scale = 0.4 * scale
+    # =======================
+    # DRAW STRESS DIAGRAM
+    # =======================
+
+    stress_scale = 0.6 * scale   # ✅ visible
 
     x_wall = x0 + Lh_s
-
     y_vals = y0 + Th_s + z * scale
+
+    # IMPORTANT: draw into soil
     x_vals = x_wall - sigma_h * stress_scale
 
-    ax.plot(x_vals, y_vals, color="crimson", lw=2)
-    ax.fill_betweenx(y_vals, x_wall, x_vals,
-                     color="crimson", alpha=0.3)
+    ax.plot(x_vals, y_vals, color="crimson", linewidth=2)
 
+    ax.fill_betweenx(
+        y_vals,
+        x_wall,
+        x_vals,
+        color="crimson",
+        alpha=0.3
+    )
+
+    # wall line
     ax.plot([x_wall, x_wall],
             [y0 + Th_s, y0 + Th_s + Ha_s],
-            color="black")
+            color="black", linewidth=1)
 
-    # -----------------------
-    # FINAL SETTINGS
-    # -----------------------
+    # label
+    ax.text(
+        x_wall - np.max(sigma_h) * stress_scale * 0.5,
+        y0 + Th_s + Ha_s * 0.5,
+        "σh",
+        rotation=90,
+        ha="center",
+        va="center",
+        color="crimson"
+    )
 
+    # =======================
+    # VIEW SETTINGS
+    # =======================
     ax.set_xlim(0, VIEW_W)
     ax.set_ylim(0, VIEW_H)
     ax.set_aspect("equal")
