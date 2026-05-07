@@ -691,7 +691,7 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
         if max_stress == 0:
             max_stress = 1
 
-        stress_scale = 0.5 / max_stress  # auto-fit nicely
+        stress_scale = 1.6 / max_stress  # auto-fit nicely
 
         # Build polygon from real data
         points = []
