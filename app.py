@@ -525,132 +525,70 @@ st.pyplot(fig_h)
 
 #===============================================================================TEST==============================================================================================
 # =======================
-    # HORIZONTAL STRESS DIAGRAM ON WALL
     # =======================
-def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
-              gamma_a, phi_a, c_a,
-              gamma_p, phi_p, c_p):
-
-    scale = compute_scale(Ha, Hp, Th, Lh, Lt, Tsb)
-
-    Ha_s = Ha * scale
-    Hw_s = Hw * scale
-    Hp_s = Hp * scale
-    Th_s = Th * scale
-    Lh_s = Lh * scale
-    Lt_s = Lt * scale
-    Tsb_s = Tsb * scale
-
-    base_L = Lh_s + Tsb_s + Lt_s
-
-    x0 = (VIEW_W - base_L) / 2
-    y0 = 0.8
-    gap = DRAFT_GAP
-    beta_rad = np.deg2rad(beta)
-
-    fig, ax = plt.subplots(figsize=(7, 7))
-
-    # -----------------------
-    # GEOMETRY
-    # -----------------------
-
-    xL = x0 + gap
-    xR = x0 + Lh_s - gap
-    yB = y0 + Th_s + gap
-    yTL = yB + Ha_s
-    yTR = yTL - Lh_s * np.tan(beta_rad)
-
-    # Active soil
-    ax.add_patch(Polygon(
-        [(xL, yB), (xR, yB), (xR, yTR), (xL, yTL)],
-        fc="#f4a261", ec="none", alpha=0.85
-    ))
-
-    # Water
-    if Hw > 0:
-        ax.add_patch(Polygon(
-            [(xL, yTL - Hw_s), (xR, yTR - Hw_s),
-             (xR, yTR), (xL, yTL)],
-            fc="#74c0fc", ec="none", alpha=0.6
-        ))
-
-    # Passive soil
-    ax.add_patch(Rectangle(
-        (x0 + Lh_s + Tsb_s + gap, y0 + Th_s + gap),
-        Lt_s - gap, Hp_s - gap,
-        fc="#b7e4c7", ec="none"
-    ))
-
-    # Concrete
-    ax.add_patch(Rectangle((x0, y0), base_L, Th_s, fc="0.85", ec="black"))
-    ax.add_patch(Rectangle((x0 + Lh_s, y0 + Th_s),
-                           Tsb_s, Ha_s, fc="0.85", ec="black"))
-
-    # -----------------------
-    # HORIZONTAL STRESS DIAGRAM (FIXED)
-    # -----------------------
+    # HORIZONTAL EFFECTIVE STRESS DIAGRAM
+    # =======================
 
     Ka = rankine_active_coefficient(phi_a, beta)
     gamma_w = 9.81
 
-    # depth (positive downward)
-    z = np.linspace(0, Ha, 50)
+    # Depth (positive downward)
+    z = np.linspace(0, Ha, 80)
     z_wt = Hw
 
-    # stresses
+    # Vertical stresses
     sigma_v_soil = gamma_a * z
     sigma_v_surcharge = q * np.ones_like(z)
+
+    # Water pressure (only below WT)
     u = gamma_w * np.maximum(0, z - z_wt)
 
-    sigma_v_effective = sigma_v_soil + sigma_v_surcharge - u
-    sigma_h = Ka * sigma_v_effective + u
+    # Effective stress
+    sigma_v_eff = sigma_v_soil + sigma_v_surcharge - u
 
-    # scaling for drawing
-    stress_scale = 0.02 * scale
+    # Horizontal stress (correct formula)
+    sigma_h = Ka * sigma_v_eff + u
 
+    # ✅ IMPORTANT: make it visible
+    stress_scale = 0.3 * scale
+
+    # Wall line position
     x_wall = x0 + Lh_s
-    y_vals = y0 + Th_s + z * scale
-    x_vals = x_wall + sigma_h * stress_scale
 
-    # plot diagram
+    # Coordinates
+    y_vals = y0 + Th_s + z * scale
+
+    # ✅ IMPORTANT: draw into soil (LEFT side)
+    x_vals = x_wall - sigma_h * stress_scale
+
+    # Draw curve
     ax.plot(x_vals, y_vals, color="crimson", linewidth=2)
 
+    # Fill diagram
     ax.fill_betweenx(
         y_vals,
         x_wall,
         x_vals,
         color="crimson",
-        alpha=0.25
+        alpha=0.3
     )
 
-    # wall face line
+    # Wall face reference line
     ax.plot([x_wall, x_wall],
             [y0 + Th_s, y0 + Th_s + Ha_s],
             color="black", linewidth=1)
 
-    # -----------------------
-    # DIMENSIONS
-    # -----------------------
-
-    draw_dimension(ax, (x0, y0 + Th_s), (x0, y0 + Th_s + Ha_s), "Ha", -0.7, True)
-    draw_dimension(ax, (x0 + base_L, y0 + Th_s),
-                   (x0 + base_L, y0 + Th_s + Hp_s), "Hp", 0.7, True)
-    draw_dimension(ax, (x0, y0), (x0 + Lh_s, y0), "Lh", -0.6)
-    draw_dimension(ax, (x0 + Lh_s + Tsb_s, y0),
-                   (x0 + base_L, y0), "Lt", -0.6)
-    draw_dimension(ax, (x0, y0), (x0, y0 + Th_s), "Th", -0.5, True)
-
-    # Ground surface
-    ax.plot([xL, xR], [yTL, yTR], "--", color="black")
-    ax.text((xL + xR) / 2, (yTL + yTR) / 2 + 0.1,
-            f"β = {beta:.0f}°", ha="center")
-
-    ax.set_xlim(0, VIEW_W)
-    ax.set_ylim(0, VIEW_H)
-    ax.set_aspect("equal")
-    ax.axis("off")
-
-    return fig
+    # Label
+    ax.text(
+        x_wall - np.max(sigma_h) * stress_scale * 0.5,
+        y0 + Th_s + Ha_s * 0.5,
+        "σh",
+        rotation=90,
+        ha="center",
+        va="center",
+        color="crimson",
+        fontsize=10
+    )
 
 
 
