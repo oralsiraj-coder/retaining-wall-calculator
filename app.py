@@ -525,7 +525,15 @@ st.pyplot(fig_h)
 
 #===============================================================================TEST==============================================================================================
 # =======================
+import streamlit as st
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle, FancyArrowPatch, Polygon
+import numpy as np
+import math
 
+# =======================
+# VIEWPORT & STYLE
+# =======================
 VIEW_W = 10.0
 VIEW_H = 10.0
 MARGIN = 0.85
@@ -595,105 +603,89 @@ def compute_scale(Ha, Hp, Th, Lh, Lt, Tsb):
 # =======================
 # DRAW WALL
 # =======================
+def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
+              gamma_a, phi_a, c_a,
+              gamma_p, phi_p, c_p):
 
+    scale = compute_scale(Ha, Hp, Th, Lh, Lt, Tsb)
 
-    # =======================
-    # HORIZONTAL STRESS (FIXED)
-    # =======================
+    Ha_s = Ha * scale
+    Hw_s = Hw * scale
+    Hp_s = Hp * scale
+    Th_s = Th * scale
+    Lh_s = Lh * scale
+    Lt_s = Lt * scale
+    Tsb_s = Tsb * scale
 
-    Ka = rankine_active_coefficient(phi_a, beta)
-    gamma_w = 9.81
+    base_L = Lh_s + Tsb_s + Lt_s
 
-    # Depth (positive downward)
-    z = np.linspace(0, Ha, 100)
+    x0 = (VIEW_W - base_L) / 2
+    y0 = 0.8
+    gap = DRAFT_GAP
+    beta_rad = np.deg2rad(beta)
 
-    # Water table
-    z_wt = Hw
+    fig, ax = plt.subplots(figsize=(7, 7))
 
-    # Vertical stress
-    sigma_v = gamma_a * z + q
+    # Active soil
+    xL = x0 + gap
+    xR = x0 + Lh_s - gap
+    yB = y0 + Th_s + gap
+    yTL = yB + Ha_s
+    yTR = yTL - Lh_s * np.tan(beta_rad)
 
-    # Pore pressure (only below WT)
-    u = gamma_w * np.maximum(0, z - z_wt)
+    ax.add_patch(Polygon(
+        [(xL, yB), (xR, yB), (xR, yTR), (xL, yTL)],
+        fc="#f4a261", ec="none", alpha=0.85
+    ))
 
-    # Effective + horizontal stress
-    sigma_v_eff = sigma_v - u
-    sigma_h = Ka * sigma_v_eff + u
+    # Water
+    if Hw > 0:
+        ax.add_patch(Polygon(
+            [(xL, yTL - Hw_s), (xR, yTR - Hw_s),
+             (xR, yTR), (xL, yTL)],
+            fc="#74c0fc", ec="none", alpha=0.6
+        ))
 
-    # =======================
-    # DRAW STRESS DIAGRAM
-    # =======================
+    # Passive soil
+    ax.add_patch(Rectangle(
+        (x0 + Lh_s + Tsb_s + gap, y0 + Th_s + gap),
+        Lt_s - gap, Hp_s - gap,
+        fc="#b7e4c7", ec="none"
+    ))
 
-    stress_scale = 0.6 * scale   # ✅ visible
+    # Concrete
+    ax.add_patch(Rectangle(
+        (x0, y0), base_L, Th_s,
+        fc="0.85", ec="black"
+    ))
+    ax.add_patch(Rectangle(
+        (x0 + Lh_s, y0 + Th_s),
+        Tsb_s, Ha_s,
+        fc="0.85", ec="black"
+    ))
 
-    x_wall = x0 + Lh_s
-    y_vals = y0 + Th_s + z * scale
+    # Dimensions
+    draw_dimension(ax, (x0, y0 + Th_s), (x0, y0 + Th_s + Ha_s), "Ha", -0.7, True)
+    draw_dimension(ax, (x0 + base_L, y0 + Th_s),
+                   (x0 + base_L, y0 + Th_s + Hp_s), "Hp", 0.7, True)
+    draw_dimension(ax, (x0, y0), (x0 + Lh_s, y0), "Lh", -0.6)
+    draw_dimension(ax, (x0 + Lh_s + Tsb_s, y0),
+                   (x0 + base_L, y0), "Lt", -0.6)
+    draw_dimension(ax, (x0, y0), (x0, y0 + Th_s), "Th", -0.5, True)
+    draw_dimension(ax, (x0 + Lh_s, y0 + Th_s),
+                   (x0 + Lh_s + Tsb_s, y0 + Th_s), "Tsb", 0.3)
 
-    # IMPORTANT: draw into soil
-    x_vals = x_wall - sigma_h * stress_scale
+    # Ground surface
+    ax.plot([xL, xR], [yTL, yTR], "--", color="black")
+    ax.text((xL + xR) / 2, (yTL + yTR) / 2 + 0.1,
+            f"β = {beta:.0f}°", ha="center")
 
-    ax.plot(x_vals, y_vals, color="crimson", linewidth=2)
-
-    ax.fill_betweenx(
-        y_vals,
-        x_wall,
-        x_vals,
-        color="crimson",
-        alpha=0.3
-    )
-
-    # wall line
-    ax.plot([x_wall, x_wall],
-            [y0 + Th_s, y0 + Th_s + Ha_s],
-            color="black", linewidth=1)
-
-    # label
-    ax.text(
-        x_wall - np.max(sigma_h) * stress_scale * 0.5,
-        y0 + Th_s + Ha_s * 0.5,
-        "σh",
-        rotation=90,
-        ha="center",
-        va="center",
-        color="crimson"
-    )
-
-    # =======================
-    # VIEW SETTINGS
-    # =======================
     ax.set_xlim(0, VIEW_W)
     ax.set_ylim(0, VIEW_H)
     ax.set_aspect("equal")
     ax.axis("off")
 
     return fig
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 # =======================
