@@ -527,40 +527,94 @@ st.pyplot(fig_h)
 # =======================
     # HORIZONTAL STRESS DIAGRAM ON WALL
     # =======================
+def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
+              gamma_a, phi_a, c_a,
+              gamma_p, phi_p, c_p):
+
+    scale = compute_scale(Ha, Hp, Th, Lh, Lt, Tsb)
+
+    Ha_s = Ha * scale
+    Hw_s = Hw * scale
+    Hp_s = Hp * scale
+    Th_s = Th * scale
+    Lh_s = Lh * scale
+    Lt_s = Lt * scale
+    Tsb_s = Tsb * scale
+
+    base_L = Lh_s + Tsb_s + Lt_s
+
+    x0 = (VIEW_W - base_L) / 2
+    y0 = 0.8
+    gap = DRAFT_GAP
+    beta_rad = np.deg2rad(beta)
+
+    fig, ax = plt.subplots(figsize=(7, 7))
+
+    # -----------------------
+    # GEOMETRY
+    # -----------------------
+
+    xL = x0 + gap
+    xR = x0 + Lh_s - gap
+    yB = y0 + Th_s + gap
+    yTL = yB + Ha_s
+    yTR = yTL - Lh_s * np.tan(beta_rad)
+
+    # Active soil
+    ax.add_patch(Polygon(
+        [(xL, yB), (xR, yB), (xR, yTR), (xL, yTL)],
+        fc="#f4a261", ec="none", alpha=0.85
+    ))
+
+    # Water
+    if Hw > 0:
+        ax.add_patch(Polygon(
+            [(xL, yTL - Hw_s), (xR, yTR - Hw_s),
+             (xR, yTR), (xL, yTL)],
+            fc="#74c0fc", ec="none", alpha=0.6
+        ))
+
+    # Passive soil
+    ax.add_patch(Rectangle(
+        (x0 + Lh_s + Tsb_s + gap, y0 + Th_s + gap),
+        Lt_s - gap, Hp_s - gap,
+        fc="#b7e4c7", ec="none"
+    ))
+
+    # Concrete
+    ax.add_patch(Rectangle((x0, y0), base_L, Th_s, fc="0.85", ec="black"))
+    ax.add_patch(Rectangle((x0 + Lh_s, y0 + Th_s),
+                           Tsb_s, Ha_s, fc="0.85", ec="black"))
+
+    # -----------------------
+    # HORIZONTAL STRESS DIAGRAM (FIXED)
+    # -----------------------
 
     Ka = rankine_active_coefficient(phi_a, beta)
     gamma_w = 9.81
 
-    # depth discretisation (positive downward)
+    # depth (positive downward)
     z = np.linspace(0, Ha, 50)
-
-    # water table depth
     z_wt = Hw
 
-    # vertical stresses
+    # stresses
     sigma_v_soil = gamma_a * z
     sigma_v_surcharge = q * np.ones_like(z)
     u = gamma_w * np.maximum(0, z - z_wt)
 
     sigma_v_effective = sigma_v_soil + sigma_v_surcharge - u
-
-    # horizontal stress
     sigma_h = Ka * sigma_v_effective + u
 
-    # SCALE stress for drawing
-    stress_scale = 0.02 * scale   # tuning factor
+    # scaling for drawing
+    stress_scale = 0.02 * scale
 
-    # Wall reference line (stem face)
     x_wall = x0 + Lh_s
-
-    # Convert to plotting coordinates
     y_vals = y0 + Th_s + z * scale
     x_vals = x_wall + sigma_h * stress_scale
 
-    # Draw stress diagram
+    # plot diagram
     ax.plot(x_vals, y_vals, color="crimson", linewidth=2)
 
-    # Fill diagram (nice visual)
     ax.fill_betweenx(
         y_vals,
         x_wall,
@@ -569,22 +623,34 @@ st.pyplot(fig_h)
         alpha=0.25
     )
 
-    # Optional: draw zero line (wall face)
-    ax.plot([x_wall, x_wall], [y0 + Th_s, y0 + Th_s + Ha_s],
+    # wall face line
+    ax.plot([x_wall, x_wall],
+            [y0 + Th_s, y0 + Th_s + Ha_s],
             color="black", linewidth=1)
 
-    # Label
-    ax.text(
-        x_wall + max(sigma_h) * stress_scale * 0.6,
-        y0 + Th_s + Ha_s * 0.5,
-        "σh",
-        color="crimson",
-        fontsize=10,
-        rotation=90,
-        ha="center"
-    )
-``
+    # -----------------------
+    # DIMENSIONS
+    # -----------------------
 
+    draw_dimension(ax, (x0, y0 + Th_s), (x0, y0 + Th_s + Ha_s), "Ha", -0.7, True)
+    draw_dimension(ax, (x0 + base_L, y0 + Th_s),
+                   (x0 + base_L, y0 + Th_s + Hp_s), "Hp", 0.7, True)
+    draw_dimension(ax, (x0, y0), (x0 + Lh_s, y0), "Lh", -0.6)
+    draw_dimension(ax, (x0 + Lh_s + Tsb_s, y0),
+                   (x0 + base_L, y0), "Lt", -0.6)
+    draw_dimension(ax, (x0, y0), (x0, y0 + Th_s), "Th", -0.5, True)
+
+    # Ground surface
+    ax.plot([xL, xR], [yTL, yTR], "--", color="black")
+    ax.text((xL + xR) / 2, (yTL + yTR) / 2 + 0.1,
+            f"β = {beta:.0f}°", ha="center")
+
+    ax.set_xlim(0, VIEW_W)
+    ax.set_ylim(0, VIEW_H)
+    ax.set_aspect("equal")
+    ax.axis("off")
+
+    return fig
 
 
 
