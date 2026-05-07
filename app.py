@@ -467,10 +467,9 @@ $\sigma_v(z):$ &nbsp; Effective vertical stress
 # =======================
 
 sigma_h_soil_self_weight = Ka * sigma_v_soil
-
 sigma_h_surcharge = Ka * sigma_v_surcharge
 sigma_h_water = -sigma_v_water
-
+sigma_h_effective = Ka * sigma_v_effective
 sigma_h_total = sigma_h_soil_self_weight + sigma_h_surcharge + sigma_h_water
 
 import matplotlib.pyplot as plt
