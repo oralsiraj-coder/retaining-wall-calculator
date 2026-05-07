@@ -529,66 +529,74 @@ st.pyplot(fig_h)
     # HORIZONTAL EFFECTIVE STRESS DIAGRAM
     # =======================
 
-    Ka = rankine_active_coefficient(phi_a, beta)
-    gamma_w = 9.81
+  # =======================
+# TOTAL HORIZONTAL ACTIVE STRESS
+# =======================
 
-    # Depth (positive downward)
-    z = np.linspace(0, Ha, 80)
-    z_wt = Hw
+Ka = rankine_active_coefficient(phi_a, beta)
+gamma_w = 9.81
 
-    # Vertical stresses
-    sigma_v_soil = gamma_a * z
-    sigma_v_surcharge = q * np.ones_like(z)
+# Depth (positive downward from top of wall)
+z = np.linspace(0, Ha, 100)
 
-    # Water pressure (only below WT)
-    u = gamma_w * np.maximum(0, z - z_wt)
+# Water table depth
+z_wt = Hw
 
-    # Effective stress
-    sigma_v_eff = sigma_v_soil + sigma_v_surcharge - u
+# ---- Vertical stresses ----
+sigma_v_soil = gamma_a * z
+sigma_v_surcharge = q * np.ones_like(z)
 
-    # Horizontal stress (correct formula)
-    sigma_h = Ka * sigma_v_eff + u
+# ---- Pore water pressure (only below WT) ----
+u = gamma_w * np.maximum(0, z - z_wt)
 
-    # ✅ IMPORTANT: make it visible
-    stress_scale = 0.3 * scale
+# ---- Effective vertical stress ----
+sigma_v_eff = sigma_v_soil + sigma_v_surcharge - u
 
-    # Wall line position
-    x_wall = x0 + Lh_s
+# ---- Horizontal stress (ACTIVE) ----
+sigma_h = Ka * sigma_v_eff + u
 
-    # Coordinates
-    y_vals = y0 + Th_s + z * scale
+# =======================
+# DRAW ON WALL
+# =======================
 
-    # ✅ IMPORTANT: draw into soil (LEFT side)
-    x_vals = x_wall - sigma_h * stress_scale
+# Scale factor for visualization (important!)
+stress_scale = 0.3 * scale
 
-    # Draw curve
-    ax.plot(x_vals, y_vals, color="crimson", linewidth=2)
+# Wall face location
+x_wall = x0 + Lh_s
 
-    # Fill diagram
-    ax.fill_betweenx(
-        y_vals,
-        x_wall,
-        x_vals,
-        color="crimson",
-        alpha=0.3
-    )
+# Coordinates
+y_vals = y0 + Th_s + z * scale
+x_vals = x_wall - sigma_h * stress_scale   # draw INTO soil
 
-    # Wall face reference line
-    ax.plot([x_wall, x_wall],
-            [y0 + Th_s, y0 + Th_s + Ha_s],
-            color="black", linewidth=1)
+# ---- Draw stress curve ----
+ax.plot(x_vals, y_vals, color="crimson", linewidth=2)
 
-    # Label
-    ax.text(
-        x_wall - np.max(sigma_h) * stress_scale * 0.5,
-        y0 + Th_s + Ha_s * 0.5,
-        "σh",
-        rotation=90,
-        ha="center",
-        va="center",
-        color="crimson",
-        fontsize=10
-    )
+# ---- Fill stress area ----
+ax.fill_betweenx(
+    y_vals,
+    x_wall,
+    x_vals,
+    color="crimson",
+    alpha=0.3
+)
+
+# ---- Wall face line ----
+ax.plot([x_wall, x_wall],
+        [y0 + Th_s, y0 + Th_s + Ha_s],
+        color="black", linewidth=1)
+
+# ---- Label ----
+ax.text(
+    x_wall - np.max(sigma_h) * stress_scale * 0.5,
+    y0 + Th_s + Ha_s * 0.5,
+    "σh (active)",
+    rotation=90,
+    ha="center",
+    va="center",
+    color="crimson",
+    fontsize=9
+)
 
 
 
