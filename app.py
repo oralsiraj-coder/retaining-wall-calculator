@@ -683,7 +683,7 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
     # =======================
     if z is not None and sigma_h is not None:
 
-        x_wall = x0 + Lh_s + Tsb_s
+        x_wall = x0 + Lh_s 
         y_top = y0 + Th_s
 
         # Scale stresses for visualization
@@ -691,7 +691,7 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
         if max_stress == 0:
             max_stress = 1
 
-        stress_scale = 0.8 / max_stress  # auto-fit nicely
+        stress_scale = 0.5 / max_stress  # auto-fit nicely
 
         # Build polygon from real data
         points = []
