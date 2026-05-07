@@ -467,15 +467,7 @@ $\sigma_v(z):$ &nbsp; Effective vertical stress
 # =======================
 st.subheader("Symbols")
 
-#st.markdown(r"""
-| Symbol | Description |
-|--------|------------|
-| $\sigma_{v,\text{soil}}(z)$ | Vertical stress due to self weight of soil |
-| $\sigma_{v,\text{surcharge}}(z)$ | Vertical stress due surcharge |
-| $\sigma_{v,\text{water}}(z)$ | Vertical stress due water table (uplift pressure) |
-| $z_w$ | Water table depth |
-| $\sigma_v(z)$ | Effective vertical stress |
-""")
+
 
 
 # =======================
