@@ -323,7 +323,7 @@ gamma_w = 9.81
 sigma_v_soil = gamma_a * (-z)
 sigma_v_surcharge = q * np.ones_like(z)
 sigma_v_water = -gamma_w * np.maximum(0, z_wt - z)
-sigma_v_effective = sigma_v_soil-sigma_v_water
+sigma_v_effective = sigma_v_soil - sigma_v_water
 
 # ---- Effective stress ----
 sigma_v_effective = (
@@ -341,7 +341,7 @@ fig_eff, ax_eff = plt.subplots(figsize=(6, 5))
 ax_eff.plot(sigma_v_soil, z, linestyle="--", color="brown", label="Soil self-weight")
 ax_eff.plot(sigma_v_water, z, linestyle="--", color="cyan", label="Water")
 ax_eff.plot(sigma_v_surcharge, z, linestyle="--", color="green", label="surcharge")
-ax_eff.plot(sigma_v_effective, z, linestyle="--", color="green", label="Effective soil")
+ax_eff.plot(sigma_v_effective, z, linestyle="--", color="blue", label="Effective soil")
 
 # ---- Effective stress (main curve) ----
 ax_eff.plot(
