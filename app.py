@@ -744,7 +744,6 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
             rotation=90,
             ha="center"
         )
-``
 
                   
     return fig
