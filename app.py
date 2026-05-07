@@ -465,7 +465,7 @@ $\sigma_v(z):$ &nbsp; Effective vertical stress
 # HORIZONTAL STRESS DISTRIBUTION
 # =======================
 
-sigma_h_soil _self_weight = Ka * sigma_v_soil
+sigma_h_soil_self_weight = Ka * sigma_v_soil
 
 sigma_h_surcharge = Ka * sigma_v_surcharge
 sigma_h_water = -sigma_v_water
