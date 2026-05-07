@@ -481,7 +481,7 @@ fig_h, ax_h = plt.subplots(figsize=(6, 5))
 ax_h.plot(sigma_h_soil_self_weight, z, linestyle="--", color="brown", label="Soil self-weight")
 ax_h.plot(sigma_h_water, z, linestyle="--", color="Blue", label="Water table")
 ax_h.plot(sigma_h_surcharge, z, linestyle="--", color="green", label="Surcharge")
-ax_h.plot(sigma_h_effective, z, linestyle="--", color="red", label="effective ")
+ax_h.plot(sigma_h_effective, z, linestyle="--", color="red", label="effective stress ")
 # ---- Total horizontal stress (main curve) ----
 ax_h.plot(
     sigma_h_total, z,
@@ -490,7 +490,7 @@ ax_h.plot(
 )
 
 # ---- Reference lines ----
-ax_h.axhline(z_wt, color="blue", linestyle=":", linewidth=1.5, label="Water table")
+ax_h.axhline(z_wt, color="blue", linestyle=":", linewidth=1.5, label="Water level")
 ax_h.axvline(0, color="black", linewidth=1)
 
 # ---- Fill area ----
