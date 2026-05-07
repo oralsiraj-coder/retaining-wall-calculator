@@ -470,7 +470,7 @@ sigma_h_soil_self_weight = Ka * sigma_v_soil
 sigma_h_surcharge = Ka * sigma_v_surcharge
 sigma_h_water = -sigma_v_water
 sigma_h_effective = Ka * sigma_v_effective
-sigma_h_total = sigma_h_soil_self_weight + sigma_h_surcharge + sigma_h_water
+sigma_h_total = sigma_h_effective + sigma_h_surcharge + sigma_h_water
 
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator
@@ -481,7 +481,7 @@ fig_h, ax_h = plt.subplots(figsize=(6, 5))
 ax_h.plot(sigma_h_soil_self_weight, z, linestyle="--", color="brown", label="Soil self-weight")
 ax_h.plot(sigma_h_water, z, linestyle="--", color="cyan", label="Water table")
 ax_h.plot(sigma_h_surcharge, z, linestyle="--", color="green", label="Surcharge")
-ax_h.plot(sigma_h_total, z, linestyle="--", color="green", label="effective ")
+ax_h.plot(sigma_h_effective, z, linestyle="--", color="green", label="effective ")
 # ---- Total horizontal stress (main curve) ----
 ax_h.plot(
     sigma_h_total, z,
