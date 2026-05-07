@@ -525,17 +525,19 @@ st.pyplot(fig_h)
 
 #===============================================================================TEST==============================================================================================
 
-def draw_stress_component(sigma, color):
+def draw_stress_component(ax, sigma, color, x_wall, y_coords, stress_scale):
     x = x_wall + sigma * stress_scale
     pts = list(zip(x, y_coords)) + list(zip([x_wall]*len(y_coords), reversed(y_coords)))
-    ax.add_patch(Polygon(pts, color=color, alpha=0.2))
 
-# Components
-draw_stress_component(sigma_h_soil_self_weight, "brown")
-draw_stress_component(sigma_h_surcharge, "orange")
-draw_stress_component(sigma_h_water, "blue")
+    ax.add_patch(Polygon(
+        pts,
+        color=color,
+        alpha=0.2
+    ))
 
-
+draw_stress_component(ax, sigma_h_soil_self_weight, "brown", x_wall, y_coords, stress_scale)
+draw_stress_component(ax, sigma_h_surcharge, "orange", x_wall, y_coords, stress_scale)
+draw_stress_component(ax, sigma_h_water, "blue", x_wall, y_coords, stress_scale)
 
 
 
