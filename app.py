@@ -525,85 +525,177 @@ st.pyplot(fig_h)
 
 #===============================================================================TEST==============================================================================================
 # =======================
-    # =======================
-    # HORIZONTAL EFFECTIVE STRESS DIAGRAM
-    # =======================
 
-  # =======================
-# TOTAL HORIZONTAL ACTIVE STRESS
-# =======================
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle, FancyArrowPatch, Polygon
+import numpy as np
 
 # =======================
-    # TOTAL HORIZONTAL ACTIVE STRESS ON WALL
-    # =======================
+# VIEWPORT & STYLE
+# =======================
+VIEW_W = 10.0
+VIEW_H = 10.0
+MARGIN = 0.85
 
-    # Coefficient
+LW_CONCRETE = 1.2
+LW_DIM = 0.6
+LW_EXT = 0.4
+DRAFT_GAP = 0.1
+
+# =======================
+# DIMENSION FUNCTION
+# =======================
+def draw_dimension(ax, p1, p2, label, offset=0.0, vertical=False):
+
+    if vertical:
+        x = p1[0] + offset
+        ax.add_patch(FancyArrowPatch(
+            (x, p1[1]), (x, p2[1]),
+            arrowstyle="<->", lw=LW_DIM, mutation_scale=8, color="black"
+        ))
+        ax.plot([p1[0], x], [p1[1], p1[1]], lw=LW_EXT, color="black")
+        ax.plot([p2[0], x], [p2[1], p2[1]], lw=LW_EXT, color="black")
+
+        ax.text(x - 0.15, (p1[1] + p2[1]) / 2,
+                label, rotation=90, ha="center", va="center")
+
+    else:
+        y = p1[1] + offset
+        ax.add_patch(FancyArrowPatch(
+            (p1[0], y), (p2[0], y),
+            arrowstyle="<->", lw=LW_DIM, mutation_scale=8, color="black"
+        ))
+        ax.plot([p1[0], p1[0]], [p1[1], y], lw=LW_EXT, color="black")
+        ax.plot([p2[0], p2[0]], [p2[1], y], lw=LW_EXT, color="black")
+
+        ax.text((p1[0] + p2[0]) / 2, y + 0.1,
+                label, ha="center", va="bottom")
+
+# =======================
+# SCALE
+# =======================
+def compute_scale(Ha, Hp, Th, Lh, Lt, Tsb):
+    return min(
+        (VIEW_W * MARGIN) / (Lh + Tsb + Lt),
+        (VIEW_H * MARGIN) / (Th + max(Ha, Hp))
+    )
+
+# =======================
+# RANKINE COEFFICIENT
+# =======================
+def rankine_active_coefficient(phi_deg, beta_deg):
+    phi = np.radians(phi_deg)
+    beta = np.radians(beta_deg)
+
+    term = np.sqrt(np.cos(beta)**2 - np.cos(phi)**2)
+
+    return (
+        np.cos(beta) *
+        (np.cos(beta) - term) /
+        (np.cos(beta) + term)
+    )
+
+# =======================
+# DRAW WALL + STRESS
+# =======================
+def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
+              gamma_a, phi_a, q):
+
+    scale = compute_scale(Ha, Hp, Th, Lh, Lt, Tsb)
+
+    Ha_s = Ha * scale
+    Hw_s = Hw * scale
+    Hp_s = Hp * scale
+    Th_s = Th * scale
+    Lh_s = Lh * scale
+    Lt_s = Lt * scale
+    Tsb_s = Tsb * scale
+
+    base_L = Lh_s + Tsb_s + Lt_s
+
+    x0 = (VIEW_W - base_L) / 2
+    y0 = 0.8
+    gap = DRAFT_GAP
+    beta_rad = np.radians(beta)
+
+    fig, ax = plt.subplots(figsize=(7, 7))
+
+    # -----------------------
+    # SOIL + WATER
+    # -----------------------
+
+    xL = x0 + gap
+    xR = x0 + Lh_s - gap
+    yB = y0 + Th_s + gap
+
+    yTL = yB + Ha_s
+    yTR = yTL - Lh_s * np.tan(beta_rad)
+
+    # Active soil
+    ax.add_patch(Polygon(
+        [(xL, yB), (xR, yB), (xR, yTR), (xL, yTL)],
+        fc="#f4a261", ec="none", alpha=0.8
+    ))
+
+    # Water
+    if Hw > 0:
+        ax.add_patch(Polygon(
+            [(xL, yTL - Hw_s), (xR, yTR - Hw_s),
+             (xR, yTR), (xL, yTL)],
+            fc="#74c0fc", ec="none", alpha=0.6
+        ))
+
+    # -----------------------
+    # CONCRETE
+    # -----------------------
+
+    ax.add_patch(Rectangle((x0, y0), base_L, Th_s,
+                           fc="0.85", ec="black"))
+
+    ax.add_patch(Rectangle((x0 + Lh_s, y0 + Th_s),
+                           Tsb_s, Ha_s, fc="0.85", ec="black"))
+
+    # -----------------------
+    # TOTAL HORIZONTAL STRESS
+    # -----------------------
+
     Ka = rankine_active_coefficient(phi_a, beta)
-
-    # Water unit weight
     gamma_w = 9.81
 
-    # Depth (positive downward)
     z = np.linspace(0, Ha, 100)
-
-    # Water table depth
     z_wt = Hw
 
-    # ---- Vertical stresses ----
-    sigma_v_soil = gamma_a * z
-    sigma_v_surcharge = q * np.ones_like(z)
-
-    # ---- Pore water pressure (only below WT) ----
+    sigma_v = gamma_a * z + q
     u = gamma_w * np.maximum(0, z - z_wt)
 
-    # ---- Effective vertical stress ----
-    sigma_v_eff = sigma_v_soil + sigma_v_surcharge - u
-
-    # ---- Horizontal stress (ACTIVE) ----
+    sigma_v_eff = sigma_v - u
     sigma_h = Ka * sigma_v_eff + u
 
-    # =======================
-    # DRAW STRESS ON WALL
-    # =======================
-
-    # Scale factor (IMPORTANT for visibility)
     stress_scale = 0.4 * scale
 
-    # Wall face location
     x_wall = x0 + Lh_s
 
-    # Coordinates
     y_vals = y0 + Th_s + z * scale
-    x_vals = x_wall - sigma_h * stress_scale   # draw into soil
+    x_vals = x_wall - sigma_h * stress_scale
 
-    # ---- Draw stress diagram ----
-    ax.plot(x_vals, y_vals, color="crimson", linewidth=2)
+    ax.plot(x_vals, y_vals, color="crimson", lw=2)
+    ax.fill_betweenx(y_vals, x_wall, x_vals,
+                     color="crimson", alpha=0.3)
 
-    # ---- Fill area ----
-    ax.fill_betweenx(
-        y_vals,
-        x_wall,
-        x_vals,
-        color="crimson",
-        alpha=0.3
-    )
-
-    # ---- Wall reference line ----
     ax.plot([x_wall, x_wall],
             [y0 + Th_s, y0 + Th_s + Ha_s],
-            color="black", linewidth=1)
+            color="black")
 
-    # ---- Label ----
-    ax.text(
-        x_wall - np.max(sigma_h) * stress_scale * 0.5,
-        y0 + Th_s + Ha_s * 0.5,
-        "σh (active)",
-        rotation=90,
-        ha="center",
-        va="center",
-        color="crimson",
-        fontsize=9
-    )
+    # -----------------------
+    # FINAL SETTINGS
+    # -----------------------
+
+    ax.set_xlim(0, VIEW_W)
+    ax.set_ylim(0, VIEW_H)
+    ax.set_aspect("equal")
+    ax.axis("off")
+
+    return fig
 
 
 
