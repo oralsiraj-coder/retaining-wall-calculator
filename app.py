@@ -620,7 +620,144 @@ st.pyplot(draw_wall(
 
 
 
+def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
+              gamma_a, phi_a, c_a,
+              gamma_p, phi_p, c_p,
+              z_a, sigma_h_eff_a, pore_pressure=None):
 
+    scale = compute_scale(Ha, Hp, Th, Lh, Lt, Tsb)
+
+    Ha_s = Ha * scale
+    Hw_s = Hw * scale
+    Hp_s = Hp * scale
+    Th_s = Th * scale
+    Lh_s = Lh * scale
+    Lt_s = Lt * scale
+    Tsb_s = Tsb * scale
+
+    base_L = Lh_s + Tsb_s + Lt_s
+
+    x0 = (VIEW_W - base_L) / 2
+    y0 = 0.8
+    gap = DRAFT_GAP
+    beta_rad = np.deg2rad(beta)
+
+    fig, ax = plt.subplots(figsize=(7, 7))
+
+    # =======================
+    # GEOMETRY
+    # =======================
+
+    xL = x0 + gap
+    xR = x0 + Lh_s - gap
+    yB = y0 + Th_s + gap
+    yTL = yB + Ha_s
+    yTR = yTL - Lh_s * np.tan(beta_rad)
+
+    # Active soil
+    ax.add_patch(Polygon(
+        [(xL, yB), (xR, yB), (xR, yTR), (xL, yTL)],
+        fc="#f4a261", ec="none", alpha=0.85
+    ))
+
+    # Water
+    if Hw > 0:
+        ax.add_patch(Polygon(
+            [(xL, yTL - Hw_s), (xR, yTR - Hw_s),
+             (xR, yTR), (xL, yTL)],
+            fc="#74c0fc", ec="none", alpha=0.6
+        ))
+
+    # Passive soil
+    ax.add_patch(Rectangle(
+        (x0 + Lh_s + Tsb_s + gap, y0 + Th_s + gap),
+        Lt_s - gap, Hp_s - gap,
+        fc="#b7e4c7", ec="none"
+    ))
+
+    # Concrete
+    ax.add_patch(Rectangle((x0, y0), base_L, Th_s,
+                           fc="0.85", ec="black"))
+    ax.add_patch(Rectangle((x0 + Lh_s, y0 + Th_s),
+                           Tsb_s, Ha_s,
+                           fc="0.85", ec="black"))
+
+    # =======================
+    # STRESS DIAGRAM (ACTIVE)
+    # =======================
+
+    stress_scale = 0.02  # adjust visually
+    x_wall = x0 + Lh_s
+
+    points = []
+
+    # Build stress polygon
+    for z, sigma in zip(z_a, sigma_h_eff_a):
+        y = yB + z * scale              # vertical position
+        x = x_wall + sigma * stress_scale
+        points.append((x, y))
+
+    # Close polygon (along wall)
+    points.insert(0, (x_wall, yB))
+    points.append((x_wall, yTL))
+
+    ax.add_patch(Polygon(points,
+                         fc="red", alpha=0.4, ec="red"))
+
+    # Optional outline
+    ax.plot(*zip(*points), color="red", linewidth=1.5)
+
+    ax.text(x_wall + 0.1, yTL - Ha_s/2,
+            "σ'h", color="red")
+
+    # =======================
+    # WATER PRESSURE DIAGRAM
+    # =======================
+
+    if pore_pressure is not None:
+        points_u = []
+
+        for z, u in zip(z_a, pore_pressure):
+            y = yB + z * scale
+            x = x_wall + u * stress_scale
+            points_u.append((x, y))
+
+        points_u.insert(0, (x_wall, yB))
+        points_u.append((x_wall, yTL))
+
+        ax.add_patch(Polygon(points_u,
+                             fc="blue", alpha=0.3, ec="blue"))
+
+        ax.plot(*zip(*points_u), color="blue", linewidth=1)
+
+        ax.text(x_wall + 0.1, yTL - Hw_s/2,
+                "u", color="blue")
+
+    # =======================
+    # DIMENSIONS
+    # =======================
+
+    draw_dimension(ax, (x0, y0 + Th_s), (x0, y0 + Th_s + Ha_s), "Ha", -0.7, True)
+    draw_dimension(ax, (x0 + base_L, y0 + Th_s),
+                   (x0 + base_L, y0 + Th_s + Hp_s), "Hp", 0.7, True)
+    draw_dimension(ax, (x0, y0), (x0 + Lh_s, y0), "Lh", -0.6)
+    draw_dimension(ax, (x0 + Lh_s + Tsb_s, y0),
+                   (x0 + base_L, y0), "Lt", -0.6)
+    draw_dimension(ax, (x0, y0), (x0, y0 + Th_s), "Th", -0.5, True)
+    draw_dimension(ax, (x0 + Lh_s, y0 + Th_s),
+                   (x0 + Lh_s + Tsb_s, y0 + Th_s), "Tsb", 0.3)
+
+    # Ground surface
+    ax.plot([xL, xR], [yTL, yTR], "--", color="black")
+    ax.text((xL + xR) / 2, (yTL + yTR) / 2 + 0.1,
+            f"β = {beta:.0f}°", ha="center")
+
+    ax.set_xlim(0, VIEW_W)
+    ax.set_ylim(0, VIEW_H)
+    ax.set_aspect("equal")
+    ax.axis("off")
+
+    return fig
 
 
 
