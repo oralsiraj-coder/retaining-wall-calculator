@@ -467,7 +467,7 @@ $\sigma_v(z):$ &nbsp; Effective vertical stress
 # =======================
 st.subheader("Symbols")
 
-st.markdown(r"""
+#st.markdown(r"""
 | Symbol | Description |
 |--------|------------|
 | $\sigma_{v,\text{soil}}(z)$ | Vertical stress due to self weight of soil |
