@@ -528,86 +528,117 @@ st.pyplot(fig_h)
 import streamlit as st
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.patches import Rectangle, Polygon
 
-def simple_test():
-    fig, ax = plt.subplots()
+# =======================
+# Rankine coefficient
+# =======================
+def rankine_active_coefficient(phi_deg, beta_deg):
+    phi = np.radians(phi_deg)
+    beta = np.radians(beta_deg)
+    term = np.sqrt(np.cos(beta)**2 - np.cos(phi)**2)
 
-    x = np.linspace(0, 10, 100)
-    y = x**2
+    return np.cos(beta) * (np.cos(beta) - term) / (np.cos(beta) + term)
 
-    ax.plot(x, y)
-    ax.set_title("TEST GRAPH")
+
+# =======================
+# DRAW WALL + STRESS
+# =======================
+def draw_wall(Ha, Hw, Th, Lh, Tsb, beta,
+              gamma_a, phi_a, q):
+
+    # Simple scale
+    scale = 0.6
+
+    x_wall = 5        # wall position
+    y_base = 1        # base
+
+    fig, ax = plt.subplots(figsize=(6, 6))
+
+    # =======================
+    # WALL
+    # =======================
+    ax.add_patch(Rectangle((x_wall, y_base), 0.4, Ha, color="gray"))
+
+    # =======================
+    # SOIL BLOCK
+    # =======================
+    ax.add_patch(Polygon(
+        [(x_wall-2, y_base),
+         (x_wall, y_base),
+         (x_wall, y_base + Ha),
+         (x_wall-2, y_base + Ha)],
+        fc="#f4a261", alpha=0.5
+    ))
+
+    # =======================
+    # STRESS COMPUTATION
+    # =======================
+    Ka = rankine_active_coefficient(phi_a, beta)
+    gamma_w = 9.81
+
+    z = np.linspace(0, Ha, 100)
+    z_wt = Hw
+
+    # total vertical stress
+    sigma_v = gamma_a * z + q
+
+    # pore water pressure
+    u = gamma_w * np.maximum(0, z - z_wt)
+
+    # effective stress
+    sigma_v_eff = sigma_v - u
+
+    # horizontal stress
+    sigma_h = Ka * sigma_v_eff + u
+
+    # =======================
+    # DRAW STRESS DIAGRAM
+    # =======================
+    stress_scale = 0.02   # VERY IMPORTANT
+
+    y_vals = y_base + z
+    x_vals = x_wall - sigma_h * stress_scale
+
+    ax.plot(x_vals, y_vals, color="red", linewidth=2)
+    ax.fill_betweenx(y_vals, x_wall, x_vals, color="red", alpha=0.3)
+
+    # =======================
+    # WATER TABLE LINE
+    # =======================
+    ax.axhline(y_base + Hw, color='blue', linestyle='--', label='Water table')
+
+    # =======================
+    # AXIS
+    # =======================
+    ax.set_xlim(0, 10)
+    ax.set_ylim(0, 10)
+    ax.set_title("Horizontal Active Stress on Wall")
+    ax.set_aspect('equal')
+    ax.grid(True)
+    ax.legend()
 
     return fig
 
-fig = simple_test()
+
+# =======================
+# STREAMLIT UI
+# =======================
+st.title("Retaining Wall Stress")
+
+fig = draw_wall(
+    Ha=6,
+    Hw=2,
+    Th=0.8,
+    Lh=3,
+    Tsb=0.4,
+    beta=10,
+    gamma_a=18,
+    phi_a=30,
+    q=10
+)
 
 st.pyplot(fig)
-
-# =======================
-# HORIZONTAL FORCE RESULTANTS
-# =======================
-st.header("Horizontal Force Resultants")
-
-gamma_w = 9.81
-
-Ka = rankine_active_coefficient(phi_a, beta)
-Kp = rankine_passive_coefficient(phi_p)
-
-# ---- Active forces ----
-Fa_soil = 0.5 * Ka * gamma_a * Ha**2
-Fa_surcharge = Ka * q * Ha
-Fw = 0.5 * gamma_w * Hw**2
-
-Fa_total = Fa_soil + Fa_surcharge + Fw
-
-# ---- Passive force ----
-Fp_soil = 0.5 * Kp * gamma_p * Hp**2
-
-# ---- Resultant ----
-F_resultant = Fa_total - Fp_soil
-
-# =======================
-# EQUATIONS (RENDERED)
-# =======================
-st.latex(r"F_{a,\gamma} = \frac{1}{2} K_a \gamma_a H_a^2")
-st.latex(r"F_{a,q} = K_a q H_a")
-st.latex(r"F_w = \frac{1}{2} \gamma_w H_w^2")
-st.latex(r"F_{p,\gamma} = \frac{1}{2} K_p \gamma_p H_p^2")
-st.latex(
-    r"\boxed{F_{\text{resultant}}"
-    r"= (F_{a,\gamma}+F_{a,q}+F_w)-F_{p,\gamma}}"
-)
-
-# =======================
-# RESULTS TABLE
-# =======================
-import pandas as pd
-
-force_table = pd.DataFrame({
-    "Component": [
-        "Active – soil self‑weight",
-        "Active – surcharge",
-        "Water pressure",
-        "Total active force",
-        "Passive – soil self‑weight",
-        "Resultant horizontal force"
-    ],
-    "Horizontal force (kN/m)": [
-        Fa_soil,
-        Fa_surcharge,
-        Fw,
-        Fa_total,
-        Fp_soil,
-        F_resultant
-    ]
-})
-
-st.subheader("📊 Horizontal Force Summary (per meter wall length)")
-st.dataframe(
-    force_table.style.format({"Horizontal force (kN/m)": "{:.2f}"}),
-    use_container_width=True
-)
 
 # =======================
 # DESIGN INTERPRETATION
