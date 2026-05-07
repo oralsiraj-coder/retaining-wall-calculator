@@ -524,12 +524,7 @@ ax_h.invert_yaxis()
 st.pyplot(fig_h)
 
 #===============================================================================TEST==============================================================================================
-ax.set_xlim(0, VIEW_W)
-    ax.set_ylim(0, VIEW_H)
-    ax.set_aspect("equal")
-    ax.axis("off")
-
-    # =======================
+# =======================
     # ACTIVE HORIZONTAL STRESS DIAGRAM
     # =======================
 
@@ -567,10 +562,15 @@ ax.set_xlim(0, VIEW_W)
         lw=1.5
     ))
 
+    # =======================
+    # VIEW SETTINGS (MUST BE LAST)
+    # =======================
+    ax.set_xlim(0, VIEW_W)
+    ax.set_ylim(0, VIEW_H)
+    ax.set_aspect("equal")
+    ax.axis("off")
+
     return fig
-
-
-
 
 
 
