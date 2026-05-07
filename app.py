@@ -524,7 +524,99 @@ ax_h.invert_yaxis()
 st.pyplot(fig_h)
 
 #===============================================================================TEST==============================================================================================
-ax.axis("off")
+def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
+              gamma_a, phi_a, c_a,
+              gamma_p, phi_p, c_p,
+              z,
+              sigma_h_total,
+              sigma_h_soil_self_weight,
+              sigma_h_surcharge,
+              sigma_h_water):
+
+    scale = compute_scale(Ha, Hp, Th, Lh, Lt, Tsb)
+
+    Ha_s = Ha * scale
+    Hw_s = Hw * scale
+    Hp_s = Hp * scale
+    Th_s = Th * scale
+    Lh_s = Lh * scale
+    Lt_s = Lt * scale
+    Tsb_s = Tsb * scale
+
+    base_L = Lh_s + Tsb_s + Lt_s
+
+    x0 = (VIEW_W - base_L) / 2
+    y0 = 0.8
+    gap = DRAFT_GAP
+    beta_rad = np.deg2rad(beta)
+
+    fig, ax = plt.subplots(figsize=(7, 7))
+
+    # =======================
+    # ACTIVE SOIL
+    # =======================
+    xL = x0 + gap
+    xR = x0 + Lh_s - gap
+    yB = y0 + Th_s + gap
+    yTL = yB + Ha_s
+    yTR = yTL - Lh_s * np.tan(beta_rad)
+
+    ax.add_patch(Polygon(
+        [(xL, yB), (xR, yB), (xR, yTR), (xL, yTL)],
+        fc="#f4a261", ec="none", alpha=0.85
+    ))
+
+    # =======================
+    # WATER
+    # =======================
+    if Hw > 0:
+        ax.add_patch(Polygon(
+            [(xL, yTL - Hw_s), (xR, yTR - Hw_s),
+             (xR, yTR), (xL, yTL)],
+            fc="#74c0fc", ec="none", alpha=0.6
+        ))
+
+    # =======================
+    # PASSIVE SOIL
+    # =======================
+    ax.add_patch(Rectangle(
+        (x0 + Lh_s + Tsb_s + gap, y0 + Th_s + gap),
+        Lt_s - gap, Hp_s - gap,
+        fc="#b7e4c7", ec="none"
+    ))
+
+    # =======================
+    # CONCRETE
+    # =======================
+    ax.add_patch(Rectangle(
+        (x0, y0), base_L, Th_s,
+        fc="0.85", ec="black"
+    ))
+    ax.add_patch(Rectangle(
+        (x0 + Lh_s, y0 + Th_s),
+        Tsb_s, Ha_s,
+        fc="0.85", ec="black"
+    ))
+
+    # =======================
+    # DIMENSIONS
+    # =======================
+    draw_dimension(ax, (x0, y0 + Th_s), (x0, y0 + Th_s + Ha_s), "Ha", -0.7, True)
+    draw_dimension(ax, (x0 + base_L, y0 + Th_s),
+                   (x0 + base_L, y0 + Th_s + Hp_s), "Hp", 0.7, True)
+    draw_dimension(ax, (x0, y0), (x0 + Lh_s, y0), "Lh", -0.6)
+    draw_dimension(ax, (x0 + Lh_s + Tsb_s, y0),
+                   (x0 + base_L, y0), "Lt", -0.6)
+    draw_dimension(ax, (x0, y0), (x0, y0 + Th_s), "Th", -0.5, True)
+    draw_dimension(ax, (x0 + Lh_s, y0 + Th_s),
+                   (x0 + Lh_s + Tsb_s, y0 + Th_s), "Tsb", 0.3)
+
+    # =======================
+    # GROUND LINE
+    # =======================
+    ax.plot([xL, xR], [yTL, yTR], "--", color="black")
+    ax.text((xL + xR) / 2, (yTL + yTR) / 2 + 0.1,
+            f"β = {beta:.0f}°", ha="center")
 
     # =======================
     # ACTIVE HORIZONTAL STRESS DIAGRAM
@@ -533,7 +625,9 @@ ax.axis("off")
     x_wall = x0 + Lh_s
     y_base = y0 + Th_s
 
+    # Convert depth (z negative)
     y_coords = y_base + (-z) * scale
+
     stress_scale = 0.02 * scale
 
     def draw_stress_component(sigma, color):
@@ -544,16 +638,16 @@ ax.axis("off")
             pts,
             facecolor=color,
             edgecolor=color,
-            alpha=0.2,
-            lw=1.0
+            alpha=0.2
         ))
 
+    # Components
     draw_stress_component(sigma_h_soil_self_weight, "brown")
     draw_stress_component(sigma_h_surcharge, "orange")
     draw_stress_component(sigma_h_water, "blue")
 
+    # Total
     x_total = x_wall + sigma_h_total * stress_scale
-
     poly_total = list(zip(x_total, y_coords)) + list(zip([x_wall]*len(y_coords), reversed(y_coords)))
 
     ax.add_patch(Polygon(
@@ -564,8 +658,15 @@ ax.axis("off")
         lw=1.5
     ))
 
-    return fig
+    # =======================
+    # VIEW SETTINGS
+    # =======================
+    ax.set_xlim(0, VIEW_W)
+    ax.set_ylim(0, VIEW_H)
+    ax.set_aspect("equal")
+    ax.axis("off")
 
+    return fig
 
 
 
