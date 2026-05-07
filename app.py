@@ -524,7 +524,243 @@ ax_h.invert_yaxis()
 st.pyplot(fig_h)
 
 #===============================================================================TEST==============================================================================================
+# =======================
+# VIEWPORT & STYLE
+# =======================
+VIEW_W = 10.0
+VIEW_H = 10.0
+MARGIN = 0.85
 
+LW_CONCRETE = 1.2
+LW_DIM = 0.6
+LW_EXT = 0.4
+DRAFT_GAP = 0.1
+
+# =======================
+# DIMENSION FUNCTION
+# =======================
+def draw_dimension(ax, p1, p2, label, offset=0.0, vertical=False):
+    if vertical:
+        x = p1[0] + offset
+        ax.add_patch(FancyArrowPatch(
+            (x, p1[1]), (x, p2[1]),
+            arrowstyle="<->",
+            lw=LW_DIM,
+            mutation_scale=8,
+            color="black"
+        ))
+        ax.plot([p1[0], x], [p1[1], p1[1]], lw=LW_EXT, color="black")
+        ax.plot([p2[0], x], [p2[1], p2[1]], lw=LW_EXT, color="black")
+        ax.text(
+            x - 0.15,
+            (p1[1] + p2[1]) / 2,
+            label,
+            rotation=90,
+            ha="center",
+            va="center",
+            fontsize=8
+        )
+    else:
+        y = p1[1] + offset
+        ax.add_patch(FancyArrowPatch(
+            (p1[0], y), (p2[0], y),
+            arrowstyle="<->",
+            lw=LW_DIM,
+            mutation_scale=8,
+            color="black"
+        ))
+        ax.plot([p1[0], p1[0]], [p1[1], y], lw=LW_EXT, color="black")
+        ax.plot([p2[0], p2[0]], [p2[1], y], lw=LW_EXT, color="black")
+        ax.text(
+            (p1[0] + p2[0]) / 2,
+            y + 0.1,
+            label,
+            ha="center",
+            va="bottom",
+            fontsize=8
+        )
+
+# =======================
+# SCALE
+# =======================
+def compute_scale(Ha, Hp, Th, Lh, Lt, Tsb):
+    base_L = Lh + Tsb + Lt
+    total_H = Th + max(Ha, Hp)
+    return min(
+        (VIEW_W * MARGIN) / base_L,
+        (VIEW_H * MARGIN) / total_H
+    )
+
+
+
+# =======================
+# DRAW WALL
+# =======================
+def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
+              gamma_a, phi_a, c_a,
+              gamma_p, phi_p, c_p,
+              z=None, sigma_h=None):
+
+    scale = compute_scale(Ha, Hp, Th, Lh, Lt, Tsb)
+
+    Ha_s = Ha * scale
+    Hw_s = Hw * scale
+    Hp_s = Hp * scale
+    Th_s = Th * scale
+    Lh_s = Lh * scale
+    Lt_s = Lt * scale
+    Tsb_s = Tsb * scale
+
+    base_L = Lh_s + Tsb_s + Lt_s
+
+    x0 = (VIEW_W - base_L) / 2
+    y0 = 0.8
+    gap = DRAFT_GAP
+    beta_rad = np.deg2rad(beta)
+
+    fig, ax = plt.subplots(figsize=(7, 7))
+
+    # Active soil
+    xL = x0 + gap
+    xR = x0 + Lh_s - gap
+    yB = y0 + Th_s + gap
+    yTL = yB + Ha_s
+    yTR = yTL - Lh_s * np.tan(beta_rad)
+
+    ax.add_patch(Polygon(
+        [(xL, yB), (xR, yB), (xR, yTR), (xL, yTL)],
+        fc="#f4a261", ec="none", alpha=0.85
+    ))
+
+    # Water
+    if Hw > 0:
+        ax.add_patch(Polygon(
+            [(xL, yTL - Hw_s), (xR, yTR - Hw_s),
+             (xR, yTR), (xL, yTL)],
+            fc="#74c0fc", ec="none", alpha=0.6
+        ))
+
+    # Passive soil
+    ax.add_patch(Rectangle(
+        (x0 + Lh_s + Tsb_s + gap, y0 + Th_s + gap),
+        Lt_s - gap, Hp_s - gap,
+        fc="#b7e4c7", ec="none"
+    ))
+
+    # Concrete
+    ax.add_patch(Rectangle(
+        (x0, y0), base_L, Th_s,
+        fc="0.85", ec="black"
+    ))
+    ax.add_patch(Rectangle(
+        (x0 + Lh_s, y0 + Th_s),
+        Tsb_s, Ha_s,
+        fc="0.85", ec="black"
+    ))
+
+    # Dimensions
+    draw_dimension(ax, (x0, y0 + Th_s), (x0, y0 + Th_s + Ha_s), "Ha", -0.7, True)
+    draw_dimension(ax, (x0 + base_L, y0 + Th_s),
+                   (x0 + base_L, y0 + Th_s + Hp_s), "Hp", 0.7, True)
+    draw_dimension(ax, (x0, y0), (x0 + Lh_s, y0), "Lh", -0.6)
+    draw_dimension(ax, (x0 + Lh_s + Tsb_s, y0),
+                   (x0 + base_L, y0), "Lt", -0.6)
+    draw_dimension(ax, (x0, y0), (x0, y0 + Th_s), "Th", -0.5, True)
+    draw_dimension(ax, (x0 + Lh_s, y0 + Th_s),
+                   (x0 + Lh_s + Tsb_s, y0 + Th_s), "Tsb", 0.3)
+
+    # Ground surface
+    ax.plot([xL, xR], [yTL, yTR], "--", color="black")
+    ax.text((xL + xR) / 2, (yTL + yTR) / 2 + 0.1,
+            f"β = {beta:.0f}°", ha="center")
+
+    ax.set_xlim(0, VIEW_W)
+    ax.set_ylim(0, VIEW_H)
+    ax.set_aspect("equal")
+    ax.axis("off")
+# =======================
+    # DRAW REAL HORIZONTAL STRESS
+    # =======================
+    if z is not None and sigma_h is not None:
+
+        x_wall = x0 + Lh_s + Tsb_s
+        y_top = y0 + Th_s
+
+        # Scale stresses for visualization
+        max_stress = np.max(np.abs(sigma_h))
+        if max_stress == 0:
+            max_stress = 1
+
+        stress_scale = 0.8 / max_stress  # auto-fit nicely
+
+        # Build polygon from real data
+        points = []
+
+        for zi, shi in zip(z, sigma_h):
+            y_plot = y_top + (-zi) * scale   # convert depth → drawing coordinate
+            x_plot = x_wall + shi * stress_scale
+
+            points.append((x_plot, y_plot))
+
+        # Close polygon back to wall
+        points.append((x_wall, y_top + Ha_s))
+        points.append((x_wall, y_top))
+
+        stress_poly = Polygon(
+            points,
+            closed=True,
+            facecolor="red",
+            alpha=0.3,
+            edgecolor="red"
+        )
+        ax.add_patch(stress_poly)
+
+        # =======================
+        # ARROWS (based on real values)
+        # =======================
+        n = 6
+        idx = np.linspace(0, len(z)-1, n).astype(int)
+
+        for i in idx:
+            y_plot = y_top + (-z[i]) * scale
+            x_tip = x_wall
+            x_tail = x_wall + sigma_h[i] * stress_scale
+
+            ax.add_patch(FancyArrowPatch(
+                (x_tail, y_plot),
+                (x_tip, y_plot),
+                arrowstyle="->",
+                mutation_scale=10,
+                color="red",
+                lw=1
+            ))
+
+        # Label
+        ax.text(
+            x_wall + 0.4,
+            y_top + Ha_s * 0.5,
+            r"$\sigma_h$ (real)",
+            color="red",
+            rotation=90,
+            ha="center"
+        )
+``
+
+                  
+    return fig
+
+# =======================
+# STREAMLIT UI
+# =======================
+
+
+st.pyplot(draw_wall(
+    Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
+    gamma_a, phi_a, c_a,
+    gamma_p, phi_p, c_p,
+    z=z,
+    sigma_h=sigma_h_total
+))
 
 
 
