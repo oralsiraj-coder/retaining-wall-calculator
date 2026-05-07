@@ -461,7 +461,7 @@ $\sigma_{v,\text{water}}(z):$ &nbsp; Vertical stress due water table
 $z_w:$ &nbsp;&nbsp; Water table depth  
 $\sigma_v(z):$ &nbsp; Effective vertical stress  
 """)
-#==============================================================Working zone ==============================================================================#
+
 # =======================
 # HORIZONTAL STRESS DISTRIBUTION
 # =======================
@@ -523,11 +523,106 @@ ax_h.invert_yaxis()
 # ---- Show ----
 st.pyplot(fig_h)
 
-#===============================================================================
+#===============================================================================TEST==============================================================================================
+# =======================
+    # HORIZONTAL STRESS DIAGRAM ON WALL
+    # =======================
+
+    Ka = rankine_active_coefficient(phi_a, beta)
+    gamma_w = 9.81
+
+    # depth discretisation (positive downward)
+    z = np.linspace(0, Ha, 50)
+
+    # water table depth
+    z_wt = Hw
+
+    # vertical stresses
+    sigma_v_soil = gamma_a * z
+    sigma_v_surcharge = q * np.ones_like(z)
+    u = gamma_w * np.maximum(0, z - z_wt)
+
+    sigma_v_effective = sigma_v_soil + sigma_v_surcharge - u
+
+    # horizontal stress
+    sigma_h = Ka * sigma_v_effective + u
+
+    # SCALE stress for drawing
+    stress_scale = 0.02 * scale   # tuning factor
+
+    # Wall reference line (stem face)
+    x_wall = x0 + Lh_s
+
+    # Convert to plotting coordinates
+    y_vals = y0 + Th_s + z * scale
+    x_vals = x_wall + sigma_h * stress_scale
+
+    # Draw stress diagram
+    ax.plot(x_vals, y_vals, color="crimson", linewidth=2)
+
+    # Fill diagram (nice visual)
+    ax.fill_betweenx(
+        y_vals,
+        x_wall,
+        x_vals,
+        color="crimson",
+        alpha=0.25
+    )
+
+    # Optional: draw zero line (wall face)
+    ax.plot([x_wall, x_wall], [y0 + Th_s, y0 + Th_s + Ha_s],
+            color="black", linewidth=1)
+
+    # Label
+    ax.text(
+        x_wall + max(sigma_h) * stress_scale * 0.6,
+        y0 + Th_s + Ha_s * 0.5,
+        "σh",
+        color="crimson",
+        fontsize=10,
+        rotation=90,
+        ha="center"
+    )
+``
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # =======================
 # HORIZONTAL FORCE RESULTANTS
 # =======================
-st.header("🧮 Horizontal Force Resultants")
+st.header("Horizontal Force Resultants")
 
 gamma_w = 9.81
 
