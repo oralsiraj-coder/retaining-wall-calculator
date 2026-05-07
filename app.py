@@ -355,7 +355,7 @@ ax_eff.axhline(z_wt, color="blue", linestyle=":", linewidth=1.5, label="Water ta
 ax_eff.axvline(0, color="black", linewidth=1)
 
 # ---- Fill effective stress (nice visual) ----
-ax_eff.fill_betweenx(z, 0, sigma_v_effective, color="gray", alpha=0.2)
+ax_eff.fill_betweenx(z, 0, sigma_v_effective_total, color="gray", alpha=0.2)
 
 # ---- Axis limits (VERY IMPORTANT) ----
 ax_eff.set_ylim(0, z.min())   # negative depth downward
