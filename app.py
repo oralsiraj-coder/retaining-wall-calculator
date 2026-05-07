@@ -479,9 +479,9 @@ fig_h, ax_h = plt.subplots(figsize=(6, 5))
 
 # ---- Plot components ----
 ax_h.plot(sigma_h_soil_self_weight, z, linestyle="--", color="brown", label="Soil self-weight")
-ax_h.plot(sigma_h_water, z, linestyle="--", color="cyan", label="Water table")
+ax_h.plot(sigma_h_water, z, linestyle="--", color="Blue", label="Water table")
 ax_h.plot(sigma_h_surcharge, z, linestyle="--", color="green", label="Surcharge")
-ax_h.plot(sigma_h_effective, z, linestyle="--", color="green", label="effective ")
+ax_h.plot(sigma_h_effective, z, linestyle="--", color="red", label="effective ")
 # ---- Total horizontal stress (main curve) ----
 ax_h.plot(
     sigma_h_total, z,
