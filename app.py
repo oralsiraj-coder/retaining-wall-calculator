@@ -471,21 +471,55 @@ sigma_h_water = -sigma_v_water
 
 sigma_h_total = sigma_h_soil + sigma_h_surcharge + sigma_h_water
 
+import matplotlib.pyplot as plt
+from matplotlib.ticker import MultipleLocator
 
-fig_h, ax_h = plt.subplots(figsize=(6, 8))
+fig_h, ax_h = plt.subplots(figsize=(6, 5))
 
-ax_h.plot(sigma_h_soil, z, label="Soil: K·γz")
-ax_h.plot(sigma_h_surcharge, z, label="Surcharge: K·q")
-ax_h.plot(sigma_h_water, z, label="Water: γw(z − zw)")
-ax_h.plot(sigma_h_total, z, linewidth=2.5, label="Resultant σh")
+# ---- Plot components ----
+ax_h.plot(sigma_h_soil, z, linestyle="--", color="brown", label="Soil: K·γz")
+ax_h.plot(sigma_h_water, z, linestyle="--", color="cyan", label="Water pressure u")
+ax_h.plot(sigma_h_surcharge, z, linestyle="--", color="green", label="Surcharge: K·q")
 
+# ---- Total horizontal stress (main curve) ----
+ax_h.plot(
+    sigma_h_total, z,
+    linewidth=2.5, color="black",
+    label="Total horizontal stress σₕ"
+)
 
+# ---- Reference lines ----
+ax_h.axhline(z_wt, color="blue", linestyle=":", linewidth=1.5, label="Water table")
+ax_h.axvline(0, color="black", linewidth=1)
+
+# ---- Fill area ----
+ax_h.fill_betweenx(z, 0, sigma_h_total, color="gray", alpha=0.2)
+
+# ---- Axis limits ----
+ax_h.set_ylim(0, z.min())   # keep your negative depth convention
+
+xmin = min(sigma_h_water.min(), sigma_h_total.min(), 0)
+xmax = max(sigma_h_soil.max(), sigma_h_total.max())
+ax_h.set_xlim(xmin, xmax)
+
+# ---- Labels ----
 ax_h.set_xlabel("Horizontal stress σh (kPa)")
-ax_h.set_ylabel("Depth z (m)")
+ax_h.set_ylabel("Elevation z (m)")
 ax_h.set_title("Horizontal Stress Distribution")
-ax_h.grid(True)
-ax_h.legend()
 
+# ---- Grid ----
+ax_h.yaxis.set_major_locator(MultipleLocator(1))
+ax_h.yaxis.set_minor_locator(MultipleLocator(0.25))
+
+ax_h.grid(True, which='major', linestyle='-', linewidth=0.8)
+ax_h.grid(True, which='minor', linestyle=':', linewidth=0.5)
+
+# ---- Legend ----
+ax_h.legend(loc="best")
+
+ax_h.invert_yaxis()
+
+# ---- Show ----
 st.pyplot(fig_h)
 
 #===============================================================================
