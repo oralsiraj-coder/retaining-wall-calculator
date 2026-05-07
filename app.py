@@ -326,7 +326,7 @@ sigma_v_water = -gamma_w * np.maximum(0, z_wt - z)
 sigma_v_effective = sigma_v_soil + sigma_v_water
 
 # ---- Effective stress ----
-sigma_v_effective = (
+sigma_v_effective_total = (
     sigma_v_soil +
     sigma_v_surcharge +
     sigma_v_water
@@ -345,7 +345,7 @@ ax_eff.plot(sigma_v_effective, z, linestyle="--", color="blue", label="Effective
 
 # ---- Effective stress (main curve) ----
 ax_eff.plot(
-    sigma_v_effective, z,
+    sigma_v_effective_total, z,
     linewidth=2.5, color="black",
     label="Effective stress σ′ᵥ"
 )
