@@ -525,47 +525,7 @@ st.pyplot(fig_h)
 
 #===============================================================================TEST==============================================================================================
 
-# =======================
-# STRESS DIAGRAM (ACTIVE)
-# =======================
 
-Ka = np.tan(np.deg2rad(45 - phi_a / 2))**2
-
-stress_scale = 0.02
-x_wall = x0 + Lh_s
-
-points = []
-
-# discretize depth
-n = 50
-z_vals = np.linspace(0, Ha, n)
-
-for z in z_vals:
-    # effective vertical stress
-    if Hw > 0:
-        gamma_eff = gamma_a - 9.81
-    else:
-        gamma_eff = gamma_a
-
-    sigma_v_eff = gamma_eff * z
-
-    # horizontal effective stress
-    sigma_h_eff = Ka * sigma_v_eff
-
-    # map to drawing
-    y = yB + z * scale
-    x = x_wall + sigma_h_eff * stress_scale
-
-    points.append((x, y))
-
-# close polygon
-points.insert(0, (x_wall, yB))
-points.append((x_wall, yTL))
-
-ax.add_patch(Polygon(points, fc="red", alpha=0.4, ec="red"))
-ax.plot(*zip(*points), color="red", linewidth=1.5)
-
-ax.text(x_wall + 0.1, (yB + yTL)/2, "σ'h", color="red")
 
 
 
