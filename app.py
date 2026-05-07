@@ -481,7 +481,7 @@ fig_h, ax_h = plt.subplots(figsize=(6, 5))
 ax_h.plot(sigma_h_soil, z, linestyle="--", color="brown", label="Soil self-weight")
 ax_h.plot(sigma_h_water, z, linestyle="--", color="cyan", label="Water table")
 ax_h.plot(sigma_h_surcharge, z, linestyle="--", color="green", label="Surcharge")
-#ax_h.plot(sigma_h_soil_submerged, z, linestyle="--", color="green", label="Soil submerged")
+ax_h.plot(sigma_h_soil_submerged, z, linestyle="--", color="green", label="Soil submerged")
 # ---- Total horizontal stress (main curve) ----
 ax_h.plot(
     sigma_h_total, z,
