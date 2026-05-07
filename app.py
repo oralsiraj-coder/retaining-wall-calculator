@@ -465,7 +465,8 @@ $\sigma_v(z):$ &nbsp; Effective vertical stress
 # HORIZONTAL STRESS DISTRIBUTION
 # =======================
 
-sigma_h_soil = Ka * sigma_v_soil
+sigma_h_soil _self_weight = Ka * sigma_v_soil
+sigma_h_soil _submerged = Ka * sigma_v_soil- gamma_w
 sigma_h_surcharge = Ka * sigma_v_surcharge
 sigma_h_water = -sigma_v_water
 
@@ -477,15 +478,15 @@ from matplotlib.ticker import MultipleLocator
 fig_h, ax_h = plt.subplots(figsize=(6, 5))
 
 # ---- Plot components ----
-ax_h.plot(sigma_h_soil, z, linestyle="--", color="brown", label="Soil: K·γz")
-ax_h.plot(sigma_h_water, z, linestyle="--", color="cyan", label="Water pressure u")
-ax_h.plot(sigma_h_surcharge, z, linestyle="--", color="green", label="Surcharge: K·q")
+ax_h.plot(sigma_h_soil, z, linestyle="--", color="brown", label="Soil self-weight")
+ax_h.plot(sigma_h_water, z, linestyle="--", color="cyan", label="Water table")
+ax_h.plot(sigma_h_surcharge, z, linestyle="--", color="green", label="Surcharge")
 
 # ---- Total horizontal stress (main curve) ----
 ax_h.plot(
     sigma_h_total, z,
     linewidth=2.5, color="black",
-    label="Total horizontal stress σₕ"
+    label="Total horizontal stress"
 )
 
 # ---- Reference lines ----
