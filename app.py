@@ -596,10 +596,7 @@ def compute_scale(Ha, Hp, Th, Lh, Lt, Tsb):
         (VIEW_W * MARGIN) / base_L,
         (VIEW_H * MARGIN) / total_H
     )
-st.pyplot(draw_wall(
-    Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
-    gamma_a, phi_a, c_a,
-    gamma_p, phi_p, c_p
+
 
 
 # =======================
@@ -688,6 +685,12 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
     ax.axis("off")
 
     return fig
+
+st.pyplot(draw_wall(
+    Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
+    gamma_a, phi_a, c_a,
+    gamma_p, phi_p, c_p
+))
 
 
 #===================================================================================================
