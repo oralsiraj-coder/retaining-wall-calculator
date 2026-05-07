@@ -460,16 +460,17 @@ $\sigma_{v,\text{water}}(z):$ &nbsp; Vertical stress due water table
 $z_w:$ &nbsp;&nbsp; Water table depth  
 $\sigma_v(z):$ &nbsp; Effective vertical stress  
 """)
-#==============================================================Working zone ==============================================================================
+#==============================================================Working zone ==============================================================================#
 # =======================
 # HORIZONTAL STRESS DISTRIBUTION
 # =======================
 
 sigma_h_soil = Ka * sigma_v_soil
 sigma_h_surcharge = Ka * sigma_v_surcharge
-sigma_h_water = sigma_v_water
+sigma_h_water = -sigma_v_water
 
 sigma_h_total = sigma_h_soil + sigma_h_surcharge + sigma_h_water
+
 
 fig_h, ax_h = plt.subplots(figsize=(6, 8))
 
