@@ -524,6 +524,33 @@ ax_h.invert_yaxis()
 st.pyplot(fig_h)
 
 #===============================================================================TEST==============================================================================================
+
+def draw_stress_component(sigma, color):
+    x = x_wall + sigma * stress_scale
+    pts = list(zip(x, y_coords)) + list(zip([x_wall]*len(y_coords), reversed(y_coords)))
+    ax.add_patch(Polygon(pts, color=color, alpha=0.2))
+
+# Components
+draw_stress_component(sigma_h_soil_self_weight, "brown")
+draw_stress_component(sigma_h_surcharge, "orange")
+draw_stress_component(sigma_h_water, "blue")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import streamlit as st
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle, FancyArrowPatch, Polygon
