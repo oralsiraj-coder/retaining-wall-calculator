@@ -717,7 +717,7 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
 
         # Optional: draw envelope line
         x_env = [x_wall - shi * arrow_scale for shi in sigma_h]
-        y_env = [y0 + Th_s + (-zi) * scale for zi in z]
+        y_env = [y0 + Th_s + (zi) * scale for zi in z]
 
         ax.plot(x_env, y_env, color="red", linewidth=1.5)
 # =======================
