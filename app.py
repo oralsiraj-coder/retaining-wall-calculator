@@ -736,7 +736,7 @@ st.markdown(W5)
 W1 = Lt * Hp * gamma_p
 W2 = Th * (Tsb + Lh + Lt) * gamma_c
 W3 = Ha * Tsb * gamma_c
-W4 = Lh * Hw * gamma_a
+W4 = Lh * Hw * gamma_w
 W5 = Lh * (Ha - Hw) * (gamma_a - gamma_w)
 
 # -----------------------------
@@ -772,8 +772,8 @@ W_3 &= H_a T_{{sb}} \gamma_c \\
 st.latex(
 rf"""
 \begin{{aligned}}
-W_4 &= L_h H_w \gamma_a \\
-    &= {Lh:.2f} \cdot {Hw:.2f} \cdot {gamma_a:.1f} = {W4:.2f}
+W_4 &= L_h H_w \gamma_w \\
+    &= {Lh:.2f} \cdot {Hw:.2f} \cdot {gamma_w:.1f} = {W4:.2f}
 \end{{aligned}}
 """
 )
