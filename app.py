@@ -700,7 +700,7 @@ st.latex(rf"P_{{a1}} = {Pa1:.2f}")
 st.latex(r"y_{a1} = \frac{H_a}{3}")
 
 # =================== render the values ==========================
-st.latex(rf"y_{{a1}} = \frac{{{Ha:.1f}}}/{{3}})
+st.latex(rf"y_{{a1}} = \frac{{{Ha:.1f}}}{{3}}")
 st.latex(rf"y_{{a1}} = {Ha/3:.2f}")
 # --------------------------------------------------
 # Pa2 – Water
