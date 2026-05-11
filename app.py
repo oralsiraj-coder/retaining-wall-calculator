@@ -704,8 +704,8 @@ st.latex(r"y_{a2} = \frac{(H_a-H_w)}{3}")
 # --------------------------------------------------
 st.subheader("3. Earth Pressure Due to Surcharge (Pa₃)")
 
-st.latex(r"\sigma_h = K_a q")
-
+st.latex(r"P_{a3} = K_a q H_a")
+st.latex(r"y_{a3} = \frac{H_a}{2}")
 
 
 
