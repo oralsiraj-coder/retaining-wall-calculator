@@ -680,96 +680,46 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
     ax.axis("off")
 #=========================================================================================== WORking here 
 # =======================
-# HORIZONTAL STRESS DIAGRAM
 # =======================
-if z is not None and sigma_h is not None and len(z) > 0:
+    # DRAW HORIZONTAL STRESS ON WALL
+    # =======================
+    if z is not None and sigma_h is not None:
 
-    # ---- Wall reference ----
-    x_wall = x0 + Lh_s
-    y_top = y0 + Th_s
+        # Normalize stress for arrow scaling
+        sigma_max = max(abs(sigma_h)) if max(abs(sigma_h)) > 0 else 1.0
+        arrow_scale = 1.2 / sigma_max   # controls arrow length
 
-    # -----------------------
-    # ✅ AUTO-FIX ORIENTATION
-    # -----------------------
-    z_plot = np.array(z)
-    sigma_plot = np.array(sigma_h)
+        # Wall face x-position (back of stem)
+        x_wall = x0 + Lh_s
 
-    # Ensure depth is positive downward
-    if np.min(z_plot) < 0:
-        z_plot = -z_plot
+        for zi, shi in zip(z, sigma_h):
 
-    # Sort from top (0) → bottom (max depth)
-    sort_idx = np.argsort(z_plot)
-    z_plot = z_plot[sort_idx]
-    sigma_plot = sigma_plot[sort_idx]
+            # Convert depth z → drawing coordinate
+            y = y0 + Th_s + (-zi) * scale
 
-    # Ensure positive stress values
-    sigma_plot = np.abs(sigma_plot)
+            # Skip points outside wall height
+            if y < y0 + Th_s or y > y0 + Th_s + Ha_s:
+                continue
 
-    # -----------------------
-    # ✅ SCALE STRESS
-    # -----------------------
-    max_stress = np.max(sigma_plot)
-    if max_stress == 0:
-        max_stress = 1
+            # Arrow length proportional to stress
+            dx = shi * arrow_scale
 
-    stress_scale = 1.6 / max_stress
+            # Draw arrow (pointing toward wall)
+            ax.add_patch(FancyArrowPatch(
+                (x_wall - dx, y),   # start
+                (x_wall, y),        # end at wall
+                arrowstyle="->",
+                color="red",
+                lw=0.8,
+                mutation_scale=8,
+                alpha=0.8
+            ))
 
-    # -----------------------
-    # ✅ BUILD POLYGON
-    # -----------------------
-    points = []
+        # Optional: draw envelope line
+        x_env = [x_wall - shi * arrow_scale for shi in sigma_h]
+        y_env = [y0 + Th_s + (-zi) * scale for zi in z]
 
-    for zi, shi in zip(z_plot, sigma_plot):
-
-        # Vertical position (downward from top of wall)
-        y_plot = y_top + zi * scale
-
-        # Horizontal position (toward wall)
-        x_plot = x_wall - shi * stress_scale
-
-        points.append((x_plot, y_plot))
-
-    # -----------------------
-    # ✅ CLOSE POLYGON PROPERLY
-    # -----------------------
-    points.append((x_wall, y_top + max(z_plot) * scale))  # bottom of wall
-    points.append((x_wall, y_top))                        # top of wall
-
-    # -----------------------
-    # ✅ DRAW POLYGON
-    # -----------------------
-    stress_poly = Polygon(
-        points,
-        closed=True,
-        facecolor="red",
-        edgecolor="red",
-        alpha=0.4
-    )
-
-    stress_poly.set_zorder(10)  # ensure on top
-    ax.add_patch(stress_poly)
-``
-
-    # -----------------------
-    # ✅ CLOSE POLYGON
-    # -----------------------
-    points.append((x_wall, y_top + max(z_plot) * scale))  # bottom
-    points.append((x_wall, y_top))                        # top
-
-    # -----------------------
-    # ✅ DRAW
-    # -----------------------
-    stress_poly = Polygon(
-        points,
-        closed=True,
-        facecolor="red",
-        alpha=0.4,
-        edgecolor="red"
-    )
-
-    stress_poly.set_zorder(10)
-    ax.add_patch(stress_poly)
+        ax.plot(x_env, y_env, color="red", linewidth=1.5)
 # =======================
 # STREAMLIT UI
 # =======================
