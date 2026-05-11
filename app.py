@@ -684,7 +684,7 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
 # =======================
 if z is not None and sigma_h is not None and len(z) > 0:
 
-    # Wall reference
+    # ---- Wall reference ----
     x_wall = x0 + Lh_s
     y_top = y0 + Th_s
 
@@ -703,11 +703,11 @@ if z is not None and sigma_h is not None and len(z) > 0:
     z_plot = z_plot[sort_idx]
     sigma_plot = sigma_plot[sort_idx]
 
-    # Use absolute stress (prevents flip issues)
+    # Ensure stress is positive (optional but safe)
     sigma_plot = np.abs(sigma_plot)
 
     # -----------------------
-    # ✅ SCALING
+    # ✅ SCALE STRESS
     # -----------------------
     max_stress = np.max(sigma_plot)
     if max_stress == 0:
@@ -721,13 +721,8 @@ if z is not None and sigma_h is not None and len(z) > 0:
     points = []
 
     for zi, shi in zip(z_plot, sigma_plot):
-
-        # vertical position
-        y_plot = y_top + zi * scale
-
-        # horizontal (toward wall)
-        x_plot = x_wall - shi * stress_scale
-
+        y_plot = y_top + zi * scale            # vertical
+        x_plot = x_wall - shi * stress_scale   # toward wall
         points.append((x_plot, y_plot))
 
     # -----------------------
