@@ -716,35 +716,7 @@ if z is not None and sigma_h is not None:
         # =======================
         # ARROWS (based on real values)
         # =======================
-n = 6
-        idx = np.linspace(0, len(z)-1, n).astype(int)
 
-        for i in idx:
-            y_plot = y_top + (-z[i]) * scale
-            x_tip = x_wall
-            x_tail = x_wall + sigma_h[i] * stress_scale
-
-            ax.add_patch(FancyArrowPatch(
-                (x_tail, y_plot),
-                (x_tip, y_plot),
-                arrowstyle="->",
-                mutation_scale=10,
-                color="red",
-                lw=1
-            ))
-
-        # Label
-        ax.text(
-            x_wall + 0.4,
-            y_top + Ha_s * 0.5,
-            r"$\sigma_h$ (real)",
-            color="red",
-            rotation=90,
-            ha="center"
-        )
-
-                  
-    return fig
 
 # =======================
 # STREAMLIT UI
