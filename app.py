@@ -679,90 +679,129 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
     ax.set_aspect("equal")
     ax.axis("off")
 #=========================================================================================== WORking here 
-# =======================
-# DRAW MULTIPLE HORIZONTAL STRESS DIAGRAMS
-# =======================
-if z is not None:
+def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
+              gamma_a, phi_a, c_a,
+              gamma_p, phi_p, c_p,
+              z=None,
+              sigma_h_water=None,
+              sigma_h_surcharge=None,
+              sigma_h_effective=None,
+              sigma_h_total=None):
 
-    depth = -z  # convert to positive depth
+    # =======================
+    # SCALE
+    # =======================
+    scale = compute_scale(Ha, Hp, Th, Lh, Lt, Tsb)
 
-    diagrams = [
-        ("Water", sigma_h_water, "blue"),
-        ("Surcharge", sigma_h_surcharge, "green"),
-        ("Effective", sigma_h_effective, "red"),
-        ("Total", sigma_h_total, "black"),
-    ]
+    Ha_s = Ha * scale
+    Hw_s = Hw * scale
+    Hp_s = Hp * scale
+    Th_s = Th * scale
+    Lh_s = Lh * scale
+    Lt_s = Lt * scale
+    Tsb_s = Tsb * scale
 
-    gap_between = 6.0 * scale   # spacing between diagrams
-    x_origin = x0 + Lh_s        # wall position
+    base_L = Lh_s + Tsb_s + Lt_s
 
-    for i, (label, sigma_h, color) in enumerate(diagrams):
+    x0 = (VIEW_W - base_L) / 2
+    y0 = 0.8
+    gap = DRAFT_GAP
+    beta_rad = np.deg2rad(beta)
 
-        # Shift each diagram horizontally
-        x_wall_shifted = x_origin + i * gap_between
+    fig, ax = plt.subplots(figsize=(8, 10))
 
-        # Normalize scaling PER diagram
-        sigma_max = max(abs(sigma_h)) if max(abs(sigma_h)) > 0 else 1.0
-        arrow_scale = 1.2 / sigma_max
+    # =======================
+    # WALL + SOIL
+    # =======================
+    xL = x0 + gap
+    xR = x0 + Lh_s - gap
+    yB = y0 + Th_s + gap
+    yTL = yB + Ha_s
+    yTR = yTL - Lh_s * np.tan(beta_rad)
 
-        x_env = []
-        y_env = []
+    ax.add_patch(Polygon([(xL, yB), (xR, yB), (xR, yTR), (xL, yTL)],
+                         fc="#f4a261", ec="none"))
 
-        for zi, shi in zip(depth, sigma_h):
+    if Hw > 0:
+        ax.add_patch(Polygon(
+            [(xL, yTL - Hw_s), (xR, yTR - Hw_s), (xR, yTR), (xL, yTL)],
+            fc="#74c0fc", ec="none", alpha=0.6))
 
-            # Convert to drawing coordinates
-            y = y0 + Th_s + zi * scale
+    ax.add_patch(Rectangle((x0, y0), base_L, Th_s, fc="0.85", ec="black"))
+    ax.add_patch(Rectangle((x0 + Lh_s, y0 + Th_s),
+                           Tsb_s, Ha_s, fc="0.85", ec="black"))
 
-            # Skip outside wall
-            if y < y0 + Th_s or y > y0 + Th_s + Ha_s:
+    # =======================
+    # STRESS DIAGRAMS
+    # =======================
+    if z is not None:
+
+        depth = -z
+
+        diagrams = [
+            ("Water", sigma_h_water, "blue"),
+            ("Surcharge", sigma_h_surcharge, "green"),
+            ("Effective", sigma_h_effective, "red"),
+            ("Total", sigma_h_total, "black"),
+        ]
+
+        gap_between = 1.6   # FIXED spacing (no scale issue)
+        x_origin = x0 + Lh_s
+
+        for i, (label, sigma_h, color) in enumerate(diagrams):
+
+            if sigma_h is None:
                 continue
 
-            dx = shi * arrow_scale
+            x_shift = x_origin + i * gap_between
 
-            # Draw arrows
-            ax.add_patch(FancyArrowPatch(
-                (x_wall_shifted - dx, y),
-                (x_wall_shifted, y),
-                arrowstyle="->",
-                color=color,
-                lw=0.8,
-                mutation_scale=8,
-                alpha=0.8
-            ))
+            sigma_max = max(abs(sigma_h)) if max(abs(sigma_h)) > 0 else 1.0
+            arrow_scale = 1.2 / sigma_max
 
-            x_env.append(x_wall_shifted - dx)
-            y_env.append(y)
+            x_env = []
+            y_env = []
 
-        # ---- Draw envelope ----
-        ax.plot(x_env, y_env, color=color, linewidth=1.5)
+            for zi, shi in zip(depth, sigma_h):
 
-        # ---- Fill diagram ----
-        ax.fill_betweenx(
-            y_env,
-            x_env,
-            [x_wall_shifted]*len(x_env),
-            color=color,
-            alpha=0.15
-        )
+                y = y0 + Th_s + zi * scale
 
-        # ---- Label each diagram ----
-        ax.text(
-            x_wall_shifted,
-            y0 + Th_s + Ha_s + 0.3,
-            f"σh {label}",
-            ha="center",
-            fontsize=9,
-            color=color
-        )
+                if y < y0 + Th_s or y > y0 + Th_s + Ha_s:
+                    continue
 
+                dx = shi * arrow_scale
 
-st.pyplot(draw_wall(
-    Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
-    gamma_a, phi_a, c_a,
-    gamma_p, phi_p, c_p,
-    z=z,
-    sigma_h=sigma_h_total
-))
+                # arrows
+                ax.add_patch(FancyArrowPatch(
+                    (x_shift - dx, y),
+                    (x_shift, y),
+                    arrowstyle="->",
+                    color=color,
+                    lw=0.8,
+                    mutation_scale=8))
+
+                x_env.append(x_shift - dx)
+                y_env.append(y)
+
+            # envelope
+            ax.plot(x_env, y_env, color=color, lw=1.5)
+
+            # fill
+            ax.fill_betweenx(y_env, x_env, [x_shift]*len(x_env),
+                             color=color, alpha=0.15)
+
+            # label
+            ax.text(x_shift, y0 + Th_s + Ha_s + 0.4,
+                    f"σh {label}", ha="center", color=color)
+
+    # =======================
+    # FINAL FORMAT
+    # =======================
+    ax.set_xlim(0, VIEW_W)
+    ax.set_ylim(0, VIEW_H)
+    ax.set_aspect("equal")
+    ax.axis("off")
+
+    return fig
 
 
 
