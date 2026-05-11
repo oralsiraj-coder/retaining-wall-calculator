@@ -685,6 +685,23 @@ st.header("Earth Pressure Resultants")
 # --------------------------------------------------
 st.subheader("1. Horizontal force due to soil (Pa₁)")    
 Pa1 = 0.5 * Ka * gamma_a * Ha**2
+st.markdown(
+    """
+    <style>
+    .stMath {
+        text-align: left !important;
+        margin-left: 0rem !important;
+        margin-right: 0rem !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+``
+
+
+
+
 
 st.latex(
 rf"""
