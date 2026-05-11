@@ -581,9 +581,9 @@ y_plot = y0 + Th_s - z * scale
 # =======================
 gap = 2.0
 
-x_total_offset = x_wall + gap
-x_eff_offset   = x_wall + 2 * gap
-x_water_offset = x_wall + 3 * gap
+x_total_offset = x_wall
+x_eff_offset   = x_wall + 1 * gap
+x_water_offset = x_wall + 2 * gap
 
 # =======================
 # TOTAL STRESS (FIRST AFTER WALL)
