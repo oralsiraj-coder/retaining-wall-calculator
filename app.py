@@ -695,7 +695,7 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
         for zi, shi in zip(z, sigma_h):
 
             # Convert depth z → drawing coordinate
-            y = y0 + Th_s + (-zi) * scale
+            y = -(y0 + Th_s + (-zi) * scale)
 
             # Skip points outside wall height
             if y < y0 + Th_s or y > y0 + Th_s + Ha_s:
