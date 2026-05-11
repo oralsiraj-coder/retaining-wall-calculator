@@ -698,6 +698,27 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
 
         stress_scale = 1.6 / max_stress
 
+
+z_plot = np.array(z)
+sigma_h = np.array(sigma_h)
+
+# ✅ Step 1 — make depth positive (downward)
+if np.min(z_plot) < 0:
+    z_plot = -z_plot
+
+# ✅ Step 2 — sort from top → bottom
+sort_idx = np.argsort(z_plot)
+z_plot = z_plot[sort_idx]
+sigma_h = sigma_h[sort_idx]
+
+# ✅ Step 3 — ensure stress is positive outward
+# (optional safety: avoids strange flips)
+sigma_h = np.abs(sigma_h
+
+
+
+
+        
         points = []
 
         for zi, shi in zip(z_plot, sigma_h):
