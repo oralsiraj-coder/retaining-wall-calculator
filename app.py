@@ -523,7 +523,84 @@ ax_h.invert_yaxis()
 # ---- Show ----
 st.pyplot(fig_h)
 
+# =======================
+# WALL + HORIZONTAL STRESS DIAGRAM
+# =======================
 
+st.header("Wall with Horizontal Earth Pressure Diagram")
+
+fig_ws, ax_ws = plt.subplots(figsize=(7, 7))
+
+# ---- Reuse scaled geometry ----
+scale = compute_scale(Ha, Hp, Th, Lh, Lt, Tsb)
+
+Ha_s = Ha * scale
+Hp_s = Hp * scale
+Th_s = Th * scale
+Lh_s = Lh * scale
+Lt_s = Lt * scale
+Tsb_s = Tsb * scale
+
+base_L = Lh_s + Tsb_s + Lt_s
+
+x0 = (VIEW_W - base_L) / 2
+y0 = 0.8
+
+# ---- Draw wall again ----
+# Base slab
+ax_ws.add_patch(Rectangle((x0, y0), base_L, Th_s,
+                          fc="0.85", ec="black"))
+
+# Stem
+ax_ws.add_patch(Rectangle((x0 + Lh_s, y0 + Th_s),
+                          Tsb_s, Ha_s,
+                          fc="0.85", ec="black"))
+
+# ---- Stress scaling (IMPORTANT) ----
+# Scale stresses so diagram fits nicely
+stress_scale = (VIEW_W * 0.25) / max(abs(sigma_h_total))
+
+# Convert stress → horizontal length
+x_stress = sigma_h_total * stress_scale
+
+# Wall face location (back of wall)
+x_wall = x0 + Lh_s + Tsb_s
+
+# Convert depth coordinates to drawing coordinates
+y_plot = y0 + Th_s - z * scale   # because z is negative
+
+# ---- Draw stress distribution ----
+ax_ws.plot(x_wall + x_stress, y_plot, color="red", linewidth=2)
+
+# Fill area between wall and stress curve
+ax_ws.fill_betweenx(
+    y_plot,
+    x_wall,
+    x_wall + x_stress,
+    color="red",
+    alpha=0.3,
+    label="Horizontal stress σh"
+)
+
+# ---- Draw wall face line ----
+ax_ws.plot([x_wall, x_wall], [y0 + Th_s, y0 + Th_s + Ha_s],
+           color="black", linewidth=1.5)
+
+# ---- Labels ----
+ax_ws.text(x_wall + max(x_stress)*0.5,
+           y0 + Th_s + Ha_s,
+           "σh", color="red", ha="center")
+
+# ---- Axis setup ----
+ax_ws.set_xlim(0, VIEW_W)
+ax_ws.set_ylim(0, VIEW_H)
+ax_ws.set_aspect("equal")
+ax_ws.axis("off")
+
+ax_ws.set_title("Retaining Wall with Horizontal Stress Distribution")
+
+# ---- Show plot ----
+st.pyplot(fig_ws)
 
 
 
