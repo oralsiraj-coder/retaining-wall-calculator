@@ -783,6 +783,89 @@ W_5 &= L_h (H_a - H_w)(\gamma_a - \gamma_w) \\
 \end{{aligned}}
 """
 )
+
+st.markdown("""
+<style>
+/* Remove page side margins */
+.main .block-container {
+    padding-left: 0rem !important;
+    padding-right: 0rem !important;
+}
+
+/* Remove spacing around LaTeX */
+.stMath {
+    margin-top: 0rem !important;
+    margin-bottom: 0rem !important;
+    padding-top: 0rem !important;
+    padding-bottom: 0rem !important;
+    text-align: left !important;
+}
+
+/* Tighten markdown spacing */
+p {
+    margin-bottom: 0.2rem !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# ---- Compute values ----
+X_W_1 = Lt / 2
+X_W_2 = Lt + Tsb / 2
+X_W_3 = (Lt + Tsb + Lh) / 2
+X_W_4 = Lt + Tsb + Lh / 2
+X_W_5 = Lt + Tsb + Lh / 2
+
+
+# =======================
+# X_W1
+# =======================
+st.markdown("**Lever arm of weight W₁**")
+
+st.latex(r"X_{W1} = \frac{L_t}{2}")
+
+st.latex(rf"X_{{W1}} = \frac{{{Lt:.2f}}}{{2}} = {X_W_1:.2f}")
+
+
+# =======================
+# X_W2
+# =======================
+st.markdown("**Lever arm of weight W₂**")
+
+st.latex(r"X_{W2} = L_t + \frac{T_{sb}}{2}")
+
+st.latex(rf"X_{{W2}} = {Lt:.2f} + \frac{{{Tsb:.2f}}}{{2}} = {X_W_2:.2f}")
+
+
+# =======================
+# X_W3
+# =======================
+st.markdown("**Lever arm of weight W₃**")
+
+st.latex(r"X_{W3} = \frac{L_t + T_{sb} + L_h}{2}")
+
+st.latex(rf"X_{{W3}} = \frac{{{Lt:.2f} + {Tsb:.2f} + {Lh:.2f}}}{{2}} = {X_W_3:.2f}")
+
+
+# =======================
+# X_W4
+# =======================
+st.markdown("**Lever arm of weight W₄**")
+
+st.latex(r"X_{W4} = L_t + T_{sb} + \frac{L_h}{2}")
+
+st.latex(rf"X_{{W4}} = {Lt:.2f} + {Tsb:.2f} + \frac{{{Lh:.2f}}}{{2}} = {X_W_4:.2f}")
+
+
+# =======================
+# X_W5
+# =======================
+st.markdown("**Lever arm of weight W₅**")
+
+st.latex(r"X_{W5} = L_t + T_{sb} + \frac{L_h}{2}")
+
+st.latex(rf"X_{{W5}} = {Lt:.2f} + {Tsb:.2f} + \frac{{{Lh:.2f}}}{{2}} = {X_W_5:.2f}")
+
+
 #===================================================================================
 st.header("Stability check")
 st.markdown("""Sliding.  """)
