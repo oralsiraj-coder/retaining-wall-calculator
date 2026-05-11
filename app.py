@@ -698,10 +698,9 @@ st.latex(rf"y_{{a1}} = {Ha/3:.2f}")
 st.subheader("2. Horizontal force due to water table (Pa₂)")
 Pa2 = 0.5 * gamma_w * (Ha - Hw)**2
 st.latex(r"P_{a2} = \frac{1}{2} \gamma_w (H_a-H_w)^2")
-st.latex(  rf"P_{{a2}} = \frac{{1}}{{2}} \cdot {gamma_w:.2f} \cdot ({Ha:.1f} - {Hw:.1f})^2")
 st.latex(rf"P_{{a2}} = \frac{{1}}{{2}} \cdot {gamma_w:.2f} \cdot ({Ha:.1f} - {Hw:.1f})^2 = {Pa2:.2f}")
 st.latex(r"y_{a2} = \frac{(H_a-H_w)}{3}")
-
+st.latex( rf"y_{{a2}} = \frac{{({Ha:.1f} - {Hw:.1f})}}{{3}} = {(Ha - Hw)/3:.2f}")
 # --------------------------------------------------
 # Pa3 – Surcharge
 # --------------------------------------------------
