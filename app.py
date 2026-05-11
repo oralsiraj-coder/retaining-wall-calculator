@@ -728,6 +728,49 @@ st.markdown(W2)
 st.markdown(W3)
 st.markdown(W4)
 st.markdown(W5)
+#====================================================================================
+
+st.latex(rf"W_1 = L_t H_p \gamma_p = {Lt:.2f} \cdot {Hp:.2f} \cdot {gamma_p:.1f} = {W1:.2f}")
+
+st.latex(rf"W_2 = T_h (T_{{sb}} + L_h + L_t)\gamma_c = {Th:.2f} \cdot ({Tsb:.2f} + {Lh:.2f} + {Lt:.2f}) \cdot {gamma_c:.1f} = {W2:.2f}")
+
+st.latex(rf"W_3 = H_a T_{{sb}} \gamma_c = {Ha:.2f} \cdot {Tsb:.2f} \cdot {gamma_c:.1f} = {W3:.2f}")
+
+st.latex(rf"W_4 = L_h H_w \gamma_a = {Lh:.2f} \cdot {Hw:.2f} \cdot {gamma_a:.1f} = {W4:.2f}")
+
+st.latex(rf"W_5 = L_h (H_a - H_w)(\gamma_a - \gamma_w) = {Lh:.2f} \cdot ({Ha:.2f} - {Hw:.2f}) \cdot ({gamma_a:.1f} - {gamma_w:.2f}) = {W5:.2f}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #===================================================================================
