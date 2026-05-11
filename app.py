@@ -167,6 +167,8 @@ st.title("🧱 Retaining Wall Geometry Tool")
 
 st.sidebar.header("Surface Load")
 q = st.sidebar.number_input("Uniform surcharge q (kPa)", 0.0, 500.0, 0.0, 5.0)
+st.sidebar.header("Coefficient of friction")
+q = st.sidebar.number_input("Coefficient of friction μ ", 0.0, 1, 0.2, 0.01)
 
 st.sidebar.header("Geometry")
 Ha = st.sidebar.number_input("Ha", 1.0, 20.0, 6.0)
@@ -865,6 +867,38 @@ st.latex(r"X_{W5} = L_t + T_{sb} + \frac{L_h}{2}")
 
 st.latex(rf"X_{{W5}} = {Lt:.2f} + {Tsb:.2f} + \frac{{{Lh:.2f}}}{{2}} = {X_W_5:.2f}")
 #===============================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # =======================
 # MOMENTS (ABOUT TOE)
 # =======================
