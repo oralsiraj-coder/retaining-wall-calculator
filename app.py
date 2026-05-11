@@ -678,9 +678,8 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
     ax.set_ylim(0, VIEW_H)
     ax.set_aspect("equal")
     ax.axis("off")
-
-
-                   if z is not None and sigma_h is not None:
+#===========================================================================================
+if z is not None and sigma_h is not None:
 
         x_wall = x0L + Lh_s/2
         y_top = y0 + Th_s
