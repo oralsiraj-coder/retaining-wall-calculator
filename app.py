@@ -522,20 +522,18 @@ ax_h.invert_yaxis()
 
 # ---- Show ----
 st.pyplot(fig_h)
-
+#========# =======================
+# WALL + FULL HORIZONTAL STRESS DIAGRAM
 # =======================
-# WALL + HORIZONTAL STRESS DIAGRAM
-# =======================
 
-st.header("Wall with Horizontal Earth Pressure Diagram")
+st.header("Wall with Full Horizontal Stress Components")
 
 fig_ws, ax_ws = plt.subplots(figsize=(7, 7))
 
-# ---- Reuse scaled geometry ----
+# ---- Geometry scaling ----
 scale = compute_scale(Ha, Hp, Th, Lh, Lt, Tsb)
 
 Ha_s = Ha * scale
-Hp_s = Hp * scale
 Th_s = Th * scale
 Lh_s = Lh * scale
 Lt_s = Lt * scale
@@ -546,64 +544,98 @@ base_L = Lh_s + Tsb_s + Lt_s
 x0 = (VIEW_W - base_L) / 2
 y0 = 0.8
 
-# ---- Draw wall again ----
-# Base slab
+# ---- Draw wall ----
 ax_ws.add_patch(Rectangle((x0, y0), base_L, Th_s,
                           fc="0.85", ec="black"))
 
-# Stem
 ax_ws.add_patch(Rectangle((x0 + Lh_s, y0 + Th_s),
                           Tsb_s, Ha_s,
                           fc="0.85", ec="black"))
 
-# ---- Stress scaling (IMPORTANT) ----
-# Scale stresses so diagram fits nicely
+# ---- Stress components (IMPORTANT) ----
+sigma_h_eff = Ka * sigma_v_effective          # effective horizontal stress
+sigma_h_water = -sigma_v_water                # pore water pressure (positive)
+sigma_h_total = sigma_h_eff + sigma_h_water + Ka * sigma_v_surcharge
+
+
+# ---- Scale stress ----
 stress_scale = (VIEW_W * 0.25) / max(abs(sigma_h_total))
 
-# Convert stress → horizontal length
-x_stress = sigma_h_total * stress_scale
+x_eff = sigma_h_eff * stress_scale
+x_water = sigma_h_water * stress_scale
+x_total = sigma_h_total * stress_scale
 
-# Wall face location (back of wall)
+# Wall back face
 x_wall = x0 + Lh_s + Tsb_s
 
-# Convert depth coordinates to drawing coordinates
-y_plot = y0 + Th_s - z * scale   # because z is negative
+# Depth → plot coordinates
+y_plot = y0 + Th_s - z * scale
 
-# ---- Draw stress distribution ----
-ax_ws.plot(x_wall + x_stress, y_plot, color="red", linewidth=2)
+# =======================
+# DRAW COMPONENTS
+# =======================
 
-# Fill area between wall and stress curve
+# ---- Effective stress (soil) ----
+ax_ws.plot(x_wall + x_eff, y_plot,
+           color="orange", linestyle='--', linewidth=2)
 ax_ws.fill_betweenx(
     y_plot,
     x_wall,
-    x_wall + x_stress,
-    color="red",
-    alpha=0.3,
-    label="Horizontal stress σh"
+    x_wall + x_eff,
+    color="orange",
+    alpha=0.4,
+    label="Effective soil stress (Kₐ·σ'v)"
 )
 
-# ---- Draw wall face line ----
-ax_ws.plot([x_wall, x_wall], [y0 + Th_s, y0 + Th_s + Ha_s],
-           color="black", linewidth=1.5)
+# ---- Water pressure ----
+ax_ws.plot(x_wall + x_water, y_plot,
+           color="blue", linestyle='--', linewidth=2)
+ax_ws.fill_betweenx(
+    y_plot,
+    x_wall,
+    x_wall + x_water,
+    color="blue",
+    alpha=0.3,
+    label="Water pressure (u)"
+)
+
+# ---- Total stress (main curve) ----
+ax_ws.plot(x_wall + x_total, y_plot,
+           color="red", linewidth=2.5)
+
+ax_ws.fill_betweenx(
+    y_plot,
+    x_wall,
+    x_wall + x_total,
+    color="red",
+    alpha=0.2,
+    label="Total horizontal stress"
+)
+
+# ---- Wall face ----
+ax_ws.plot([x_wall, x_wall],
+           [y0 + Th_s, y0 + Th_s + Ha_s],
+           color="black", linewidth=2)
+
+# ---- Water level line ----
+ax_ws.axhline(y0 + Th_s - z_wt * scale,
+              color="blue", linestyle=":",
+              label="Water table")
 
 # ---- Labels ----
-ax_ws.text(x_wall + max(x_stress)*0.5,
+ax_ws.text(x_wall + max(x_total) * 0.6,
            y0 + Th_s + Ha_s,
            "σh", color="red", ha="center")
 
-# ---- Axis setup ----
+# ---- Axis ----
 ax_ws.set_xlim(0, VIEW_W)
 ax_ws.set_ylim(0, VIEW_H)
 ax_ws.set_aspect("equal")
 ax_ws.axis("off")
 
-ax_ws.set_title("Retaining Wall with Horizontal Stress Distribution")
+ax_ws.set_title("Retaining Wall with Horizontal Stress Components")
 
-# ---- Show plot ----
-st.pyplot(fig_ws)
+ax_ws.legend(loc="upper right")
 
-
-
-
-
-
+# ---- Show figure ----
+st.pyplot(fig_ws)===================================================================================================
