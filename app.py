@@ -708,8 +708,8 @@ Pa3 = Ka * q * Ha
 st.latex(r"P_{a3} = K_a q H_a")
 st.latex(rf"P_{{a3}} = {Ka:.3f} \cdot {q:.1f} \cdot {Ha:.1f} = {Pa3:.2f}")
 st.latex(rf"P_{{a3}} = {Ka:.3f} \cdot {q:.1f} \cdot {Ha:.1f} = {Pa3:.2f}")
-st.latex(r"y_{a3} = \frac{(H_a)}{3}")
-
+st.latex(r"y_{a3} = \frac{(H_a)}{2}")
+st.latex(rf"y_{{a3}} = \frac{{{Ha:.1f}}}{{2}} = {Ha/2:.2f}")
 
 
 
