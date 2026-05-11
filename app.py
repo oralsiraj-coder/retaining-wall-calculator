@@ -680,64 +680,80 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
     ax.axis("off")
 #=========================================================================================== WORking here 
 # =======================
-# DRAW HORIZONTAL STRESS ON WALL
+# DRAW MULTIPLE HORIZONTAL STRESS DIAGRAMS
 # =======================
-if z is not None and sigma_h is not None:
+if z is not None:
 
-    # Convert to positive depth (0 at top, +Ha at bottom)
-    depth = -z
+    depth = -z  # convert to positive depth
 
-    # Normalize stress for arrow scaling
-    sigma_max = max(abs(sigma_h)) if max(abs(sigma_h)) > 0 else 1.0
-    arrow_scale = 1.2 / sigma_max   # controls arrow length
+    diagrams = [
+        ("Water", sigma_h_water, "blue"),
+        ("Surcharge", sigma_h_surcharge, "green"),
+        ("Effective", sigma_h_effective, "red"),
+        ("Total", sigma_h_total, "black"),
+    ]
 
-    # Wall face x-position (back of stem)
-    x_wall = x0 + Lh_s
+    gap_between = 6.0 * scale   # spacing between diagrams
+    x_origin = x0 + Lh_s        # wall position
 
-    x_env = []
-    y_env = []
+    for i, (label, sigma_h, color) in enumerate(diagrams):
 
-    for zi, shi in zip(depth, sigma_h):
+        # Shift each diagram horizontally
+        x_wall_shifted = x_origin + i * gap_between
 
-        # Convert depth → drawing coordinate
-        y = y0 + Th_s + zi * scale
+        # Normalize scaling PER diagram
+        sigma_max = max(abs(sigma_h)) if max(abs(sigma_h)) > 0 else 1.0
+        arrow_scale = 1.2 / sigma_max
 
-        # Skip points outside wall height
-        if y < y0 + Th_s or y > y0 + Th_s + Ha_s:
-            continue
+        x_env = []
+        y_env = []
 
-        # Arrow length proportional to stress
-        dx = shi * arrow_scale
+        for zi, shi in zip(depth, sigma_h):
 
-        # Draw arrow (towards wall)
-        ax.add_patch(FancyArrowPatch(
-            (x_wall - dx, y),   # start
-            (x_wall, y),        # end at wall
-            arrowstyle="->",
-            color="red",
-            lw=0.8,
-            mutation_scale=8,
-            alpha=0.8
-        ))
+            # Convert to drawing coordinates
+            y = y0 + Th_s + zi * scale
 
-        # Store envelope points
-        x_env.append(x_wall - dx)
-        y_env.append(y)
+            # Skip outside wall
+            if y < y0 + Th_s or y > y0 + Th_s + Ha_s:
+                continue
 
-    # ---- Draw stress envelope ----
-    ax.plot(x_env, y_env, color="red", linewidth=1.5)
+            dx = shi * arrow_scale
 
-    # ---- Optional: fill pressure diagram ----
-    ax.fill_betweenx(
-        y_env,
-        x_env,
-        [x_wall]*len(x_env),
-        color="red",
-        alpha=0.15
-    )
-# =======================
-# STREAMLIT UI
-# =======================
+            # Draw arrows
+            ax.add_patch(FancyArrowPatch(
+                (x_wall_shifted - dx, y),
+                (x_wall_shifted, y),
+                arrowstyle="->",
+                color=color,
+                lw=0.8,
+                mutation_scale=8,
+                alpha=0.8
+            ))
+
+            x_env.append(x_wall_shifted - dx)
+            y_env.append(y)
+
+        # ---- Draw envelope ----
+        ax.plot(x_env, y_env, color=color, linewidth=1.5)
+
+        # ---- Fill diagram ----
+        ax.fill_betweenx(
+            y_env,
+            x_env,
+            [x_wall_shifted]*len(x_env),
+            color=color,
+            alpha=0.15
+        )
+
+        # ---- Label each diagram ----
+        ax.text(
+            x_wall_shifted,
+            y0 + Th_s + Ha_s + 0.3,
+            f"σh {label}",
+            ha="center",
+            fontsize=9,
+            color=color
+        )
 
 
 st.pyplot(draw_wall(
