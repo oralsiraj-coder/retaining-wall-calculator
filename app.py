@@ -736,7 +736,7 @@ st.markdown(W5)
 W1 = Lt * Hp * gamma_p
 W2 = Th * (Tsb + Lh + Lt) * gamma_c
 W3 = Ha * Tsb * gamma_c
-W4 = Lh * Hw * gamma_w
+W4 = Lh * Hw * gamma_a
 W5 = Lh * (Ha - Hw) * (gamma_a - gamma_w)
 
 # -----------------------------
