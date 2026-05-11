@@ -742,7 +742,6 @@ plt.tight_layout()
 
 # Show in Streamlit
 st.pyplot(fig_ref)
-``
 
 
 
