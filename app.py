@@ -685,15 +685,10 @@ st.header("Earth Pressure Resultants")
 # --------------------------------------------------
 st.subheader("1. Earth Pressure Due to Soil (Pa₁)")
 
-st.latex(r"\sigma_h(z) = K_a \, \gamma_a \, z")
-
-st.latex(r"P_{a1} = \int_0^{H_a} K_a \gamma_a z \, dz")
-
 st.latex(r"P_{a1} = \frac{1}{2} K_a \gamma_a H_a^2")
 
 st.latex(r"y_{a1} = \frac{H_a}{3}")
 
-st.markdown("Application point: **H/3 from base**")
 
 # --------------------------------------------------
 # Pa2 – Water
