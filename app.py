@@ -679,67 +679,29 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
     ax.set_aspect("equal")
     ax.axis("off")
 #=========================================================================================== WORking here 
-from matplotlib.patches import Polygon
-import numpy as np
+points = []
 
-def draw_stress_diagram(ax, x0, y0, Lh_s, Th_s, Ha_s, z, sigma_h_total, scale=1.0):
-    """
-    Draw horizontal stress diagram on a retaining wall.
+for zi, shi in zip(z, sigma_h):
 
-    Parameters:
-    ax        : matplotlib axis
-    x0, y0    : base coordinates
-    Lh_s      : wall thickness/offset
-    Th_s      : top slab thickness
-    Ha_s      : wall height
-    z         : depth array (0 = top, positive downward)
-    sigma_h   : horizontal stress array
-    scale     : vertical scaling factor
-    """
+    y_plot = y_top + zi * scale
+    x_plot = x_wall - shi * stress_scale   # try + if needed
 
-    # Safety check
-    if z is None or sigma_h_total is None or len(z) == 0:
-        return
+    points.append((x_plot, y_plot))
 
-    # Wall reference position
-    x_wall = x0 + Lh_s
-    y_top = y0 + Th_s
+# Close polygon correctly
+points.append((x_wall, y_top + max(z) * scale))
+points.append((x_wall, y_top + min(z) * scale))
 
-    # Normalize stress for plotting
-    max_stress = np.max(np.abs(sigma_h_total))
-    if max_stress == 0:
-        max_stress = 1
+stress_poly = Polygon(
+    points,
+    closed=True,
+    facecolor="red",
+    alpha=0.5,
+    edgecolor="red"
+)
 
-    stress_scale = 1.6 / max_stress
-
-    # Build polygon
-    points = []
-
-    for zi, shi in zip(z, sigma_h_total):
-
-        # ✅ Vertical position (top → downward)
-        y_plot = y_top + zi * scale
-
-        # ✅ Horizontal position (toward wall)
-        x_plot = x_wall - shi * stress_scale
-
-        points.append((x_plot, y_plot))
-
-    # ✅ Close polygon along the wall
-    points.append((x_wall, y_top + max(z) * scale))  # bottom
-    points.append((x_wall, y_top))                  # top
-
-    # Create and draw polygon
-    stress_poly = Polygon(
-        points,
-        closed=True,
-        facecolor="red",
-        alpha=0.3,
-        edgecolor="red"
-    )
-
-    ax.add_patch(stress_poly)
-    
+stress_poly.set_zorder(10)
+ax.add_patch(stress_poly)
   
 
 
