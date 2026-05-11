@@ -663,3 +663,13 @@ ax_ws.legend(loc="upper right")
 
 # ---- Show figure ----
 st.pyplot(fig_ws)
+
+
+=============================================================================
+
+st.header("Stability check")
+st.markdown(
+    """
+    Sliding. 
+    """
+)
