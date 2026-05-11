@@ -168,7 +168,7 @@ st.title("🧱 Retaining Wall Geometry Tool")
 st.sidebar.header("Surface Load")
 q = st.sidebar.number_input("Uniform surcharge q (kPa)", 0.0, 500.0, 0.0, 5.0)
 st.sidebar.header("Coefficient of friction")
-q = st.sidebar.number_input("Coefficient of friction μ ", 0.0, 1, 0.2, 0.01)
+μ = st.sidebar.number_input("Coefficient of friction μ ", 0.0, 1, 0.2, 0.01)
 
 st.sidebar.header("Geometry")
 Ha = st.sidebar.number_input("Ha", 1.0, 20.0, 6.0)
