@@ -694,16 +694,16 @@ if z is not None and sigma_h is not None and len(z) > 0:
     z_plot = np.array(z)
     sigma_plot = np.array(sigma_h)
 
-    # Make depth positive downward
+    # Ensure depth is positive downward
     if np.min(z_plot) < 0:
         z_plot = -z_plot
 
-    # Sort from top → bottom
+    # Sort from top (0) → bottom (max depth)
     sort_idx = np.argsort(z_plot)
     z_plot = z_plot[sort_idx]
     sigma_plot = sigma_plot[sort_idx]
 
-    # Ensure stress is positive (optional but safe)
+    # Ensure positive stress values
     sigma_plot = np.abs(sigma_plot)
 
     # -----------------------
@@ -721,9 +721,35 @@ if z is not None and sigma_h is not None and len(z) > 0:
     points = []
 
     for zi, shi in zip(z_plot, sigma_plot):
-        y_plot = y_top + zi * scale            # vertical
-        x_plot = x_wall - shi * stress_scale   # toward wall
+
+        # Vertical position (downward from top of wall)
+        y_plot = y_top + zi * scale
+
+        # Horizontal position (toward wall)
+        x_plot = x_wall - shi * stress_scale
+
         points.append((x_plot, y_plot))
+
+    # -----------------------
+    # ✅ CLOSE POLYGON PROPERLY
+    # -----------------------
+    points.append((x_wall, y_top + max(z_plot) * scale))  # bottom of wall
+    points.append((x_wall, y_top))                        # top of wall
+
+    # -----------------------
+    # ✅ DRAW POLYGON
+    # -----------------------
+    stress_poly = Polygon(
+        points,
+        closed=True,
+        facecolor="red",
+        edgecolor="red",
+        alpha=0.4
+    )
+
+    stress_poly.set_zorder(10)  # ensure on top
+    ax.add_patch(stress_poly)
+``
 
     # -----------------------
     # ✅ CLOSE POLYGON
