@@ -703,7 +703,7 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
         for zi, shi in zip(z_plot, sigma_h):
 
             # ✅ Vertical position (downward)
-            y_plot = y_top + zi * scale
+            y_plot = y_top - zi * scale
 
             # ✅ Horizontal (toward wall)
             x_plot = x_wall + shi * stress_scale
