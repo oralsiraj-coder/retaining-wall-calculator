@@ -667,6 +667,13 @@ st.pyplot(fig_ws)
 
 #=============================================================================
 
+# =======================
+# REFERENCE DIAGRAM
+# =======================
+st.header("Reference Earth Pressure Diagram")
+
+st.image("image.png", caption="Classical earth pressure decomposition", use_container_width=True)
+
 
 
 
