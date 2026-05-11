@@ -783,61 +783,6 @@ W_5 &= L_h (H_a - H_w)(\gamma_a - \gamma_w) \\
 \end{{aligned}}
 """
 )
-
-# =======================
-# LEVER ARMS (FULL BLOCK)
-# =======================
-
-# ---- Compute values ----
-X_W_1 = Lt / 2
-X_W_2 = Lt + Tsb / 2
-X_W_3 = (Lt + Tsb + Lh) / 2
-X_W_4 = Lt + Tsb + Lh / 2
-X_W_5 = Lt + Tsb + Lh / 2
-
-st.latex(
-rf"""
-\begin{{aligned}}
-\text{{{{Lever arm of W_1:}}}}\\
-X_{{W1}}&=\frac{{L_t}}{{2}}\\
-&=\frac{{{Lt:.2f}}}{{2}}\\
-&={X_W_1:.2f}\\
-\text{{{{Lever arm of W_2:}}}}\\
-X_{{W2}}&=L_t+\frac{{T_{{sb}}}}{{2}}\\
-&={Lt:.2f}+\frac{{{Tsb:.2f}}}{{2}}\\
-&={X_W_2:.2f}\\
-\text{{{{Lever arm of W_3:}}}}\\
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #===================================================================================
 st.header("Stability check")
 st.markdown("""Sliding.  """)
