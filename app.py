@@ -716,7 +716,7 @@ if z is not None and sigma_h is not None:
         # =======================
         # ARROWS (based on real values)
         # =======================
-    n = 6
+n = 6
         idx = np.linspace(0, len(z)-1, n).astype(int)
 
         for i in idx:
