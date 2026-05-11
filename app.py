@@ -529,7 +529,7 @@ st.pyplot(fig_h)
 
 st.header("Wall with Full Horizontal Stress Components")
 
-fig_ws, ax_ws = plt.subplots(figsize=(7, 10))
+fig_ws, ax_ws = plt.subplots(figsize=(10, 10))
 
 # ---- Geometry scaling ----
 scale = compute_scale(Ha, Hp, Th, Lh, Lt, Tsb)
