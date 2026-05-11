@@ -680,46 +680,61 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
     ax.axis("off")
 #=========================================================================================== WORking here 
 # =======================
-    # DRAW HORIZONTAL STRESS ON WALL
-    # =======================
-    if z is not None and sigma_h is not None:
+# DRAW HORIZONTAL STRESS ON WALL
+# =======================
+if z is not None and sigma_h is not None:
 
-        # Normalize stress for arrow scaling
-        sigma_max = max(abs(sigma_h)) if max(abs(sigma_h)) > 0 else 1.0
-        arrow_scale = 1.2 / sigma_max   # controls arrow length
+    # Convert to positive depth (0 at top, +Ha at bottom)
+    depth = -z
 
-        # Wall face x-position (back of stem)
-        x_wall = x0 + Lh_s
+    # Normalize stress for arrow scaling
+    sigma_max = max(abs(sigma_h)) if max(abs(sigma_h)) > 0 else 1.0
+    arrow_scale = 1.2 / sigma_max   # controls arrow length
 
-        z_flipped = np.flip(z)
-        sigma_h_flipped = np.flip(sigma_h)
+    # Wall face x-position (back of stem)
+    x_wall = x0 + Lh_s
 
-        for zi, shi in zip(z_flipped, sigma_h_flipped):
-            y = y0 + Th_s + (-zi) * scale
+    x_env = []
+    y_env = []
 
-            # Skip points outside wall height
-            if y < y0 + Th_s or y > y0 + Th_s + Ha_s:
-                continue
+    for zi, shi in zip(depth, sigma_h):
 
-            # Arrow length proportional to stress
-            dx = shi * arrow_scale
+        # Convert depth → drawing coordinate
+        y = y0 + Th_s + zi * scale
 
-            # Draw arrow (pointing toward wall)
-            ax.add_patch(FancyArrowPatch(
-                (x_wall - dx, y),   # start
-                (x_wall, y),        # end at wall
-                arrowstyle="->",
-                color="red",
-                lw=0.8,
-                mutation_scale=8,
-                alpha=0.8
-            ))
+        # Skip points outside wall height
+        if y < y0 + Th_s or y > y0 + Th_s + Ha_s:
+            continue
 
-        # Optional: draw envelope line
-        x_env = [x_wall - shi * arrow_scale for shi in sigma_h]
-        y_env = [y0 + Th_s + (-zi) * scale for zi in z]
+        # Arrow length proportional to stress
+        dx = shi * arrow_scale
 
-        ax.plot(x_env, y_env, color="red", linewidth=1.5)
+        # Draw arrow (towards wall)
+        ax.add_patch(FancyArrowPatch(
+            (x_wall - dx, y),   # start
+            (x_wall, y),        # end at wall
+            arrowstyle="->",
+            color="red",
+            lw=0.8,
+            mutation_scale=8,
+            alpha=0.8
+        ))
+
+        # Store envelope points
+        x_env.append(x_wall - dx)
+        y_env.append(y)
+
+    # ---- Draw stress envelope ----
+    ax.plot(x_env, y_env, color="red", linewidth=1.5)
+
+    # ---- Optional: fill pressure diagram ----
+    ax.fill_betweenx(
+        y_env,
+        x_env,
+        [x_wall]*len(x_env),
+        color="red",
+        alpha=0.15
+    )
 # =======================
 # STREAMLIT UI
 # =======================
