@@ -730,17 +730,63 @@ st.markdown(W4)
 st.markdown(W5)
 #====================================================================================
 
-st.latex(rf"W_1 = L_t H_p \gamma_p = {Lt:.2f} \cdot {Hp:.2f} \cdot {gamma_p:.1f} = {W1:.2f}")
+# -----------------------------
+# COMPUTE WEIGHTS
+# -----------------------------
+W1 = Lt * Hp * gamma_p
+W2 = Th * (Tsb + Lh + Lt) * gamma_c
+W3 = Ha * Tsb * gamma_c
+W4 = Lh * Hw * gamma_a
+W5 = Lh * (Ha - Hw) * (gamma_a - gamma_w)
 
-st.latex(rf"W_2 = T_h (T_{{sb}} + L_h + L_t)\gamma_c = {Th:.2f} \cdot ({Tsb:.2f} + {Lh:.2f} + {Lt:.2f}) \cdot {gamma_c:.1f} = {W2:.2f}")
+# -----------------------------
+# RENDER EQUATIONS
+# -----------------------------
+st.latex(
+rf"""
+\begin{{aligned}}
+W_1 &= L_t H_p \gamma_p \\
+    &= {Lt:.2f} \cdot {Hp:.2f} \cdot {gamma_p:.1f} = {W1:.2f}
+\end{{aligned}}
+"""
+)
 
-st.latex(rf"W_3 = H_a T_{{sb}} \gamma_c = {Ha:.2f} \cdot {Tsb:.2f} \cdot {gamma_c:.1f} = {W3:.2f}")
+st.latex(
+rf"""
+\begin{{aligned}}
+W_2 &= T_h (T_{{sb}} + L_h + L_t) \gamma_c \\
+    &= {Th:.2f} \cdot ({Tsb:.2f} + {Lh:.2f} + {Lt:.2f}) \cdot {gamma_c:.1f} = {W2:.2f}
+\end{{aligned}}
+"""
+)
 
-st.latex(rf"W_4 = L_h H_w \gamma_a = {Lh:.2f} \cdot {Hw:.2f} \cdot {gamma_a:.1f} = {W4:.2f}")
+st.latex(
+rf"""
+\begin{{aligned}}
+W_3 &= H_a T_{{sb}} \gamma_c \\
+    &= {Ha:.2f} \cdot {Tsb:.2f} \cdot {gamma_c:.1f} = {W3:.2f}
+\end{{aligned}}
+"""
+)
 
-st.latex(rf"W_5 = L_h (H_a - H_w)(\gamma_a - \gamma_w) = {Lh:.2f} \cdot ({Ha:.2f} - {Hw:.2f}) \cdot ({gamma_a:.1f} - {gamma_w:.2f}) = {W5:.2f}")
+st.latex(
+rf"""
+\begin{{aligned}}
+W_4 &= L_h H_w \gamma_a \\
+    &= {Lh:.2f} \cdot {Hw:.2f} \cdot {gamma_a:.1f} = {W4:.2f}
+\end{{aligned}}
+"""
+)
 
-
+st.latex(
+rf"""
+\begin{{aligned}}
+W_5 &= L_h (H_a - H_w)(\gamma_a - \gamma_w) \\
+    &= {Lh:.2f} \cdot ({Ha:.2f} - {Hw:.2f}) \cdot ({gamma_a:.1f} - {gamma_w:.2f}) = {W5:.2f}
+\end{{aligned}}
+"""
+)
+``
 
 
 
