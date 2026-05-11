@@ -864,6 +864,103 @@ st.markdown("**Lever arm of weight W₅**")
 st.latex(r"X_{W5} = L_t + T_{sb} + \frac{L_h}{2}")
 
 st.latex(rf"X_{{W5}} = {Lt:.2f} + {Tsb:.2f} + \frac{{{Lh:.2f}}}{{2}} = {X_W_5:.2f}")
+#===============================================================
+# =======================
+# MOMENTS (ABOUT TOE)
+# =======================
+
+M1 = W1 * X_W_1
+M2 = W2 * X_W_2
+M3 = W3 * X_W_3
+M4 = W4 * X_W_4
+M5 = W5 * X_W_5
+
+st.latex(
+rf"""
+\begin{{aligned}}
+M_1&=W_1 X_{{W1}} = {W1:.2f}\cdot {X_W_1:.2f} = {M1:.2f}\\
+M_2&=W_2 X_{{W2}} = {W2:.2f}\cdot {X_W_2:.2f} = {M2:.2f}\\
+M_3&=W_3 X_{{W3}} = {W3:.2f}\cdot {X_W_3:.2f} = {M3:.2f}\\
+M_4&=W_4 X_{{W4}} = {W4:.2f}\cdot {X_W_4:.2f} = {M4:.2f}\\
+M_5&=W_5 X_{{W5}} = {W5:.2f}\cdot {X_W_5:.2f} = {M5:.2f}
+\end{{aligned}}
+"""
+)
+
+# =======================
+# SLIDING SAFETY FACTOR
+# =======================
+
+# Total vertical load
+N = W1 + W2 + W3 + W4 + W5
+
+# Friction coefficient (example: tan(phi_p))
+mu = math.tan(math.radians(phi_p))
+
+# Resisting force
+R = mu * N + Kp * 0.5 * gamma_p * Hp**2
+
+# Driving force
+Pa = Pa1 + Pa2 + Pa3
+
+FS = R / Pa
+
+st.latex(
+rf"""
+\begin{{aligned}}
+FS &= \frac{{R}}{{P_a}} \\
+   &= \frac{{{R:.2f}}}{{{Pa:.2f}}} \\
+   &= {FS:.2f}
+\end{{aligned}}
+"""
+)
+
+import pandas as pd
+
+summary = pd.DataFrame({
+    "Component": ["W1", "W2", "W3", "W4", "W5"],
+    "Force (kN)": [W1, W2, W3, W4, W5],
+    "Lever Arm (m)": [X_W_1, X_W_2, X_W_3, X_W_4, X_W_5],
+    "Moment (kNm)": [M1, M2, M3, M4, M5]
+})
+
+st.subheader("Summary Table")
+
+st.dataframe(
+    summary.style.format({
+        "Force (kN)": "{:.2f}",
+        "Lever Arm (m)": "{:.2f}",
+        "Moment (kNm)": "{:.2f}"
+    }),
+    use_container_width=True
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #===================================================================================
