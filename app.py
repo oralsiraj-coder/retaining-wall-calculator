@@ -745,11 +745,11 @@ X_W_2 = Lt+Tsb/2
 X_W_3 = (Lt+Tbs+Lh)/2
 X_W_4 = Lt+Tbs+Lh/2
 X_W_5 = Lt+Tbs+Lh/2
-
-
-
-
-
+st.markdown(X_W_1)
+st.markdown(X_W_2)
+st.markdown(X_W_3)
+st.markdown(X_W_4)
+st.markdown(X_W_5)
 
 
 # -----------------------------
