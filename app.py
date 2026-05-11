@@ -689,7 +689,7 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
         y_top = y0 + Th_s
 
         # Convert z to positive depth (your z is negative!)
-        z_plot = -z   # ✅ VERY IMPORTANT
+        z_plot = z   # ✅ VERY IMPORTANT
 
         # Scale stresses for visualization
         max_stress = np.max(np.abs(sigma_h))
@@ -706,7 +706,7 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
             y_plot = y_top + zi * scale
 
             # ✅ Horizontal (toward wall)
-            x_plot = x_wall - shi * stress_scale
+            x_plot = x_wall + shi * stress_scale
 
             points.append((x_plot, y_plot))
 
