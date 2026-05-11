@@ -695,11 +695,9 @@ st.latex(r"y_{a1} = \frac{H_a}{3}")
 # --------------------------------------------------
 st.subheader("2. Horizontal force due to water table (Pa₂)")
 
-st.latex(r"P_{a2} = \frac{1}{2} \gamma_(w H_a-H_w)^2")
+st.latex(r"P_{a2} = \frac{1}{2} \gamma_w (H_a-H_w)^2")
 
-st.latex(r"y_{a2} = \frac{H_w}{3}")
-
-st.markdown("Application point: **Hw/3 from base of water zone**")
+st.latex(r"y_{a2} = \frac{(H_a-H_w)}{3}")
 
 # --------------------------------------------------
 # Pa3 – Surcharge
