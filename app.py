@@ -706,7 +706,7 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
             y_plot = y_top - zi * scale
 
             # ✅ Horizontal (toward wall)
-            x_plot = x_wall + shi * stress_scale
+            x_plot = x_wall - shi * stress_scale
 
             points.append((x_plot, y_plot))
 
