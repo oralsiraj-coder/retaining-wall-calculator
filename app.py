@@ -714,6 +714,18 @@ st.latex(rf"y_{{a3}} = \frac{{{Ha:.1f}}}{{2}} = {Ha/2:.2f}")
 st.subheader("Gravity loads ")
 st.markdown("""A cantilever retaining wall relies on gravity loads to provide stabilizing forces against sliding and overturning failure. These stabilizing actions arise mainly from the self-weight of the wall, the weight of the retained soil above the heel, and any additional surcharge loads applied at the ground surface.""")
 
+st.markdown("""Sliding.  """)
+w1 = Lt *HP
+W2 = th * ( Tsb+Lh+Lt)
+W3 = Ha *  Tsb
+W4 = Lh * (Hw)
+W5 = Lh * (Ha-Hw)
+
+st.markdown(W1)
+st.markdown(W2)
+st.markdown(W3)
+st.markdown(W4)
+st.markdown(W5)
 
 
 #===================================================================================
