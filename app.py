@@ -681,23 +681,9 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
 #=========================================================================================== WORking here 
 # =======================
     # DRAW HORIZONTAL STRESS DIAGRAM
-                  
-    if z is not None and sigma_h is not None and len(z) > 0:
-
-        # Wall reference
-        x_wall = x0 + Lh_s
-        y_top = y0 + Th_s
-
-        # Convert z to positive depth (your z is negative!)
-        z_plot = -z   # ✅ VERY IMPORTANT
-
-        # Scale stresses for visualization
-        max_stress = np.max(np.abs(sigma_h))
-        if max_stress == 0:
-            max_stress = 1
-
-        stress_scale = 1.6 / max_stress
-
+         # =======================
+# AUTO-FIX ORIENTATION
+# =======================
 
 z_plot = np.array(z)
 sigma_h = np.array(sigma_h)
@@ -713,11 +699,7 @@ sigma_h = sigma_h[sort_idx]
 
 # ✅ Step 3 — ensure stress is positive outward
 # (optional safety: avoids strange flips)
-sigma_h = np.abs(sigma_h
-
-
-
-
+sigma_h = np.abs(sigma_h)         
         
         points = []
 
