@@ -618,7 +618,7 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
     gap = DRAFT_GAP
     beta_rad = np.deg2rad(beta)
 
-    fig, ax = plt.subplots(figsize=(7, 7))
+    fig, ax = plt.subplots(figsize=(7, 10))
 
     # Active soil
     xL = x0 + gap
