@@ -683,7 +683,7 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
     # =======================
     if z is not None and sigma_h is not None:
 
-        x_wall = x0L + Lh_s
+        x_wall = x0L + Lh_s/2
         y_top = y0 + Th_s
 
         # Scale stresses for visualization
