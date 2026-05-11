@@ -691,9 +691,10 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
         # Wall face x-position (back of stem)
         x_wall = x0 + Lh_s
 
-        for zi, shi in zip(z, sigma_h):
+        z_flipped = np.flip(z)
+        sigma_h_flipped = np.flip(sigma_h)
 
-            # Convert depth z → drawing coordinate
+        for zi, shi in zip(z_flipped, sigma_h_flipped):
             y = y0 + Th_s + (-zi) * scale
 
             # Skip points outside wall height
