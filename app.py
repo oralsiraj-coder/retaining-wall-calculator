@@ -715,11 +715,13 @@ st.subheader("Gravity loads ")
 st.markdown("""A cantilever retaining wall relies on gravity loads to provide stabilizing forces against sliding and overturning failure. These stabilizing actions arise mainly from the self-weight of the wall, the weight of the retained soil above the heel, and any additional surcharge loads applied at the ground surface.""")
 
 st.markdown("""Sliding.  """)
-W1 = Lt *Hp
-W2 = Th * ( Tsb+Lh+Lt)
-W3 = Ha *  Tsb
-W4 = Lh * (Hw)
-W5 = Lh * (Ha-Hw)
+gamma_c= 25
+
+W1 = Lt * Hp * gamma_p
+W2 = Th * ( Tsb+Lh+Lt) * gamma_c
+W3 = Ha *  Tsb * gamma_c
+W4 = Lh * (Hw) * gamma_a
+W5 = Lh * (Ha-Hw) * (gamma_a-gamma_w)
 
 st.markdown(W1)
 st.markdown(W2)
