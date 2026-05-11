@@ -684,6 +684,10 @@ st.header("Earth Pressure Resultants")
 # Pa1 – Soil
 # --------------------------------------------------
 st.subheader("1. Horizontal force due to soil (Pa₁)")    
+
+Pa1 = 0.5 * Ka * gamma_a * Ha**2
+
+
 # =================== render the symboles ==========================
 st.latex(r"P_{a1} = \frac{1}{2} K_a \gamma_a H_a^2")      
 # =================== render the numbers ==========================
