@@ -674,6 +674,48 @@ st.header("Reference Earth Pressure Diagram")
 
 st.image("image.png", caption="Classical earth pressure decomposition", use_container_width=True)
 
+#=====================================================================================
+# =======================
+# EARTH PRESSURE FORCES
+# =======================
+st.header("Earth Pressure Resultants")
+
+# --------------------------------------------------
+# Pa1 – Soil
+# --------------------------------------------------
+st.subheader("1. Earth Pressure Due to Soil (Pa₁)")
+
+st.latex(r"\sigma_h(z) = K_a \, \gamma_a \, z")
+
+st.latex(r"P_{a1} = \int_0^{H_a} K_a \gamma_a z \, dz")
+
+st.latex(r"P_{a1} = \frac{1}{2} K_a \gamma_a H_a^2")
+
+st.latex(r"y_{a1} = \frac{H_a}{3}")
+
+st.markdown("Application point: **H/3 from base**")
+
+# --------------------------------------------------
+# Pa2 – Water
+# --------------------------------------------------
+st.subheader("2. Earth Pressure Due to Water (Pa₂)")
+
+st.latex(r"u(z) = \gamma_w z")
+
+st.latex(r"P_{a2} = \int_0^{H_w} \gamma_w z \, dz")
+
+st.latex(r"P_{a2} = \frac{1}{2} \gamma_w H_w^2")
+
+st.latex(r"y_{a2} = \frac{H_w}{3}")
+
+st.markdown("Application point: **Hw/3 from base of water zone**")
+
+# --------------------------------------------------
+# Pa3 – Surcharge
+# --------------------------------------------------
+st.subheader("3. Earth Pressure Due to Surcharge (Pa₃)")
+
+st.latex(r"\sigma_h = K_a q")
 
 
 
