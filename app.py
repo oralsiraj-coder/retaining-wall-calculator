@@ -680,7 +680,6 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
     ax.axis("off")
 #=========================================================================================== WORking here 
 # =======================
-# =======================
     # DRAW HORIZONTAL STRESS ON WALL
     # =======================
     if z is not None and sigma_h is not None:
@@ -695,7 +694,7 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
         for zi, shi in zip(z, sigma_h):
 
             # Convert depth z → drawing coordinate
-            y =  zi * scale)
+            y = y0 + Th_s + (-zi) * scale
 
             # Skip points outside wall height
             if y < y0 + Th_s or y > y0 + Th_s + Ha_s:
@@ -717,7 +716,7 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
 
         # Optional: draw envelope line
         x_env = [x_wall - shi * arrow_scale for shi in sigma_h]
-        y_env = [y0 + Th_s + (zi) * scale for zi in z]
+        y_env = [y0 + Th_s + (-zi) * scale for zi in z]
 
         ax.plot(x_env, y_env, color="red", linewidth=1.5)
 # =======================
