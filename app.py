@@ -717,19 +717,6 @@ st.markdown("""A cantilever retaining wall relies on gravity loads to provide st
 st.markdown("""Sliding.  """)
 gamma_c= 25
 
-W1 = Lt * Hp * gamma_p
-W2 = Th * ( Tsb+Lh+Lt) * gamma_c
-W3 = Ha *  Tsb * gamma_c
-W4 = Lh * (Hw) * gamma_a
-W5 = Lh * (Ha-Hw) * (gamma_a-gamma_w)
-
-st.markdown(W1)
-st.markdown(W2)
-st.markdown(W3)
-st.markdown(W4)
-st.markdown(W5)
-#====================================================================================
-
 # -----------------------------
 # COMPUTE WEIGHTS
 # -----------------------------
@@ -740,16 +727,13 @@ W4 = Lh * Hw * gamma_a
 W5 = Lh * (Ha - Hw) * (gamma_a - gamma_w)
 
 
+
 X_W_1 = Lt/2
 X_W_2 = Lt+Tsb/2
 X_W_3 = (Lt+Tsb+Lh)/2
 X_W_4 = Lt+Tsb+Lh/2
 X_W_5 = Lt+Tsb+Lh/2
-st.markdown(X_W_1)
-st.markdown(X_W_2)
-st.markdown(X_W_3)
-st.markdown(X_W_4)
-st.markdown(X_W_5)
+
 
 
 # -----------------------------
@@ -800,6 +784,62 @@ W_5 &= L_h (H_a - H_w)(\gamma_a - \gamma_w) \\
 """
 )
 
+# ---- Compute values ----
+X_W_1 = Lt / 2
+X_W_2 = Lt + Tsb / 2
+X_W_3 = (Lt + Tsb + Lh) / 2
+X_W_4 = Lt + Tsb + Lh / 2
+X_W_5 = Lt + Tsb + Lh / 2
+
+
+# =======================
+# X_W1
+# =======================
+st.markdown("**Lever arm of weight W₁**")
+
+st.latex(r"X_{W1} = \frac{L_t}{2}")
+
+st.latex(rf"X_{{W1}} = \frac{{{Lt:.2f}}}{{2}} = {X_W_1:.2f}")
+
+
+# =======================
+# X_W2
+# =======================
+st.markdown("**Lever arm of weight W₂**")
+
+st.latex(r"X_{W2} = L_t + \frac{T_{sb}}{2}")
+
+st.latex(rf"X_{{W2}} = {Lt:.2f} + \frac{{{Tsb:.2f}}}{{2}} = {X_W_2:.2f}")
+
+
+# =======================
+# X_W3
+# =======================
+st.markdown("**Lever arm of weight W₃**")
+
+st.latex(r"X_{W3} = \frac{L_t + T_{sb} + L_h}{2}")
+
+st.latex(rf"X_{{W3}} = \frac{{{Lt:.2f} + {Tsb:.2f} + {Lh:.2f}}}{{2}} = {X_W_3:.2f}")
+
+
+# =======================
+# X_W4
+# =======================
+st.markdown("**Lever arm of weight W₄**")
+
+st.latex(r"X_{W4} = L_t + T_{sb} + \frac{L_h}{2}")
+
+st.latex(rf"X_{{W4}} = {Lt:.2f} + {Tsb:.2f} + \frac{{{Lh:.2f}}}{{2}} = {X_W_4:.2f}")
+
+
+# =======================
+# X_W5
+# =======================
+st.markdown("**Lever arm of weight W₅**")
+
+st.latex(r"X_{W5} = L_t + T_{sb} + \frac{L_h}{2}")
+
+st.latex(rf"X_{{W5}} = {Lt:.2f} + {Tsb:.2f} + \frac{{{Lh:.2f}}}{{2}} = {X_W_5:.2f}")
 
 
 
