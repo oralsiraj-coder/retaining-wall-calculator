@@ -679,39 +679,7 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
     ax.set_aspect("equal")
     ax.axis("off")
 
-    # =======================
-    # DRAW REAL HORIZONTAL STRESS
-    # =======================
-    if z is not None and sigma_h is not None:
-
-        x_wall = x0 + Lh_s
-        y_top = y0 + Th_s
-
-        max_stress = np.max(np.abs(sigma_h))
-        if max_stress == 0:
-            max_stress = 1
-
-        stress_scale = 1.6 / max_stress
-
-        points = []
-
-        for zi, shi in zip(z, sigma_h):
-            y_plot = y_top + (Ha_s - zi) * scale
-            x_plot = x_wall - shi * stress_scale
-            points.append((x_plot, y_plot))
-
-        points.append((x_wall, y_top + Ha_s))
-        points.append((x_wall, y_top))
-
-        stress_poly = Polygon(
-            points,
-            closed=True,
-            facecolor="red",
-            alpha=0.3,
-            edgecolor="red"
-        )
-        ax.add_patch(stress_poly)
-
+    
         # =======================
         # ARROWS (based on real values)
         # =======================
