@@ -716,7 +716,7 @@ st.markdown("""A cantilever retaining wall relies on gravity loads to provide st
 
 st.markdown("""Sliding.  """)
 w1 = Lt *HP
-W2 = th * ( Tsb+Lh+Lt)
+W2 = Th * ( Tsb+Lh+Lt)
 W3 = Ha *  Tsb
 W4 = Lh * (Hw)
 W5 = Lh * (Ha-Hw)
