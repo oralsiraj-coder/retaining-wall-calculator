@@ -681,7 +681,8 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
 #=========================================================================================== WORking here 
 # =======================
     # DRAW HORIZONTAL STRESS DIAGRAM
-    # =======================
+                  
+    z = np.arange(0, Ha, 0.1)
     if z is not None and sigma_h is not None and len(z) > 0:
 
         # Wall reference
