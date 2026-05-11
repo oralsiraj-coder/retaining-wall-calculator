@@ -685,48 +685,6 @@ st.header("Earth Pressure Resultants")
 # --------------------------------------------------
 st.subheader("1. Horizontal force due to soil (Pa₁)")    
 Pa1 = 0.5 * Ka * gamma_a * Ha**2
-st.markdown(
-    """
-    <style>
-    .stMath {
-        text-align: left !important;
-        margin-left: 0rem !important;
-        margin-right: 0rem !important;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-
-
-
-
-st.latex(
-rf"""
-\begin{{aligned}}
-P_{{a1}} &= \frac{{1}}{{2}} K_a \gamma_a H_a^2 \\
-         &= \frac{{1}}{{2}} \cdot {Ka:.3f} \cdot {gamma_a:.1f} \cdot {Ha:.1f}^2 \\
-         &= {Pa1:.2f} \\
-\\
-y_{{a1}} &= \frac{{H_a}}{{3}} \\
-         &= \frac{{{Ha:.1f}}}{{3}} \\
-         &= {Ha/3:.2f}
-\end{{aligned}}
-"""
-)
-
-
-
-
-
-
-
-
-
-
-
-Pa1 = 0.5 * Ka * gamma_a * Ha**2
 st.latex(r"P_{a1} = \frac{1}{2} K_a \gamma_a H_a^2")      
 st.latex(
     rf"P_{{a1}} = \frac{{1}}{{2}} \cdot {Ka:.3f} \cdot {gamma_a:.1f} \cdot {Ha:.1f}^2") # render the symboles 
