@@ -679,32 +679,52 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
     ax.set_aspect("equal")
     ax.axis("off")
 #=========================================================================================== WORking here 
-points = []
+# =======================
+    # DRAW HORIZONTAL STRESS DIAGRAM
+    # =======================
+    if z is not None and sigma_h is not None and len(z) > 0:
 
-for zi, shi in zip(z, sigma_h):
+        # Wall reference
+        x_wall = x0 + Lh_s
+        y_top = y0 + Th_s
 
-    y_plot = y_top + zi * scale
-    x_plot = x_wall - shi * stress_scale   # try + if needed
+        # Convert z to positive depth (your z is negative!)
+        z_plot = -z   # ✅ VERY IMPORTANT
 
-    points.append((x_plot, y_plot))
+        # Scale stresses for visualization
+        max_stress = np.max(np.abs(sigma_h))
+        if max_stress == 0:
+            max_stress = 1
 
-# Close polygon correctly
-points.append((x_wall, y_top + max(z) * scale))
-points.append((x_wall, y_top + min(z) * scale))
+        stress_scale = 1.6 / max_stress
 
-stress_poly = Polygon(
-    points,
-    closed=True,
-    facecolor="red",
-    alpha=0.5,
-    edgecolor="red"
-)
+        points = []
 
-stress_poly.set_zorder(10)
-ax.add_patch(stress_poly)
-  
+        for zi, shi in zip(z_plot, sigma_h):
 
+            # ✅ Vertical position (downward)
+            y_plot = y_top + zi * scale
 
+            # ✅ Horizontal (toward wall)
+            x_plot = x_wall - shi * stress_scale
+
+            points.append((x_plot, y_plot))
+
+        # ✅ Close polygon PROPERLY
+        points.append((x_wall, y_top + max(z_plot) * scale))
+        points.append((x_wall, y_top))
+
+        # Draw polygon
+        stress_poly = Polygon(
+            points,
+            closed=True,
+            facecolor="red",
+            alpha=0.4,
+            edgecolor="red"
+        )
+
+        stress_poly.set_zorder(10)
+        ax.add_patch(stress_poly)
 # =======================
 # STREAMLIT UI
 # =======================
