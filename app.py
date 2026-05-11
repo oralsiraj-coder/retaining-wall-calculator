@@ -666,6 +666,92 @@ st.pyplot(fig_ws)
 
 
 #=============================================================================
+# =======================
+# SEPARATED STRESS DIAGRAMS (NO RECALCULATION)
+# =======================
 
+st.header("Separated Horizontal Stress Components (Engineering Diagram)")
+
+fig_ref, axs = plt.subplots(1, 3, figsize=(12, 5), sharey=True)
+
+# =======================
+# COMMON SETTINGS
+# =======================
+ax1, ax2, ax3 = axs
+
+# Flip depth axis (same as your convention)
+for ax in axs:
+    ax.set_ylim(0, z.min())
+    ax.invert_yaxis()
+    ax.axvline(0, color="black", linewidth=1)
+
+# =======================
+# 1️⃣ TOTAL STRESS
+# =======================
+ax1.plot(sigma_h_total, z, color="red", linewidth=2.5)
+ax1.fill_betweenx(z, 0, sigma_h_total, color="red", alpha=0.25)
+
+# Resultant location (approx H/3 for triangular-like)
+ax1.axhline(-2*Ha/3, linestyle="--", color="black")
+ax1.text(max(sigma_h_total)*0.1, -2*Ha/3, "≈ H/3")
+
+ax1.set_title("Total")
+ax1.set_xlabel("σh (kPa)")
+ax1.set_ylabel("Depth (m)")
+
+# =======================
+# 2️⃣ EFFECTIVE STRESS
+# =======================
+sigma_h_eff = Ka * sigma_v_effective  # already defined in your code earlier
+
+ax2.plot(sigma_h_eff, z, color="orange", linestyle="--", linewidth=2)
+ax2.fill_betweenx(z, 0, sigma_h_eff, color="orange", alpha=0.4)
+
+ax2.axhline(-2*Ha/3, linestyle="--", color="black")
+ax2.text(max(sigma_h_eff)*0.1, -2*Ha/3, "≈ H/3")
+
+ax2.set_title("Effective (Kₐ·σ'v)")
+ax2.set_xlabel("σh (kPa)")
+
+# =======================
+# 3️⃣ WATER PRESSURE
+# =======================
+# Already defined in your code as:
+# sigma_h_water = -sigma_v_water
+
+ax3.plot(sigma_h_water, z, color="blue", linewidth=2)
+ax3.fill_betweenx(z, 0, sigma_h_water, color="blue", alpha=0.3)
+
+# Draw water table
+ax3.axhline(z_wt, linestyle=":", color="blue")
+
+# Resultant at Hw/3
+ax3.axhline(z_wt - 2*Hw/3, linestyle="--", color="black")
+ax3.text(max(sigma_h_water)*0.1, z_wt - 2*Hw/3, "Hw/3")
+
+ax3.set_title("Water pressure (u)")
+ax3.set_xlabel("σh (kPa)")
+
+# =======================
+# FINAL FORMATTING
+# =======================
+for ax in axs:
+    ax.grid(True, linestyle=":", linewidth=0.5)
+
+plt.tight_layout()
+
+# Show in Streamlit
+st.pyplot(fig_ref)
+``
+
+
+
+
+
+
+
+
+
+#===================================================================================
 st.header("Stability check")
 st.markdown("""Sliding.  """)
