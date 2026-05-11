@@ -680,40 +680,42 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
     ax.axis("off")
 # =======================
     # DRAW REAL HORIZONTAL STRESS
-    # =======================
-    if z is not None and sigma_h is not None:
+# =======================
+if z is not None and sigma_h is not None:
 
-        x_wall = x0 + Lh_s
-        y_top = y0 + Th_s
+    x_wall = x0 + Lh_s
+    y_top = y0 + Th_s
 
-        # Scale stresses for visualization
-        max_stress = np.max(np.abs(sigma_h))
-        if max_stress == 0:
-            max_stress = 1
+    # Scale stresses for visualization
+    max_stress = np.max(np.abs(sigma_h))
+    if max_stress == 0:
+        max_stress = 1
 
-        stress_scale = 1.6 / max_stress  # auto-fit nicely
+    stress_scale = 1.6 / max_stress
 
-        # Build polygon from real data
-        points = []
+    points = []
 
-        for zi, shi in zip(-z, sigma_h):
-            y_plot = y_top + (Ha_s - zi) * scale   # convert depth → drawing coordinate
-            x_plot = x_wall - shi * stress_scale
+    for zi, shi in zip(z, sigma_h):
+        # ✅ flipped vertically
+        y_plot = y_top + (Ha_s - zi) * scale
 
-            points.append((x_plot, y_plot))
+        # ✅ flipped horizontally (already done)
+        x_plot = x_wall - shi * stress_scale
 
-        # Close polygon back to wall
-        points.append((x_wall, y_top + Ha_s))
-        points.append((x_wall, y_top))
+        points.append((x_plot, y_plot))
 
-        stress_poly = Polygon(
-            points,
-            closed=True,
-            facecolor="red",
-            alpha=0.3,
-            edgecolor="red"
-        )
-        ax.add_patch(stress_poly)
+    # Close polygon back to wall
+    points.append((x_wall, y_top + Ha_s))
+    points.append((x_wall, y_top))
+
+    stress_poly = Polygon(
+        points,
+        closed=True,
+        facecolor="red",
+        alpha=0.3,
+        edgecolor="red"
+    )
+    ax.add_patch(stress_poly)
 
         # =======================
         # ARROWS (based on real values)
