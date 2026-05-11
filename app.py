@@ -682,7 +682,7 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
 from matplotlib.patches import Polygon
 import numpy as np
 
-def draw_stress_diagram(ax, x0, y0, Lh_s, Th_s, Ha_s, z, sigma_h, scale=1.0):
+def draw_stress_diagram(ax, x0, y0, Lh_s, Th_s, Ha_s, z, sigma_h_total, scale=1.0):
     """
     Draw horizontal stress diagram on a retaining wall.
 
@@ -698,7 +698,7 @@ def draw_stress_diagram(ax, x0, y0, Lh_s, Th_s, Ha_s, z, sigma_h, scale=1.0):
     """
 
     # Safety check
-    if z is None or sigma_h is None or len(z) == 0:
+    if z is None or sigma_h_total is None or len(z) == 0:
         return
 
     # Wall reference position
@@ -706,7 +706,7 @@ def draw_stress_diagram(ax, x0, y0, Lh_s, Th_s, Ha_s, z, sigma_h, scale=1.0):
     y_top = y0 + Th_s
 
     # Normalize stress for plotting
-    max_stress = np.max(np.abs(sigma_h))
+    max_stress = np.max(np.abs(sigma_h_total))
     if max_stress == 0:
         max_stress = 1
 
@@ -715,7 +715,7 @@ def draw_stress_diagram(ax, x0, y0, Lh_s, Th_s, Ha_s, z, sigma_h, scale=1.0):
     # Build polygon
     points = []
 
-    for zi, shi in zip(z, sigma_h):
+    for zi, shi in zip(z, sigma_h_total):
 
         # ✅ Vertical position (top → downward)
         y_plot = y_top + zi * scale
