@@ -680,55 +680,75 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
     ax.axis("off")
 #=========================================================================================== WORking here 
 # =======================
-    # DRAW HORIZONTAL STRESS DIAGRAM
-         # =======================
-# AUTO-FIX ORIENTATION
+# HORIZONTAL STRESS DIAGRAM
 # =======================
+if z is not None and sigma_h is not None and len(z) > 0:
 
-z_plot = np.array(z)
-sigma_h = np.array(sigma_h)
+    # Wall reference
+    x_wall = x0 + Lh_s
+    y_top = y0 + Th_s
 
-# ✅ Step 1 — make depth positive (downward)
-if np.min(z_plot) < 0:
-    z_plot = -z_plot
+    # -----------------------
+    # ✅ AUTO-FIX ORIENTATION
+    # -----------------------
+    z_plot = np.array(z)
+    sigma_plot = np.array(sigma_h)
 
-# ✅ Step 2 — sort from top → bottom
-sort_idx = np.argsort(z_plot)
-z_plot = z_plot[sort_idx]
-sigma_h = sigma_h[sort_idx]
+    # Make depth positive downward
+    if np.min(z_plot) < 0:
+        z_plot = -z_plot
 
-# ✅ Step 3 — ensure stress is positive outward
-# (optional safety: avoids strange flips)
-sigma_h = np.abs(sigma_h)         
-        
-        points = []
+    # Sort from top → bottom
+    sort_idx = np.argsort(z_plot)
+    z_plot = z_plot[sort_idx]
+    sigma_plot = sigma_plot[sort_idx]
 
-        for zi, shi in zip(z_plot, sigma_h):
+    # Use absolute stress (prevents flip issues)
+    sigma_plot = np.abs(sigma_plot)
 
-            # ✅ Vertical position (downward)
-            y_plot = y_top - zi * scale
+    # -----------------------
+    # ✅ SCALING
+    # -----------------------
+    max_stress = np.max(sigma_plot)
+    if max_stress == 0:
+        max_stress = 1
 
-            # ✅ Horizontal (toward wall)
-            x_plot = x_wall - shi * stress_scale
+    stress_scale = 1.6 / max_stress
 
-            points.append((x_plot, y_plot))
+    # -----------------------
+    # ✅ BUILD POLYGON
+    # -----------------------
+    points = []
 
-        # ✅ Close polygon PROPERLY
-        points.append((x_wall, y_top + max(z_plot) * scale))
-        points.append((x_wall, y_top))
+    for zi, shi in zip(z_plot, sigma_plot):
 
-        
-        # Draw polygon
-        stress_poly = Polygon(
-            points,
-            closed=True,
-            facecolor="red",
-            alpha=0.4,
-            edgecolor="red"
-        )
+        # vertical position
+        y_plot = y_top + zi * scale
 
-        stress_poly.set_zorder(10)
-        ax.add_patch(stress_poly)
+        # horizontal (toward wall)
+        x_plot = x_wall - shi * stress_scale
+
+        points.append((x_plot, y_plot))
+
+    # -----------------------
+    # ✅ CLOSE POLYGON
+    # -----------------------
+    points.append((x_wall, y_top + max(z_plot) * scale))  # bottom
+    points.append((x_wall, y_top))                        # top
+
+    # -----------------------
+    # ✅ DRAW
+    # -----------------------
+    stress_poly = Polygon(
+        points,
+        closed=True,
+        facecolor="red",
+        alpha=0.4,
+        edgecolor="red"
+    )
+
+    stress_poly.set_zorder(10)
+    ax.add_patch(stress_poly)
 # =======================
 # STREAMLIT UI
 # =======================
