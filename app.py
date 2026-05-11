@@ -786,7 +786,6 @@ W_5 &= L_h (H_a - H_w)(\gamma_a - \gamma_w) \\
 \end{{aligned}}
 """
 )
-``
 
 
 
