@@ -698,7 +698,7 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
 
         for zi, shi in zip(-z, sigma_h):
             y_plot = y_top + (zi) * scale   # convert depth → drawing coordinate
-            x_plot = x_wall + shi * stress_scale
+            x_plot = x_wall - shi * stress_scale
 
             points.append((x_plot, y_plot))
 
