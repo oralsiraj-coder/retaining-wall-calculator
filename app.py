@@ -576,57 +576,80 @@ y_plot = y0 + Th_s - z * scale
 # DRAW COMPONENTS
 # =======================
 
-# ---- Effective stress (soil) ----
-ax_ws.plot(x_wall + x_eff, y_plot,
-           color="orange", linestyle='--', linewidth=2)
+# =======================
+# SEPARATION GAP
+# =======================
+gap = 2.0
+
+x_total_offset = x_wall + gap
+x_eff_offset   = x_wall + 2 * gap
+x_water_offset = x_wall + 3 * gap
+
+# =======================
+# TOTAL STRESS (FIRST AFTER WALL)
+# =======================
+ax_ws.plot(x_total_offset + x_total, y_plot,
+           color="red", linewidth=2.5)
+
 ax_ws.fill_betweenx(
     y_plot,
-    x_wall,
-    x_wall + x_eff,
-    color="orange",
-    alpha=0.4,
-    label="Effective soil stress (Kₐ·σ'v)"
+    x_total_offset,
+    x_total_offset + x_total,
+    color="red",
+    alpha=0.25,
+    label="Total σh"
 )
 
-# ---- Water pressure ----
-ax_ws.plot(x_wall + x_water, y_plot,
-           color="blue", linestyle='--', linewidth=2)
+# =======================
+# EFFECTIVE STRESS (SECOND)
+# =======================
+ax_ws.plot(x_eff_offset + x_eff, y_plot,
+           color="orange", linestyle='--', linewidth=2)
+
 ax_ws.fill_betweenx(
     y_plot,
-    x_wall,
-    x_wall + x_water,
+    x_eff_offset,
+    x_eff_offset + x_eff,
+    color="orange",
+    alpha=0.4,
+    label="Effective (Kₐ·σ'v)"
+)
+
+# =======================
+# WATER PRESSURE (LAST)
+# =======================
+ax_ws.plot(x_water_offset + x_water, y_plot,
+           color="blue", linestyle='--', linewidth=2)
+
+ax_ws.fill_betweenx(
+    y_plot,
+    x_water_offset,
+    x_water_offset + x_water,
     color="blue",
     alpha=0.3,
     label="Water pressure (u)"
 )
 
-# ---- Total stress (main curve) ----
-ax_ws.plot(x_wall + x_total, y_plot,
-           color="red", linewidth=2.5)
-
-ax_ws.fill_betweenx(
-    y_plot,
-    x_wall,
-    x_wall + x_total,
-    color="red",
-    alpha=0.2,
-    label="Total horizontal stress"
-)
-
-# ---- Wall face ----
+# =======================
+# WALL LINE
+# =======================
 ax_ws.plot([x_wall, x_wall],
            [y0 + Th_s, y0 + Th_s + Ha_s],
            color="black", linewidth=2)
 
-# ---- Water level line ----
-ax_ws.axhline(y0 + Th_s - z_wt * scale,
-              color="blue", linestyle=":",
-              label="Water table")
+# =======================
+# LABELS ABOVE DIAGRAMS
+# =======================
+top_y = y0 + Th_s + Ha_s + 0.3
 
-# ---- Labels ----
-ax_ws.text(x_wall + max(x_total) * 0.6,
-           y0 + Th_s + Ha_s,
-           "σh", color="red", ha="center")
+ax_ws.text(x_total_offset, top_y,
+           "Total", color="red", ha="left")
+
+ax_ws.text(x_eff_offset, top_y,
+           "Effective", color="orange", ha="left")
+
+ax_ws.text(x_water_offset, top_y,
+           "Water", color="blue", ha="left")
 
 # ---- Axis ----
 ax_ws.set_xlim(0, VIEW_W)
