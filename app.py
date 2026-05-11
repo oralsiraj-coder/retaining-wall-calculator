@@ -682,7 +682,6 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
 # =======================
     # DRAW HORIZONTAL STRESS DIAGRAM
                   
-
     if z is not None and sigma_h is not None and len(z) > 0:
 
         # Wall reference
@@ -690,7 +689,7 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
         y_top = y0 + Th_s
 
         # Convert z to positive depth (your z is negative!)
-        z_plot = -z   # ✅ VERY IMPORTANT
+        z_plot = z   # ✅ VERY IMPORTANT
 
         # Scale stresses for visualization
         max_stress = np.max(np.abs(sigma_h))
