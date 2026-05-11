@@ -668,8 +668,4 @@ st.pyplot(fig_ws)
 =============================================================================
 
 st.header("Stability check")
-st.markdown(
-    """
-    Sliding. 
-    """
-)
+st.markdown("""Sliding.  """)
