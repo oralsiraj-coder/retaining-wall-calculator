@@ -696,7 +696,7 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
         # Build polygon from real data
         points = []
 
-        for zi, shi in zip(z, sigma_h):
+        for zi, shi in zip(-z, sigma_h):
             y_plot = y_top + (-zi) * scale   # convert depth → drawing coordinate
             x_plot = x_wall + shi * stress_scale
 
