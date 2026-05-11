@@ -678,44 +678,69 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
     ax.set_ylim(0, VIEW_H)
     ax.set_aspect("equal")
     ax.axis("off")
-#===========================================================================================
-if z is not None and sigma_h is not None:
+#=========================================================================================== WORking here 
+from matplotlib.patches import Polygon
+import numpy as np
 
-        x_wall = x0L + Lh_s/2
-        y_top = y0 + Th_s
+def draw_stress_diagram(ax, x0, y0, Lh_s, Th_s, Ha_s, z, sigma_h, scale=1.0):
+    """
+    Draw horizontal stress diagram on a retaining wall.
 
-        # Scale stresses for visualization
-        max_stress = np.max(np.abs(sigma_h))
-        if max_stress == 0:
-            max_stress = 1
+    Parameters:
+    ax        : matplotlib axis
+    x0, y0    : base coordinates
+    Lh_s      : wall thickness/offset
+    Th_s      : top slab thickness
+    Ha_s      : wall height
+    z         : depth array (0 = top, positive downward)
+    sigma_h   : horizontal stress array
+    scale     : vertical scaling factor
+    """
 
-        stress_scale = 1.6 / max_stress  # auto-fit nicely
+    # Safety check
+    if z is None or sigma_h is None or len(z) == 0:
+        return
 
-        # Build polygon from real data
-        points = []
+    # Wall reference position
+    x_wall = x0 + Lh_s
+    y_top = y0 + Th_s
 
-        for zi, shi in zip(z, sigma_h):
-            y_plot = y_top + (-zi) * scale   # convert depth → drawing coordinate
-            x_plot = x_wall + shi * stress_scale
+    # Normalize stress for plotting
+    max_stress = np.max(np.abs(sigma_h))
+    if max_stress == 0:
+        max_stress = 1
 
-            points.append((x_plot, y_plot))
+    stress_scale = 1.6 / max_stress
 
-        # Close polygon back to wall
-        points.append((x_wall, y_top + Ha_s))
-        points.append((x_wall, y_top))
+    # Build polygon
+    points = []
 
-        stress_poly = Polygon(
-            points,
-            closed=True,
-            facecolor="red",
-            alpha=0.3,
-            edgecolor="red"
-        )
-        ax.add_patch(stress_poly)
+    for zi, shi in zip(z, sigma_h):
+
+        # ✅ Vertical position (top → downward)
+        y_plot = y_top + zi * scale
+
+        # ✅ Horizontal position (toward wall)
+        x_plot = x_wall - shi * stress_scale
+
+        points.append((x_plot, y_plot))
+
+    # ✅ Close polygon along the wall
+    points.append((x_wall, y_top + max(z) * scale))  # bottom
+    points.append((x_wall, y_top))                  # top
+
+    # Create and draw polygon
+    stress_poly = Polygon(
+        points,
+        closed=True,
+        facecolor="red",
+        alpha=0.3,
+        edgecolor="red"
+    )
+
+    ax.add_patch(stress_poly)
     
-        # =======================
-        # ARROWS (based on real values)
-        # =======================
+  
 
 
 # =======================
