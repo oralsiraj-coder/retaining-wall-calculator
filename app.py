@@ -736,6 +736,7 @@ W5 = Lh * (Ha - Hw) * (gamma_a - gamma_w)
 N  = W1+W2+W3+W4+W5
 R_f = mu * N
 Pp = 0.5 * Kp * gamma_p * Hp**2
+R_d = R_{f} + P_{p}
 
 # -----------------------------
 # RENDER EQUATIONS
@@ -800,8 +801,7 @@ st.latex(rf"""P_p =\frac{{1}}{{2}} \cdot {Kp:.3f} \cdot {gamma_p:.1f} \cdot {Hp:
 
 # Siding resistance 
 st.latex(r""" R_d = R_{f} + P_{p} """)
-
-
+st.latex(rf"""R_d = {R_f:.2f} + {P_p:.2f}""")
 
 
 
