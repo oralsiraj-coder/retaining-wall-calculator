@@ -798,7 +798,14 @@ st.latex(rf"""R_f = {mu:.2f} \times {N:.2f} = {R_f:.2f}""")
 st.latex(r"""P_p = \frac{1}{2} K_p \gamma_p H_p^2""")
 st.latex(rf"""P_p =\frac{{1}}{{2}} \cdot {Kp:.3f} \cdot {gamma_p:.1f} \cdot {Hp:.1f}^2= {Pp:.2f}""")
 
+# Siding resistance 
+st.latex(r"""
+R_d = N_d \tan(\delta) + R_{p,d}
+""")
 
+st.latex(r"""
+\frac{R_d}{E_d} \geq 1.0
+""")
 
 
 
