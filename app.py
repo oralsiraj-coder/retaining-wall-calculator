@@ -809,9 +809,11 @@ st.latex(rf""" H_d = {Pa1:.2f} + {Pa2:.2f} + {Pa3:.2f}= {H_d:.2f}""")
 
 
 st.latex(r"""FS = \frac{R_d}{H_d}""")
-st.latex(rf"""FS =\frac{{{R_d:.2f}}}{{{H_d:.2f}}}= {FS:.2f}
-"""
-)
+st.latex(rf"""FS =\frac{{{R_d:.2f}}}{{{H_d:.2f}}}= {FS:.2f}""")
+if FS >= 1.5:
+    st.success("✅ Sliding check: OK")
+else:
+    st.error("❌ Sliding check: NOT OK")
 
 
 # ---- Compute lever arm ----
