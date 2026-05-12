@@ -688,9 +688,9 @@ st.header("Earth Pressure Resultants")
 # --------------------------------------------------
 st.subheader("1. Horizontal force due to soil (Pa₁)")    
 Pa1 = 0.5 * Ka * gamma_a * Ha**2
-y_a1 = H_a/3
-y_a2 = (H_a-H_w)/3
-y_a3 = H_a/2
+y_a1 = Ha / 3
+y_a2 = (Ha-Hw)/3
+y_a3 = Ha/2
 
 M_overturning = Pa1 * y_a1+ Pa2 * y_a2 + Pa3 * y_a3
 
