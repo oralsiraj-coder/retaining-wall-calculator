@@ -738,6 +738,7 @@ R_f = mu * N
 Pp = 0.5 * Kp * gamma_p * Hp**2
 R_d = R_f + Pp
 H_d = Pa1+Pa2+Pa3
+FS = R_d / H_d
 # -----------------------------
 # RENDER EQUATIONS
 # -----------------------------
@@ -805,6 +806,12 @@ st.latex(rf"""R_d = {R_f:.2f} + {Pp:.2f}={R_d:.2f}""")
 
 st.latex(r"""H_d = P_{a1} + P_{a2} + P_{a3}""")
 st.latex(rf""" H_d = {Pa1:.2f} + {Pa2:.2f} + {Pa3:.2f}= {H_d:.2f}""")
+
+
+st.latex(r"""FS = \frac{R}{H}""")
+st.latex(rf"""FS =\frac{{{R_d:.2f}}}{{{H_d:.2f}}}= {FS:.2f}
+"""
+)
 
 
 # ---- Compute lever arm ----
