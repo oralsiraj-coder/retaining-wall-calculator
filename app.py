@@ -920,6 +920,10 @@ y_a3 = Ha/2
 
 M_overturning = Pa1 * y_a1+ Pa2 * y_a2 + Pa3 * y_a3
 M_resisting = M1+M2+M3+M4+M5
+FS_OT = M_resisting / M_overturning
+
+
+
 
 st.latex(
 rf"""
