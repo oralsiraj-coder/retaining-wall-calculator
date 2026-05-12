@@ -736,7 +736,7 @@ W5 = Lh * (Ha - Hw) * (gamma_a - gamma_w)
 N  = W1+W2+W3+W4+W5
 R_f = mu * N
 Pp = 0.5 * Kp * gamma_p * Hp**2
-R_d = R_f + P_p
+R_d = R_f + Pp
 
 # -----------------------------
 # RENDER EQUATIONS
