@@ -776,30 +776,6 @@ W_5 &= L_h (H_a - H_w)(\gamma_a - \gamma_w) \\
 """
 )
 
-st.markdown("""
-<style>
-/* Remove page side margins */
-.main .block-container {
-    padding-left: 0rem !important;
-    padding-right: 0rem !important;
-}
-
-/* Remove spacing around LaTeX */
-.stMath {
-    margin-top: 0rem !important;
-    margin-bottom: 0rem !important;
-    padding-top: 0rem !important;
-    padding-bottom: 0rem !important;
-    text-align: left !important;
-}
-
-/* Tighten markdown spacing */
-p {
-    margin-bottom: 0.2rem !important;
-}
-</style>
-""", unsafe_allow_html=True)
-
 # ---- Compute values ----
 X_W_1 = Lt / 2
 X_W_2 = Lt + Tsb / 2
