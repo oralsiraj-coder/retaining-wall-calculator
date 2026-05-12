@@ -836,8 +836,6 @@ st.latex(r"X_{W5} = L_t + T_{sb} + \frac{L_h}{2}")
 st.latex(rf"X_{{W5}} = {Lt:.2f} + {Tsb:.2f} + \frac{{{Lh:.2f}}}{{2}} = {X_W_5:.2f}")
 #===============================================================
 
-CAlculate the friction 
-Vrd=W1+W2
 
 
 
