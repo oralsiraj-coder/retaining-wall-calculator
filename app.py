@@ -724,6 +724,15 @@ The frictional resistance is proportional to the total vertical load acting on t
 In addition, passive earth pressure develops in front of the wall due to the confinement of the soil, providing an stabilizing force.""")
 
 st.markdown("""Calculation the gravity loads on a unite length of the wall  """)
+# -----------------------------
+# COMPUTE WEIGHTS
+# -----------------------------
+gamma_c= 25
+W1 = Lt * Hp * gamma_p
+W2 = Th * (Tsb + Lh + Lt) * gamma_c
+W3 = Ha * Tsb * gamma_c
+W4 = Lh * Hw * gamma_a
+W5 = Lh * (Ha - Hw) * (gamma_a - gamma_w)
 
 st.latex(r"""N = W_1 + W_2 + W_3 + W_4 + W_5""")
 st.latex(rf"""N = {W1:.2f} + {W2:.2f} + {W3:.2f} + {W4:.2f} + {W5:.2f}""")
@@ -732,17 +741,9 @@ st.latex(rf"""N = {W1:.2f} + {W2:.2f} + {W3:.2f} + {W4:.2f} + {W5:.2f}""")
 
 
 
-gamma_c= 25
 
-# -----------------------------
-# COMPUTE WEIGHTS
-# -----------------------------
-W1 = Lt * Hp * gamma_p
-W2 = Th * (Tsb + Lh + Lt) * gamma_c
-W3 = Ha * Tsb * gamma_c
-W4 = Lh * Hw * gamma_a
-W5 = Lh * (Ha - Hw) * (gamma_a - gamma_w)
-Vrd = (W1+W2+W3+W4+W5)*μ
+
+
 
 # -----------------------------
 # RENDER EQUATIONS
