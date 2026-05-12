@@ -926,33 +926,6 @@ M_5&=W_5 X_{{W5}} = {W5:.2f}\cdot {X_W_5:.2f} = {M5:.2f}
 """
 )
 
-# =======================
-# SLIDING SAFETY FACTOR
-# =======================
-
-# Total vertical load
-N = W1 + W2 + W3 + W4 + W5
-
-# Friction coefficient (example: tan(phi_p))
-mu = math.tan(math.radians(phi_p))
-
-# Resisting force
-R = mu * N + Kp * 0.5 * gamma_p * Hp**2
-
-# Driving force
-Pa = Pa1 + Pa2 + Pa3
-
-FS = R / Pa
-
-st.latex(
-rf"""
-\begin{{aligned}}
-FS &= \frac{{R}}{{P_a}} \\
-   &= \frac{{{R:.2f}}}{{{Pa:.2f}}} \\
-   &= {FS:.2f}
-\end{{aligned}}
-"""
-)
 
 import pandas as pd
 
