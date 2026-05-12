@@ -728,6 +728,8 @@ W2 = Th * (Tsb + Lh + Lt) * gamma_c
 W3 = Ha * Tsb * gamma_c
 W4 = Lh * Hw * gamma_a
 W5 = Lh * (Ha - Hw) * (gamma_a - gamma_w)
+Vrd = (W1+W2+W3+W4+W5)*μ
+
 # -----------------------------
 # RENDER EQUATIONS
 # -----------------------------
@@ -776,7 +778,7 @@ W_5 &= L_h (H_a - H_w)(\gamma_a - \gamma_w) \\
 """
 )
 
-# ---- Compute values ----
+# ---- Compute lever arm ----
 X_W_1 = Lt / 2
 X_W_2 = Lt + Tsb / 2
 X_W_3 = (Lt + Tsb + Lh) / 2
@@ -834,7 +836,8 @@ st.latex(r"X_{W5} = L_t + T_{sb} + \frac{L_h}{2}")
 st.latex(rf"X_{{W5}} = {Lt:.2f} + {Tsb:.2f} + \frac{{{Lh:.2f}}}{{2}} = {X_W_5:.2f}")
 #===============================================================
 
-
+CAlculate the friction 
+Vrd=W1+W2
 
 
 
