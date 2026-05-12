@@ -971,7 +971,7 @@ st.dataframe(
 )
 
 
-===================Add the equation of friction force =============
+#===================Add the equation of friction force =============
 
 
 
