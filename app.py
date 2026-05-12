@@ -735,6 +735,8 @@ W4 = Lh * Hw * gamma_a
 W5 = Lh * (Ha - Hw) * (gamma_a - gamma_w)
 N  = W1+W2+W3+W4+W5
 R_f = mu * N
+Pp = 0.5 * Kp * gamma_p * Hp**2
+
 # -----------------------------
 # RENDER EQUATIONS
 # -----------------------------
@@ -794,7 +796,7 @@ st.latex(rf"""R_f = {mu:.2f} \times {N:.2f} = {R_f:.2f}""")
 #Passive earth pressure 
 
 st.latex(r"""P_p = \frac{1}{2} K_p \gamma_p H_p^2""")
-st.latex(rf"""P_p =\frac{{1}}{{2}} \cdot {Kp:.3f} \cdot {gamma_p:.1f} \cdot {Hp:.1f}^2= {0.5 * Kp * gamma_p * Hp**2:.2f}""")
+st.latex(rf"""P_p =\frac{{1}}{{2}} \cdot {Kp:.3f} \cdot {gamma_p:.1f} \cdot {Hp:.1f}^2= {Pp:.2f}""")
 
 
 
