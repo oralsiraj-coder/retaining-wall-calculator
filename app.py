@@ -920,15 +920,6 @@ M3 = W3 * X_W_3
 M4 = W4 * X_W_4
 M5 = W5 * X_W_5
 
-y_a1=
-y_a2=
-y_a3=
-M_overturning=
-
-
-
-
-
 st.latex(
 rf"""
 \begin{{aligned}}
