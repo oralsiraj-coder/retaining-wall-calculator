@@ -775,7 +775,7 @@ W_4 &= L_h H_w \gamma_a \\
 )
 
 st.latex(
-    }rf"""
+    rf"""
 
 \begin{{aligned}}
 W_5 &= L_h (H_a - H_w)(\gamma_a - \gamma_w) \\
