@@ -775,7 +775,9 @@ W_4 &= L_h H_w \gamma_a \\
 )
 
 st.latex(
-rf"""
+'?
+    }rf"""
+
 \begin{{aligned}}
 W_5 &= L_h (H_a - H_w)(\gamma_a - \gamma_w) \\
     &= {Lh:.2f} \cdot ({Ha:.2f} - {Hw:.2f}) \cdot ({gamma_a:.1f} - {gamma_w:.2f}) = {W5:.2f}
@@ -790,7 +792,10 @@ st.latex(r"""R_f = \mu \, N""")
 st.latex(rf"""R_f = {mu:.2f} \times {N:.2f} = {R_f:.2f}""")
 
 
+#Passive earth pressure 
 
+st.latex(r"""P_p = \frac{1}{2} K_p \gamma_p H_p^2""")
+st.latex(rf"""P_p =\frac{{1}}{{2}} \cdot {Kp:.3f} \cdot {gamma_p:.1f} \cdot {Hp:.1f}^2= {0.5 * Kp * gamma_p * Hp**2:.2f}""")
 
 
 
