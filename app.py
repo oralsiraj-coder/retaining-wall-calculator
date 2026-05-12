@@ -920,6 +920,13 @@ M3 = W3 * X_W_3
 M4 = W4 * X_W_4
 M5 = W5 * X_W_5
 
+y_a1 = Ha / 3
+y_a2 = (Ha-Hw)/3
+y_a3 = Ha/2
+
+M_overturning = Pa1 * y_a1+ Pa2 * y_a2 + Pa3 * y_a3
+
+
 st.latex(
 rf"""
 \begin{{aligned}}
