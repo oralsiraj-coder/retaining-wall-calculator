@@ -951,7 +951,7 @@ st.latex(r"""FS_{OT} = \frac{M_{stabilizing}}{M_{overturning}}""")
 st.latex(rf"""FS_{{OT}} =\frac{{{M_resisting:.2f}}}{{{M_overturning:.2f}}}={FS_OT:.2f} """)
 
 
-if FS_ot >= 1.5:
+if FS_OT >= 1.5:
     st.success("✅ Stability against overturning is satisfied")
 else:
     st.error("❌ Stability against overturning is NOT satisfied")
