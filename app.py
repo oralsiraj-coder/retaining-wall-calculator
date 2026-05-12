@@ -934,6 +934,12 @@ st.latex(r"""M_{\text{resisting}} = M_1 + M_2 + M_3 + M_4 + M_5""")
 
 st.latex(rf"""M_{{resisting}} ={M1:.2f} + {M2:.2f} + {M3:.2f} + {M4:.2f} + {M5:.2f}= {(M1 + M2 + M3 + M4 + M5):.2f}""")
 
+
+st.subheader("Overturning moment")
+
+st.latex(r"""M_{overturning} =P_{a1} \cdot y_{a1}+ P_{a2} \cdot y_{a2}+ P_{a3} \cdot y_{a3}""")
+st.latex(rf"""M_{{overturning}} ={Pa1:.2f} \cdot {y_a1:.2f}+{Pa2:.2f} \cdot {y_a2:.2f}+{Pa3:.2f} \cdot {y_a3:.2f}={M_overturning:.2f}""")
+
 import pandas as pd
 
 summary = pd.DataFrame({
