@@ -728,17 +728,6 @@ W2 = Th * (Tsb + Lh + Lt) * gamma_c
 W3 = Ha * Tsb * gamma_c
 W4 = Lh * Hw * gamma_a
 W5 = Lh * (Ha - Hw) * (gamma_a - gamma_w)
-
-
-
-X_W_1 = Lt/2
-X_W_2 = Lt+Tsb/2
-X_W_3 = (Lt+Tsb+Lh)/2
-X_W_4 = Lt+Tsb+Lh/2
-X_W_5 = Lt+Tsb+Lh/2
-
-
-
 # -----------------------------
 # RENDER EQUATIONS
 # -----------------------------
