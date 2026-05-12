@@ -778,6 +778,12 @@ W_5 &= L_h (H_a - H_w)(\gamma_a - \gamma_w) \\
 """
 )
 
+Friction resistance 
+st.latex(r"""
+R_f = \mu (W_1 + W_2 + W_3 + W_4 + W_5)
+""")
+
+
 # Sliding check 
 st.latex(r"""
 FS_{sliding} =
