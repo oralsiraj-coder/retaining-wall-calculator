@@ -787,7 +787,7 @@ W_5 &= L_h (H_a - H_w)(\gamma_a - \gamma_w) \\
 st.latex(r"""N = W_1 + W_2 + W_3 + W_4 + W_5""")
 st.latex(rf"""N = {W1:.2f} + {W2:.2f} + {W3:.2f} + {W4:.2f} + {W5:.2f} = {N:.2f}""")
 st.latex(r"""R_f = \mu \, N""")
-st.latex(rf"""R_f = {μ:.2f} \times {N:.2f} = {R_f:.2f}""")
+st.latex(rf"""R_f = {mu:.2f} \times {N:.2f} = {R_f:.2f}""")
 
 
 
