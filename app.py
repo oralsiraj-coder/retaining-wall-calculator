@@ -723,8 +723,10 @@ st.markdown("""The resistance against sliding of a retaining wall is provided by
 The frictional resistance is proportional to the total vertical load acting on the base of the wall, which includes the self-weight of the wall and the weight of the soil retained above the base slab. This resistance is governed by the coefficient of friction between the wall base and the supporting soil.
 In addition, passive earth pressure develops in front of the wall due to the confinement of the soil, providing an stabilizing force.""")
 
+st.markdown("""Calculation the gravity loads on a unite length of the wall  """)
 
-
+st.latex(r"""N = W_1 + W_2 + W_3 + W_4 + W_5""")
+st.latex(rf"""N = {W1:.2f} + {W2:.2f} + {W3:.2f} + {W4:.2f} + {W5:.2f}""")
 
 
 
