@@ -955,7 +955,6 @@ if FS_ot >= 1.5:
     st.success("✅ Stability against overturning is satisfied")
 else:
     st.error("❌ Stability against overturning is NOT satisfied")
-``
 
 
 
