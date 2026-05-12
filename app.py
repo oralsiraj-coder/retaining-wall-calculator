@@ -914,6 +914,17 @@ M3 = W3 * X_W_3
 M4 = W4 * X_W_4
 M5 = W5 * X_W_5
 
+st.latex(r"""M_{\text{stabilizing}} = M_1 + M_2 + M_3 + M_4 + M_5""")
+
+st.latex(rf"""M_{{stabilizing}} ={M1:.2f} + {M2:.2f} + {M3:.2f} + {M4:.2f} + {M5:.2f}= {(M1 + M2 + M3 + M4 + M5):.2f}""")
+
+
+
+
+
+
+
+
 st.latex(
 rf"""
 \begin{{aligned}}
