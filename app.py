@@ -801,7 +801,7 @@ st.latex(rf"""P_p =\frac{{1}}{{2}} \cdot {Kp:.3f} \cdot {gamma_p:.1f} \cdot {Hp:
 
 # Siding resistance 
 st.latex(r""" R_d = R_{f} + P_{p} """)
-st.latex(rf"""R_d = {R_f:.2f} + {Pp:.2f}""")
+st.latex(rf"""R_d = {R_f:.2f} + {Pp:.2f}={R_d:.2f}""")
 
 
 
