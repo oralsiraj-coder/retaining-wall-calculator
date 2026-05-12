@@ -945,6 +945,7 @@ st.latex(rf"""M_{{overturning}} ={Pa1:.2f} \cdot {y_a1:.2f}+{Pa2:.2f} \cdot {y_a
 
 st.latex(r"""FS_{OT} = \frac{M_{stabilizing}}{M_{overturning}}""")
 st.latex(r"""FS_{OT} = \frac{M_{resisting}:.2f}{M_{overturning}:.2f}""")
+st.latex(rf"""FS_{{OT}} =\frac{{{M_resisting:.2f}}}{{{M_overturning:.2f}}}""")
 
 
 
