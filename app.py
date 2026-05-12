@@ -808,7 +808,7 @@ st.latex(r"""H_d = P_{a1} + P_{a2} + P_{a3}""")
 st.latex(rf""" H_d = {Pa1:.2f} + {Pa2:.2f} + {Pa3:.2f}= {H_d:.2f}""")
 
 
-st.latex(r"""FS = \frac{R}{H}""")
+st.latex(r"""FS = \frac{R_d}{H_d}""")
 st.latex(rf"""FS =\frac{{{R_d:.2f}}}{{{H_d:.2f}}}= {FS:.2f}
 """
 )
