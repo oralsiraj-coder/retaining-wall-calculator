@@ -778,6 +778,29 @@ W_5 &= L_h (H_a - H_w)(\gamma_a - \gamma_w) \\
 """
 )
 
+# Sliding check 
+st.latex(r"""
+FS_{sliding} =
+\frac{
+\mu (W_1 + W_2 + W_3 + W_4 + W_5)
++ \frac{1}{2} K_p \gamma_p H_p^2
+}{
+\frac{1}{2} K_a \gamma_a H_a^2
++ \frac{1}{2} \gamma_w H_w^2
++ K_a q H_a
+}
+""")
+
+
+
+
+
+
+
+
+
+
+
 # ---- Compute lever arm ----
 X_W_1 = Lt / 2
 X_W_2 = Lt + Tsb / 2
