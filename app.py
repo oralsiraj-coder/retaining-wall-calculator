@@ -734,6 +734,7 @@ W3 = Ha * Tsb * gamma_c
 W4 = Lh * Hw * gamma_a
 W5 = Lh * (Ha - Hw) * (gamma_a - gamma_w)
 N  = W1+W2+W3+W4+W5
+R_f = mu * N
 # -----------------------------
 # RENDER EQUATIONS
 # -----------------------------
@@ -784,9 +785,9 @@ W_5 &= L_h (H_a - H_w)(\gamma_a - \gamma_w) \\
 
 #Friction resistance 
 st.latex(r"""N = W_1 + W_2 + W_3 + W_4 + W_5""")
-st.latex(rf"""N = {W1:.2f} + {W2:.2f} + {W3:.2f} + {W4:.2f} + {W5:.2f}""")
+st.latex(rf"""N = {W1:.2f} + {W2:.2f} + {W3:.2f} + {W4:.2f} + {W5:.2f} = {N:.2f}""")
 st.latex(r"""R_f = \mu \, N""")
-st.latex(rf"""R_f = {μ:.2f} \times {N:.2f} = {μ*N:.2f}""")
+st.latex(rf"""R_f = {μ:.2f} \times {N:.2f} = {R_f:.2f}""")
 
 
 
