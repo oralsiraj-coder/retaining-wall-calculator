@@ -716,8 +716,20 @@ st.latex(rf"y_{{a3}} = \frac{{{Ha:.1f}}}{{2}} = {Ha/2:.2f}")
 
 st.subheader("Gravity loads ")
 st.markdown("""A cantilever retaining wall relies on gravity loads to provide stabilizing forces against sliding and overturning failure. These stabilizing actions arise mainly from the self-weight of the wall, the weight of the retained soil above the heel, and any additional surcharge loads applied at the ground surface.""")
+#================================================================================== work here 
 
 st.markdown("""Sliding.  """)
+st.markdown("""The resistance against sliding of a retaining wall is provided by two primary mechanisms: the frictional resistance mobilized at the interface between the base of the wall and the foundation soil, and the passive earth pressure developed in front of the wall.
+The frictional resistance is proportional to the total vertical load acting on the base of the wall, which includes the self-weight of the wall and the weight of the soil retained above the base slab. This resistance is governed by the coefficient of friction between the wall base and the supporting soil.
+In addition, passive earth pressure develops in front of the wall due to the confinement of the soil, providing an stabilizing force.""")
+
+
+
+
+
+
+
+
 gamma_c= 25
 
 # -----------------------------
