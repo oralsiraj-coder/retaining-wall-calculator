@@ -775,7 +775,6 @@ W_4 &= L_h H_w \gamma_a \\
 )
 
 st.latex(
-'?
     }rf"""
 
 \begin{{aligned}}
