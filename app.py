@@ -110,7 +110,39 @@ def compute_forces(geom, soil_a, soil_p, load, Ka, Kp):
 
 #===============================Step 5
 
+import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle, Polygon
+import numpy as np
 
+VIEW_W, VIEW_H = 10, 10
+
+def compute_scale(geom):
+    base_L = geom.Lh + geom.Tsb + geom.Lt
+    total_H = geom.Th + max(geom.Ha, geom.Hp)
+    return min(8/base_L, 8/total_H)
+
+def draw_wall(geom):
+    scale = compute_scale(geom)
+
+    Ha = geom.Ha * scale
+    Th = geom.Th * scale
+    Lh = geom.Lh * scale
+    Lt = geom.Lt * scale
+    Tsb = geom.Tsb * scale
+
+    base_L = Lh + Tsb + Lt
+
+    fig, ax = plt.subplots(figsize=(6,6))
+
+    ax.add_patch(Rectangle((2,2), base_L, Th, fc="0.8"))
+    ax.add_patch(Rectangle((2+Lh,2+Th), Tsb, Ha, fc="0.8"))
+
+    ax.set_xlim(0, VIEW_W)
+    ax.set_ylim(0, VIEW_H)
+    ax.set_aspect("equal")
+    ax.axis("off")
+
+    return fig
 
 
 
