@@ -73,4 +73,8 @@ def horizontal_stress(Ka, stress):
         "effective": Ka * stress["effective"],
         "total": Ka * stress["effective"] + Ka * stress["surcharge"] - stress["water"]
     }
-``
+#=============================Step 4
+
+
+
+
