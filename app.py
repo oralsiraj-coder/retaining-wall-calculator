@@ -171,5 +171,61 @@ def plot_horizontal(z, stress):
     ax.grid()
 
     return fig
+#==============================================Step 7
+import streamlit as st
 
+from models.inputs import Geometry, Soil, Load
+from physics.earth_pressure import rankine_active, rankine_passive
+from physics.stresses import compute_depth, vertical_stress, horizontal_stress
+from physics.forces import compute_forces
+from plotting.wall import draw_wall
+from plotting.stress import plot_vertical, plot_horizontal
+
+st.title("🧱 Retaining Wall Tool")
+
+# --- INPUTS ---
+Ha = st.sidebar.number_input("Ha", 1.0, 20.0, 6.0)
+Hw = st.sidebar.number_input("Hw", 0.0, Ha, 2.0)
+Hp = st.sidebar.number_input("Hp", 0.0, 20.0, 3.0)
+
+Th = st.sidebar.number_input("Th", 0.2, 2.0, 0.8)
+Lh = st.sidebar.number_input("Lh", 0.5, 15.0, 3.0)
+Lt = st.sidebar.number_input("Lt", 0.5, 15.0, 2.0)
+Tsb = st.sidebar.number_input("Tsb", 0.2, 2.0, 0.4)
+
+beta = st.sidebar.number_input("β", 0.0, 45.0, 10.0)
+
+gamma_a = st.sidebar.number_input("γa", 14.0, 25.0, 18.0)
+phi_a = st.sidebar.number_input("φa", 0.0, 45.0, 30.0)
+
+gamma_p = st.sidebar.number_input("γp", 14.0, 25.0, 18.0)
+phi_p = st.sidebar.number_input("φp", 0.0, 45.0, 35.0)
+
+q = st.sidebar.number_input("q", 0.0, 500.0, 0.0)
+mu = st.sidebar.number_input("μ", 0.0, 1.0, 0.2)
+
+# --- OBJECTS ---
+geom = Geometry(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta)
+soil_a = Soil(gamma_a, phi_a, 0)
+soil_p = Soil(gamma_p, phi_p, 0)
+load = Load(q, mu)
+
+# --- ANALYSIS ---
+Ka = rankine_active(phi_a, beta)
+Kp = rankine_passive(phi_p)
+
+z = compute_depth(geom)
+
+stress_v = vertical_stress(z, soil_a, load, geom)
+stress_h = horizontal_stress(Ka, stress_v)
+
+forces = compute_forces(geom, soil_a, soil_p, load, Ka, Kp)
+
+# --- OUTPUT ---
+st.subheader(f"Ka = {Ka:.3f}, Kp = {Kp:.3f}")
+st.subheader(f"Sliding FS = {forces['FS_sliding']:.2f}")
+
+st.pyplot(draw_wall(geom))
+st.pyplot(plot_vertical(z, stress_v))
+st.pyplot(plot_horizontal(z, stress_h))
 
