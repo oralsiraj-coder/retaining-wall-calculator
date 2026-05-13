@@ -74,6 +74,43 @@ def horizontal_stress(Ka, stress):
         "total": Ka * stress["effective"] + Ka * stress["surcharge"] - stress["water"]
     }
 #=============================Step 4
+def compute_forces(geom, soil_a, soil_p, load, Ka, Kp):
+    gamma_w = 9.81
+    gamma_c = 25
+
+    Ha, Hw, Hp = geom.Ha, geom.Hw, geom.Hp
+    Lh, Lt, Tsb, Th = geom.Lh, geom.Lt, geom.Tsb, geom.Th
+
+    # Active forces
+    Pa1 = 0.5 * Ka * soil_a.gamma * Ha**2
+    Pa2 = 0.5 * gamma_w * (Ha - Hw)**2
+    Pa3 = Ka * load.q * Ha
+
+    # Weights
+    W1 = Lt * Hp * soil_p.gamma
+    W2 = Th * (Tsb + Lh + Lt) * gamma_c
+    W3 = Ha * Tsb * gamma_c
+    W4 = Lh * Hw * soil_a.gamma
+    W5 = Lh * (Ha - Hw) * (soil_a.gamma - gamma_w)
+
+    N = W1 + W2 + W3 + W4 + W5
+    Rf = load.mu * N
+    Pp = 0.5 * Kp * soil_p.gamma * Hp**2
+
+    Rd = Rf + Pp
+    Hd = Pa1 + Pa2 + Pa3
+
+    FS = Rd / Hd if Hd != 0 else 0
+
+    return {
+        "Pa": (Pa1, Pa2, Pa3),
+        "weights": (W1, W2, W3, W4, W5),
+        "FS_sliding": FS
+    }
+
+#===============================Step 5
+
+
 
 
 
