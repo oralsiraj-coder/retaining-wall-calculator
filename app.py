@@ -144,6 +144,32 @@ def draw_wall(geom):
 
     return fig
 
+#=================================Step 6
 
+import matplotlib.pyplot as plt
+
+def plot_vertical(z, stress):
+    fig, ax = plt.subplots()
+
+    ax.plot(stress["total"], z, label="Total", lw=2)
+    ax.plot(stress["soil"], z, "--", label="Soil")
+
+    ax.invert_yaxis()
+    ax.legend()
+    ax.grid()
+
+    return fig
+
+def plot_horizontal(z, stress):
+    fig, ax = plt.subplots()
+
+    ax.plot(stress["total"], z, label="Total", lw=2)
+    ax.plot(stress["effective"], z, "--", label="Effective")
+
+    ax.invert_yaxis()
+    ax.legend()
+    ax.grid()
+
+    return fig
 
 
