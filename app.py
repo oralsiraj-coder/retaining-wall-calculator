@@ -189,7 +189,7 @@ c_a = st.sidebar.number_input("Cohesion of soil (cₐ)( neglected in this calcul
 st.sidebar.header("Passive soil")
 gamma_p = st.sidebar.number_input("Desnity of soil (γₚ)", 14.0, 25.0, 18.0)
 phi_p = st.sidebar.number_input("Friction angle of soil (φ)ₚ", 0.0, 45.0, 35.0)
-c_p = st.sidebar.number_input("Cohesion of soil (cₐ)( neglected in this calculation )", 0.0, 50.0, 0.0)
+c_p = st.sidebar.number_input("Cohesion of soil (cp)( neglected in this calculation )", 0.0, 50.0, 0.0)
 
 st.pyplot(draw_wall(
     Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
