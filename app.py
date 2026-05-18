@@ -238,7 +238,7 @@ def rankine_passive_coefficient(phi_deg, beta_deg=0.0):
     return Kp
 Ka = rankine_active_coefficient(phi_a, beta)
 Kp = rankine_passive_coefficient(phi_p)
-
+#================================================================rendering equations 
 st.markdown(
     """Active earth coefficient""")
 # Rendering the equation of active earth pressure coefficient
@@ -252,7 +252,7 @@ st.latex(
     \mathbf{{{Ka:.4f}}}
     """
 )
-# ==============================================Work here ============================
+
 st.markdown("### Passive earth coefficient")
 
 st.latex(
@@ -267,35 +267,6 @@ st.latex(
     \mathbf{{{Kp:.4f}}}
     """
 )
-#=============================================Work here 
-
-
-
-
-
-
-
-
-
-st.markdown(
-    """Passive earth coefficient""")
-    
-# Render the equation with symboles
-st.latex(
-    r"K_p = \cos\beta \frac{\cos\beta + \sqrt{\cos^2\beta - \cos^2\varphi}}"
-    r"{\cos\beta - \sqrt{\cos^2\beta - \cos^2\varphi}}"
-)
-
-#Render the equation with numbers
-st.latex(
-    rf"K_p = \cos(0^\circ) \cdot \frac{{\cos(0^\circ) + \sqrt{{\cos^2(0^\circ) - \cos^2({phi_p:.1f}^\circ)}}}}{{\cos(0^\circ) - \sqrt{{\cos^2(0^\circ) - \cos^2({phi_p:.1f}^\circ)}}}}"
-)
-#Print the result
-st.success(f"Kp = {Kp:.4f}")
-
-
-
-
 # ================================================================================
 # EFFECTIVE VERTICAL STRESS – THEORY AND EQUATIONS 
 # ================================================================================
