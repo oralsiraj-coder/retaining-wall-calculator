@@ -241,7 +241,7 @@ Kp = rankine_passive_coefficient(phi_p)
 
 st.markdown(
     """Active earth coefficient""")
-#================================================================================== Work here 
+# Rendering the equation of active earth pressure coefficient
 st.latex(
     rf"""
     K_a =
@@ -252,20 +252,30 @@ st.latex(
     \mathbf{{{Ka:.4f}}}
     """
 )
-#====================================================================================
-# Render the equation with symboles
+# ==============================================Work here ============================
 st.latex(
-    r"K_a = \cos\beta \frac{\cos\beta - \sqrt{\cos^2\beta - \cos^2\varphi}}"
-    r"{\cos\beta + \sqrt{\cos^2\beta - \cos^2\varphi}}"
-)
-#Render the equation with numbers 
-st.latex(
-    rf"K_a = \cos({beta:.1f}^\circ) \cdot \frac{{\cos({beta:.1f}^\circ) - \sqrt{{\cos^2({beta:.1f}^\circ) - \cos^2({phi_a:.1f}^\circ)}}}}{{\cos({beta:.1f}^\circ) + \sqrt{{\cos^2({beta:.1f}^\circ) - \cos^2({phi_a:.1f}^\circ)}}}}"
+    rf"""
+    K_a =
+    \cos\beta \frac{{\cos\beta - \sqrt{{\cos^2\beta - \cos^2\varphi}}}}{{\cos\beta + \sqrt{{\cos^2\beta - \cos^2\varphi}}}}
+    =
+    \cos({beta:.1f}^\circ)\,
+    \frac{{\cos({beta:.1f}^\circ) - \sqrt{{\cos^2({beta:.1f}^\circ) - \cos^2({phi_a:.1f}^\circ)}}}}
+         {{\cos({beta:.1f}^\circ) + \sqrt{{\cos^2({beta:.1f}^\circ) - \cos^2({phi_a:.1f}^\circ)}}}}
+    =
+    \boxed{{{ka:.4f}}}
+    """
 )
 
-#Print the result 
 
-st.success(f"Ka = {Ka:.4f}")
+#=============================================Work here 
+
+
+
+
+
+
+
+
 
 st.markdown(
     """Passive earth coefficient""")
