@@ -244,9 +244,11 @@ st.markdown(
 #================================================================================== Work here 
 st.latex(
     rf"""
-    K_a = \cos\beta \frac{{\cos\beta - \sqrt{{\cos^2\beta - \cos^2\varphi}}}}{{\cos\beta + \sqrt{{\cos^2\beta - \cos^2\varphi}}}}
-    \quad = \quad
-    \cos({beta:.1f}^\circ)\,\frac{{\cos({beta:.1f}^\circ) - \sqrt{{\cos^2({beta:.1f}^\circ) - \cos^2({phi_a:.1f}^\circ)}}}}{{\cos({beta:.1f}^\circ) + \sqrt{{\cos^2({beta:.1f}^\circ) - \cos^2({phi_a:.1f}^\circ)}}}}
+    \begin{{aligned}}
+    K_a &= \cos\beta \frac{{\cos\beta - \sqrt{{\cos^2\beta - \cos^2\varphi}}}}{{\cos\beta + \sqrt{{\cos^2\beta - \cos^2\varphi}}}} \\
+        &= \cos({beta:.1f}^\circ)\,\frac{{\cos({beta:.1f}^\circ) - \sqrt{{\cos^2({beta:.1f}^\circ) - \cos^2({phi_a:.1f}^\circ)}}}}{{\cos({beta:.1f}^\circ) + \sqrt{{\cos^2({beta:.1f}^\circ) - \cos^2({phi_a:.1f}^\circ)}}}} \\
+        &= {ka:.4f}
+    \end{{aligned}}
     """
 )
 #====================================================================================
