@@ -8,8 +8,8 @@ import math
 # =======================
 # VIEWPORT & STYLE
 # =======================
-VIEW_W = 10.0
-VIEW_H = 10.0
+VIEW_W = 7.0
+VIEW_H = 7.0
 MARGIN = 0.85
 
 LW_CONCRETE = 1.2
