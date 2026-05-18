@@ -239,8 +239,7 @@ def rankine_passive_coefficient(phi_deg, beta_deg=0.0):
 Ka = rankine_active_coefficient(phi_a, beta)
 Kp = rankine_passive_coefficient(phi_p)
 #================================================================rendering equations 
-st.markdown(
-    """Active earth coefficient""")
+st.markdown("### Active earth coefficient")
 # Rendering the equation of active earth pressure coefficient
 st.latex(
     rf"""
