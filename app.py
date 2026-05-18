@@ -264,7 +264,7 @@ st.latex(
     \frac{{\cos({beta:.1f}^\circ) + \sqrt{{\cos^2({beta:.1f}^\circ) - \cos^2({phi_p:.1f}^\circ)}}}}
          {{\cos({beta:.1f}^\circ) - \sqrt{{\cos^2({beta:.1f}^\circ) - \cos^2({phi_p:.1f}^\circ)}}}}
     \;=\;
-    \boxed{{{Kp:.4f}}}
+    \mathbf{{{Kp:.4f}}}
     """
 )
 #=============================================Work here 
