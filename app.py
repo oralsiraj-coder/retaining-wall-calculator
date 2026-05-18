@@ -330,7 +330,7 @@ sigma_v_effective_total = (
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator
 
-fig_eff, ax_eff = plt.subplots(figsize=(4, 2))
+fig_eff, ax_eff = plt.subplots(figsize=(8, 8))
 
 # ---- Plot components ----
 ax_eff.plot(sigma_v_soil, z, linestyle="--", color="brown", label="Soil self-weight")
