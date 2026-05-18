@@ -1,5 +1,15 @@
 import streamlit as st
-st.set_page_config(layout="wide")
+st.markdown(
+    """
+    <style>
+        .main {
+            max-width: 800px;
+            margin: auto;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle, FancyArrowPatch, Polygon
 import numpy as np
