@@ -184,12 +184,12 @@ beta = st.sidebar.number_input("Inclination angle of the soil β (deg)", 0.0, 45
 st.sidebar.header("Active soil")
 gamma_a = st.sidebar.number_input("Saturated desnity of soil (γₐ)", 14.0, 25.0, 18.0)
 phi_a = st.sidebar.number_input("Friction angle of soil (φₐ)", 0.0, 45.0, 30.0)
-c_a = st.sidebar.number_input("Cohesion of soil (cₐ)", 0.0, 50.0, 0.0)
+c_a = st.sidebar.number_input("Cohesion of soil (cₐ)( neglected in this calculation )", 0.0, 50.0, 0.0)
 
 st.sidebar.header("Passive soil")
 gamma_p = st.sidebar.number_input("Desnity of soil (γₚ)", 14.0, 25.0, 18.0)
 phi_p = st.sidebar.number_input("Friction angle of soil (φ)ₚ", 0.0, 45.0, 35.0)
-c_p = st.sidebar.number_input("cₚ", 0.0, 50.0, 0.0)
+c_p = st.sidebar.number_input("Cohesion of soil (cₐ)( neglected in this calculation )", 0.0, 50.0, 0.0)
 
 st.pyplot(draw_wall(
     Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
