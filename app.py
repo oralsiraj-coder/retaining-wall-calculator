@@ -1,4 +1,5 @@
 import streamlit as st
+st.set_page_config(layout="wide")
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle, FancyArrowPatch, Polygon
 import numpy as np
