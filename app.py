@@ -137,7 +137,7 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
             [xL, xR],
             [y_water, y_water],   # always horizontal
             color="black",
-            linestyle=":",
+            linestyle="-",
             linewidth=2,
         )
 
