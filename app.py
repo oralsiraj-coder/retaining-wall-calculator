@@ -192,26 +192,27 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
         fontsize=8,
         bbox=dict(boxstyle="round,pad=0.3", fc="white", ec="black", alpha=0.7)
     )
-    # ---- Passive soil label ----
-     x_passive_center = x0 + Lh_s + Tsb_s + Lt_s / 2
+  # ---- Passive soil label ----
+    x_passive_center = x0 + Lh_s + Tsb_s + Lt_s / 2
     y_passive_center = y0 + Th_s + Hp_s / 2
 
     label_passive = (
-         f"Passive soil\n"
-         f"γ = {gamma_p:.1f} kN/m³\n"
-         f"φ = {phi_p:.1f}°\n"
+        f"Passive soil\n"
+        f"γ = {gamma_p:.1f} kN/m³\n"
+        f"φ = {phi_p:.1f}°\n"
         f"c = {c_p:.1f} kPa"
-     )
+    )
 
-     ax.text(
-         x_passive_center,
-          y_passive_center,
-         label_passive,
-         ha="center",
-         va="center",
-         fontsize=8,
-         bbox=dict(boxstyle="round,pad=0.3", fc="white", ec="black", alpha=0.7)
-     )
+    ax.text(
+        x_passive_center,
+        y_passive_center,
+        label_passive,
+        ha="center",
+        va="center",
+        fontsize=8,
+        bbox=dict(boxstyle="round,pad=0.3", fc="white", ec="black", alpha=0.7)
+    )
+
 
 
                   
