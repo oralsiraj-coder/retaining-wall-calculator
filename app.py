@@ -131,7 +131,7 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
         ))
 #=================================
     if Hw > 0:
-        y_water = Ha - Hw_s
+        y_water = yTR - Hw_s
 
         ax.plot(
             [xL, xR],
