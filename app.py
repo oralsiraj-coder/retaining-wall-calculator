@@ -130,14 +130,7 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
             fc="#74c0fc", ec="none", alpha=0.6
         ))
 #=================================
-if Hw > 0:
-    ax.plot(
-        [xL, xR],                # horizontal span
-        [yTL - Hw_s, yTR - Hw_s],  # same vertical level (water depth)
-        color="#74c0fc",
-        linewidth=2,
-        alpha=0.8
-    )
+
 
 #==================================
 
