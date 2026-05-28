@@ -262,6 +262,23 @@ st.pyplot(draw_wall(
     gamma_a, phi_a, c_a,
     gamma_p, phi_p, c_p
 ))
+#==========================
+if st.button("Generate PDF Report"):
+    pdf_file = generate_pdf()
+
+    with open(pdf_file, "rb") as f:
+        st.download_button(
+            label="Download Report",
+            data=f,
+            file_name="retaining_wall_report.pdf",
+            mime="application/pdf"
+        )
+
+
+
+
+
+
 #========================================================================================================
 #Calculation of lateral earth pressure coefficient
 #========================================================================================================
