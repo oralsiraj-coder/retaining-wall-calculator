@@ -131,6 +131,14 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
         ))
 #=================================
 
+    if Hw > 0:
+        ax.plot(
+            [xL, xR],
+            [yTL - Hw_s, yTR - Hw_s],
+            color="#74c0fc",
+            linewidth=2,
+        )
+
 
 #==================================
 
