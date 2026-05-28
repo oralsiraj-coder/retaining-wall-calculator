@@ -15,11 +15,7 @@ from matplotlib.patches import Rectangle, FancyArrowPatch, Polygon
 import numpy as np
 import math
 #=================
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
-from reportlab.lib.pagesizes import A4
-from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.lib.units import inch
-import tempfile
+
 
 
 
@@ -977,3 +973,16 @@ def generate_pdf():
     doc.build(story)
 
     return pdf_path
+
+#==========================
+if st.button("Generate PDF Report"):
+    pdf_file = generate_pdf()
+
+    with open(pdf_file, "rb") as f:
+        st.download_button(
+            label="Download Report",
+            data=f,
+            file_name="retaining_wall_report.pdf",
+            mime="application/pdf"
+        )
+
