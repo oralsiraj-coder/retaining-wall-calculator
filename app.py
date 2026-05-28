@@ -21,9 +21,7 @@ import tempfile
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.lib.units import inch
 
-Image(wall_path, width=5*inch, height=5*inch)
 
 #=================
 
