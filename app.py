@@ -175,7 +175,7 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
 # STREAMLIT UI
 # =======================
 st.title("🧱 Retaining Wall Geometry Tool")
-st.title("This is a demonstration prototype prepared for Fluor Corporation and is not ready for real-world application")
+st.markdown("This is a demonstration prototype prepared for Fluor Corporation and is not ready for real-world application")
 st.sidebar.header("Surface Load")
 q = st.sidebar.number_input("Uniform surcharge q (kPa)", 0.0, 500.0, 0.0, 5.0)
 
