@@ -122,14 +122,7 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
         fc="#f4a261", ec="none", alpha=0.85
     ))
 
-    # Water
-    if Hw > 0:
-        ax.add_patch(Polygon(
-            [(xL, yTL - Hw_s), (xR, yTR - Hw_s),
-             (xR, yTR), (xL, yTL)],
-            fc="#74c0fc", ec="none", alpha=0.6
-        ))
-#=================================
+    #Water
     if Hw > 0:
         y_water = yTR - Hw_s
 
@@ -140,10 +133,7 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
             linestyle="--",
             linewidth=2,
         )
-
-#==================================
-
-                  
+             
     # Passive soil
     ax.add_patch(Rectangle(
         (x0 + Lh_s + Tsb_s + gap, y0 + Th_s + gap),
