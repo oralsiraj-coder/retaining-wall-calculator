@@ -200,7 +200,6 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
         f"Passive soil\n"
         f"γ = {gamma_p:.1f} kN/m³\n"
         f"φ = {phi_p:.1f}°\n"
-        f"c = {c_p:.1f} kPa"
     )
 
     ax.text(
