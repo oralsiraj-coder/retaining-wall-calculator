@@ -15,6 +15,7 @@ from matplotlib.patches import Rectangle, FancyArrowPatch, Polygon
 import numpy as np
 import math
 #==============
+from reportlab.lib.units import inch
 import os
 import tempfile
 
