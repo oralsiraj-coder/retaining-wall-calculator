@@ -130,15 +130,16 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
             fc="#74c0fc", ec="none", alpha=0.6
         ))
 #=================================
-
+   
     if Hw > 0:
+        y_water = yTL - Hw_s   # choose a reference level
+
         ax.plot(
             [xL, xR],
-            [yTL - Hw_s, yTR - Hw_s],
+            [y_water, y_water],   # same y-value → horizontal line
             color="#74c0fc",
             linewidth=2,
         )
-
 
 #==================================
 
