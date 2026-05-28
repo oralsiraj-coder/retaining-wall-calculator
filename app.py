@@ -900,3 +900,63 @@ st.dataframe(
 )
 
 
+
+#====================================
+temp_dir = tempfile.gettempdir()
+
+wall_path = f"{temp_dir}/wall.png"
+eff_path = f"{temp_dir}/effective.png"
+hor_path = f"{temp_dir}/horizontal.png"
+
+draw_wall(
+    Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
+    gamma_a, phi_a, c_a,
+    gamma_p, phi_p, c_p
+).savefig(wall_path, dpi=300, bbox_inches='tight')
+
+fig_eff.savefig(eff_path, dpi=300, bbox_inches='tight')
+fig_h.savefig(hor_path, dpi=300, bbox_inches='tight')
+
+#=======================
+def generate_pdf():
+    pdf_path = f"{temp_dir}/report.pdf"
+
+    doc = SimpleDocTemplate(pdf_path, pagesize=A4)
+    styles = getSampleStyleSheet()
+
+    story = []
+
+    # ---- Title ----
+    story.append(Paragraph("Geotechnical Design Report", styles["Title"]))
+    story.append(Spacer(1, 12))
+
+    # ---- Geometry ----
+    story.append(Paragraph("<b>Geometry</b>", styles["Heading2"]))
+    story.append(Paragraph(
+        f"Ha = {Ha} m, Hp = {Hp} m, Lh = {Lh} m, Lt = {Lt} m, β = {beta}°",
+        styles["Normal"]
+    ))
+    story.append(Spacer(1, 12))
+
+    # ---- Wall figure ----
+    story.append(Paragraph("<b>Wall Geometry</b>", styles["Heading2"]))
+    story.append(Image(wall_path, width=5*inch, height=5*inch))
+    story.append(Spacer(1, 12))
+
+    # ---- Stress plots ----
+    story.append(Paragraph("<b>Effective Stress</b>", styles["Heading2"]))
+    story.append(Image(eff_path, width=5*inch, height=5*inch))
+    story.append(Spacer(1, 12))
+
+    story.append(Paragraph("<b>Horizontal Stress</b>", styles["Heading2"]))
+    story.append(Image(hor_path, width=5*inch, height=5*inch))
+    story.append(Spacer(1, 12))
+
+    # ---- Results ----
+    story.append(Paragraph("<b>Results</b>", styles["Heading2"]))
+    story.append(Paragraph(f"Sliding Safety Factor = {FS:.2f}", styles["Normal"]))
+    story.append(Paragraph(f"Overturning Safety Factor = {FS_OT:.2f}", styles["Normal"]))
+
+    doc.build(story)
+
+    return pdf_path
