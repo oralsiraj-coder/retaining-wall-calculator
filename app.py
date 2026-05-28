@@ -136,7 +136,8 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
         ax.plot(
             [xL, xR],
             [y_water, y_water],   # always horizontal
-            color="#74c0fc",
+            color="black",
+            linestyle=":",
             linewidth=2,
         )
 
