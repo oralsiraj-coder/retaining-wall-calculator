@@ -875,38 +875,6 @@ if FS_OT >= 1.5:
     st.success("✅ Stability against overturning is satisfied")
 else:
     st.error("❌ Stability against overturning is NOT satisfied")
-
-
-
-
-
-
-
-
-
-
-import pandas as pd
-
-summary = pd.DataFrame({
-    "Component": ["W1", "W2", "W3", "W4", "W5"],
-    "Force (kN)": [W1, W2, W3, W4, W5],
-    "Lever Arm (m)": [X_W_1, X_W_2, X_W_3, X_W_4, X_W_5],
-    "Moment (kNm)": [M1, M2, M3, M4, M5]
-})
-
-st.subheader("Summary Table")
-
-st.dataframe(
-    summary.style.format({
-        "Force (kN)": "{:.2f}",
-        "Lever Arm (m)": "{:.2f}",
-        "Moment (kNm)": "{:.2f}"
-    }),
-    use_container_width=True
-)
-
-
-
 #====================================
 temp_dir = tempfile.gettempdir()
 
