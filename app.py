@@ -172,7 +172,30 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
     ax.set_ylim(0, VIEW_H)
     ax.set_aspect("equal")
     ax.axis("off")
+#=======================================
+    # ---- Active soil label ----
+    x_active_center = (xL + xR) / 2
+    y_active_center = (yB + yTL) / 2
 
+    label_active = (
+        f"Active soil\n"
+        f"γ = {gamma_a:.1f} kN/m³\n"
+        f"φ = {phi_a:.1f}°\n"
+        f"c = {c_a:.1f} kPa"
+    )
+
+    ax.text(
+        x_active_center,
+        y_active_center,
+        label_active,
+        ha="center",
+        va="center",
+        fontsize=8,
+        bbox=dict(boxstyle="round,pad=0.3", fc="white", ec="black", alpha=0.7)
+    )
+
+
+                  
     return fig
 
 # =======================
