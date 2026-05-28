@@ -14,6 +14,15 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle, FancyArrowPatch, Polygon
 import numpy as np
 import math
+#=================
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.units import inch
+import tempfile
+
+
+
 
 # =======================
 # VIEWPORT & STYLE
