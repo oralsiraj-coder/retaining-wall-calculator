@@ -185,7 +185,7 @@ mu = st.sidebar.number_input("Coefficient of friction μ ", 0.0, 1.0, 0.0, 0.01)
 st.sidebar.header("Geometry")
 Ha = st.sidebar.number_input("Height of active soil (Ha)", 1.0, 20.0, 6.0)
 Hw = st.sidebar.number_input("Depth of water table from top surface (Hw)", 0.0, Ha, 2.0)                #depth of water table from top of wall
-Hp = st.sidebar.number_input("Height of active soil (Hp)", 0.0, 20.0, 3.0)
+Hp = st.sidebar.number_input("Height of passive soil (Hp)", 0.0, 20.0, 3.0)
 Th = st.sidebar.number_input("Thickness of the heel (Th)", 0.2, 2.0, 0.8)
 Lh = st.sidebar.number_input("Length of the heel (Lh)", 0.5, 15.0, 3.0)
 Lt = st.sidebar.number_input("Length of the Toe (Lt)", 0.5, 15.0, 2.0)
