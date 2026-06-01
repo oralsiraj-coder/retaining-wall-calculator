@@ -235,6 +235,7 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
 # =======================
 # STREAMLIT UI
 # =======================
+st.image("logo.png", width=200)
 st.title("Geotechnical Design of Retaining Wall")
 st.markdown("This is a demonstration prototype prepared for Fluor Corporation and is not ready for real-world application")
 st.sidebar.header("Surface Load")
