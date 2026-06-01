@@ -238,7 +238,7 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
 import os
 
 BASE_DIR = os.path.dirname(__file__)
-LOGO_PATH = os.path.join(BASE_DIR, "assets", "logo.png")
+LOGO_PATH = os.path.join(BASE_DIR, "assets", "logo.jpg")
 
 # Show logo in sidebar
 if os.path.exists(LOGO_PATH):
