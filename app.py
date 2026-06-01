@@ -235,6 +235,15 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
 # =======================
 # STREAMLIT UI
 # =======================
+#======================================
+import os
+
+BASE_DIR = os.path.dirname(__file__)
+LOGO_PATH = os.path.join(BASE_DIR, "assets", "logo.png")
+
+st.sidebar.image(LOGO_PATH, width=150)
+st.sidebar.markdown("### Fluor Design Tool")
+3================================
 st.image("logo.jpg", width=200)
 st.title("Geotechnical Design of Retaining Wall")
 st.markdown("This is a demonstration prototype prepared for Fluor Corporation and is not ready for real-world application")
