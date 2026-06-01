@@ -235,30 +235,6 @@ def draw_wall(Ha, Hw, Hp, Th, Lh, Lt, Tsb, beta,
 # =======================
 # STREAMLIT UI
 # =======================
-import os
-
-BASE_DIR = os.path.dirname(__file__)
-LOGO1_PATH = os.path.join(BASE_DIR, "assets", "logo1.jpg")
-
-# Show logo in sidebar
-if os.path.exists(LOGO1_PATH):
-    st.sidebar.image(LOGO1_PATH, width=150)
-else:
-    st.sidebar.warning("Logo not found")
-#===========================
-
-
-
-
-
-
-
-
-
-
-
-
-
 st.image("logo.jpg", width=200)
 st.title("Geotechnical Design of Retaining Wall")
 st.markdown("This is a demonstration prototype prepared for Fluor Corporation and is not ready for real-world application")
