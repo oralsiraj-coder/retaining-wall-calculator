@@ -241,7 +241,7 @@ import os
 BASE_DIR = os.path.dirname(__file__)
 LOGO_PATH = os.path.join(BASE_DIR, "assets", "logo.png")
 
-st.sidebar.image(LOGO_PATH, width=150)
+st.sidebar.image(logo_PATH, width=150)
 st.sidebar.markdown("### Fluor Design Tool")
 #3================================
 st.image("logo.jpg", width=200)
